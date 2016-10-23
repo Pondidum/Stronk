@@ -1,0 +1,11 @@
+obj
+bin
+*.csproj.user
+*.vbproj.user
+*.xproj.user
+
+project.lock.json
+
+/packages
+/node_modules
+/.vs
