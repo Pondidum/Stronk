@@ -16,7 +16,8 @@ namespace Stronk.Tests
 			config.ShouldSatisfyAllConditions(
 				() => config.Name.ShouldBe(ConfigurationManager.AppSettings["Name"]),
 				() => config.Version.ShouldBe(Convert.ToInt32(ConfigurationManager.AppSettings["Version"])),
-				() => config.Environment.ShouldBe((TargetEnvironment)Enum.Parse(typeof(TargetEnvironment), ConfigurationManager.AppSettings["Environment"], true))
+				() => config.Environment.ShouldBe((TargetEnvironment)Enum.Parse(typeof(TargetEnvironment), ConfigurationManager.AppSettings["Environment"], true)),
+				() => config.Endpoint.ShouldBe(new Uri(ConfigurationManager.AppSettings["Endpoint"]))
 			);
 		}
 
@@ -24,6 +25,7 @@ namespace Stronk.Tests
 		{
 			public string Name { get; private set; }
 			public int Version { get; private set; }
+			public Uri Endpoint { get; private set; }
 			public TargetEnvironment Environment { get; private set; }
 		}
 
