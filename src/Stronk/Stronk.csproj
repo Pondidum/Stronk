@@ -43,6 +43,10 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueConversion\EnumValueConverter.cs" />
+    <Compile Include="ValueConversion\IValueConverter.cs" />
+    <Compile Include="ValueConversion\LambdaValueConverter.cs" />
+    <Compile Include="ValueConversion\FallbackValueConverter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
