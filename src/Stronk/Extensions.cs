@@ -19,7 +19,13 @@ namespace Stronk
 
 			var properties = target
 				.GetType()
-				.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+				.Select(prop => new PropertyDescriptor
+				{
+					Name = prop.Name,
+					Type = prop.PropertyType,
+					Assign = value => prop.GetSetMethod(true).Invoke(target, new []{ value })
+				});
 
 			var appSettings = ConfigurationManager.AppSettings;
 
@@ -30,12 +36,19 @@ namespace Stronk
 				if (hasSetting)
 				{
 					var converted = converters
-						.First(c => c.CanMap(property.PropertyType))
-						.Map(property.PropertyType, appSettings[property.Name]);
+						.First(c => c.CanMap(property.Type))
+						.Map(property.Type, appSettings[property.Name]);
 
-					property.GetSetMethod(true).Invoke(target, new[] { converted });
+					property.Assign(converted);
 				}
 			}
 		}
+	}
+
+	public class PropertyDescriptor
+	{
+		public string Name { get; set; }
+		public Type Type { get; set; }
+		public Action<object> Assign { get; set; }
 	}
 }
