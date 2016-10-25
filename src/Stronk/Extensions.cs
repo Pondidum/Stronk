@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
@@ -17,15 +18,14 @@ namespace Stronk
 				new FallbackValueConverter()
 			};
 
-			var properties = target
-				.GetType()
-				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-				.Select(prop => new PropertyDescriptor
-				{
-					Name = prop.Name,
-					Type = prop.PropertyType,
-					Assign = value => prop.GetSetMethod(true).Invoke(target, new []{ value })
-				});
+			var propertySelectors = new IPropertySelector[]
+			{
+				new PrivateSetterPropertySelector(),
+			};
+
+			var properties = propertySelectors
+				.SelectMany(selector => selector.Select(target.GetType()));
+				
 
 			var appSettings = ConfigurationManager.AppSettings;
 
@@ -39,9 +39,29 @@ namespace Stronk
 						.First(c => c.CanMap(property.Type))
 						.Map(property.Type, appSettings[property.Name]);
 
-					property.Assign(converted);
+					property.Assign(target, converted);
 				}
 			}
+		}
+	}
+
+	public interface IPropertySelector
+	{
+		IEnumerable<PropertyDescriptor> Select(Type target);
+	}
+
+	public class PrivateSetterPropertySelector : IPropertySelector
+	{
+		public IEnumerable<PropertyDescriptor> Select(Type target)
+		{
+			return target
+				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+				.Select(prop => new PropertyDescriptor
+				{
+					Name = prop.Name,
+					Type = prop.PropertyType,
+					Assign = (targetObject, value) => prop.GetSetMethod(true).Invoke(targetObject, new[] { value })
+				});
 		}
 	}
 
@@ -49,6 +69,6 @@ namespace Stronk
 	{
 		public string Name { get; set; }
 		public Type Type { get; set; }
-		public Action<object> Assign { get; set; }
+		public Action<object, object> Assign { get; set; }
 	}
 }
