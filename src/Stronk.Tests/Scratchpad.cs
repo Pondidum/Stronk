@@ -15,6 +15,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_testing_something()
 		{
+
 		}
 	}
 }
