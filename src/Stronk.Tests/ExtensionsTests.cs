@@ -13,11 +13,16 @@ namespace Stronk.Tests
 			var config = new ConfigWithPrivateSetters();
 			config.FromAppConfig();
 
+
+			var appSettings = ConfigurationManager.AppSettings;
+			var connectionStrings = ConfigurationManager.ConnectionStrings;
+
 			config.ShouldSatisfyAllConditions(
-				() => config.Name.ShouldBe(ConfigurationManager.AppSettings["Name"]),
-				() => config.Version.ShouldBe(Convert.ToInt32(ConfigurationManager.AppSettings["Version"])),
-				() => config.Environment.ShouldBe((TargetEnvironment)Enum.Parse(typeof(TargetEnvironment), ConfigurationManager.AppSettings["Environment"], true)),
-				() => config.Endpoint.ShouldBe(new Uri(ConfigurationManager.AppSettings["Endpoint"]))
+				() => config.Name.ShouldBe(appSettings["Name"]),
+				() => config.Version.ShouldBe(Convert.ToInt32(appSettings["Version"])),
+				() => config.Environment.ShouldBe((TargetEnvironment)Enum.Parse(typeof(TargetEnvironment), appSettings["Environment"], true)),
+				() => config.Endpoint.ShouldBe(new Uri(appSettings["Endpoint"])),
+				() => config.DefaultDB.ShouldBe(connectionStrings["DefaultDB"].ConnectionString)
 			);
 		}
 
@@ -27,11 +32,15 @@ namespace Stronk.Tests
 			var config = new ConfigWithBackingFields();
 			config.FromAppConfig();
 
+			var appSettings = ConfigurationManager.AppSettings;
+			var connectionStrings = ConfigurationManager.ConnectionStrings;
+
 			config.ShouldSatisfyAllConditions(
-				() => config.Name.ShouldBe(ConfigurationManager.AppSettings["Name"]),
-				() => config.Version.ShouldBe(Convert.ToInt32(ConfigurationManager.AppSettings["Version"])),
-				() => config.Environment.ShouldBe((TargetEnvironment)Enum.Parse(typeof(TargetEnvironment), ConfigurationManager.AppSettings["Environment"], true)),
-				() => config.Endpoint.ShouldBe(new Uri(ConfigurationManager.AppSettings["Endpoint"]))
+				() => config.Name.ShouldBe(appSettings["Name"]),
+				() => config.Version.ShouldBe(Convert.ToInt32(appSettings["Version"])),
+				() => config.Environment.ShouldBe((TargetEnvironment)Enum.Parse(typeof(TargetEnvironment), appSettings["Environment"], true)),
+				() => config.Endpoint.ShouldBe(new Uri(appSettings["Endpoint"])),
+				() => config.DefaultDB.ShouldBe(connectionStrings["DefaultDB"].ConnectionString)
 			);
 		}
 
@@ -41,6 +50,7 @@ namespace Stronk.Tests
 			public int Version { get; private set; }
 			public Uri Endpoint { get; private set; }
 			public TargetEnvironment Environment { get; private set; }
+			public string DefaultDB { get; private set; }
 		}
 
 		public class ConfigWithBackingFields
@@ -49,11 +59,13 @@ namespace Stronk.Tests
 			private int _version;
 			private Uri _endpoint;
 			private TargetEnvironment _environment;
+			private string _defaultDB;
 
 			public string Name => _name;
 			public int Version => _version;
 			public Uri Endpoint => _endpoint;
 			public TargetEnvironment Environment => _environment;
+			public string DefaultDB => _defaultDB;
 		}
 
 		public enum TargetEnvironment

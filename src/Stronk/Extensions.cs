@@ -28,16 +28,17 @@ namespace Stronk
 				
 
 			var appSettings = ConfigurationManager.AppSettings;
+			var connectionStrings = ConfigurationManager.ConnectionStrings;
 
 			foreach (var property in properties)
 			{
-				var hasSetting = appSettings.AllKeys.Contains(property.Name);
-
-				if (hasSetting)
+				var value = appSettings[property.Name] ?? connectionStrings[property.Name]?.ConnectionString;
+				
+				if (value != null)
 				{
 					var converted = converters
 						.First(c => c.CanMap(property.Type))
-						.Map(property.Type, appSettings[property.Name]);
+						.Map(property.Type, value);
 
 					property.Assign(target, converted);
 				}
