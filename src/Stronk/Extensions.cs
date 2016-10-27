@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using Stronk.PropertySelection;
@@ -23,6 +25,11 @@ namespace Stronk
 				new BackingFieldPropertySelector(), 
 			};
 
+			var valueSelectors = new IValueSelector[]
+			{
+				new PropertyNameValueSelector(),
+			};
+
 			var properties = propertySelectors
 				.SelectMany(selector => selector.Select(target.GetType()));
 				
@@ -32,8 +39,12 @@ namespace Stronk
 
 			foreach (var property in properties)
 			{
-				var value = appSettings[property.Name] ?? connectionStrings[property.Name]?.ConnectionString;
-				
+				var value = valueSelectors
+					.Select(filter => filter.Select(appSettings, connectionStrings, property))
+					.Where(v => v != null)
+					.DefaultIfEmpty(null)
+					.First();
+
 				if (value != null)
 				{
 					var converted = converters
@@ -43,6 +54,19 @@ namespace Stronk
 					property.Assign(target, converted);
 				}
 			}
+		}
+	}
+
+	public interface IValueSelector
+	{
+		string Select(NameValueCollection appSettings, ConnectionStringSettingsCollection connectionStrings, PropertyDescriptor property);
+	}
+
+	public class PropertyNameValueSelector : IValueSelector
+	{
+		public string Select(NameValueCollection appSettings, ConnectionStringSettingsCollection connectionStrings, PropertyDescriptor property)
+		{
+			return appSettings[property.Name] ?? connectionStrings[property.Name]?.ConnectionString;
 		}
 	}
 }
