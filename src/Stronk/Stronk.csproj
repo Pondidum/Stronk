@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ValueSelection\IValueSelector.cs" />
+    <Compile Include="ValueSelection\PropertyNameValueSelector.cs" />
     <Compile Include="PropertySelection\BackingFieldPropertySelector.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PropertySelection\IPropertySelector.cs" />
@@ -51,6 +53,7 @@
     <Compile Include="ValueConversion\IValueConverter.cs" />
     <Compile Include="ValueConversion\LambdaValueConverter.cs" />
     <Compile Include="ValueConversion\FallbackValueConverter.cs" />
+    <Compile Include="ValueSelection\ValueSelectorArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

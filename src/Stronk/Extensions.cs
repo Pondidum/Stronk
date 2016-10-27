@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using Stronk.PropertySelection;
 using Stronk.ValueConversion;
+using Stronk.ValueSelection;
 
 namespace Stronk
 {
@@ -32,15 +32,13 @@ namespace Stronk
 
 			var properties = propertySelectors
 				.SelectMany(selector => selector.Select(target.GetType()));
-				
 
-			var appSettings = ConfigurationManager.AppSettings;
-			var connectionStrings = ConfigurationManager.ConnectionStrings;
+			var args = new ValueSelectorArgs(ConfigurationManager.AppSettings, ConfigurationManager.ConnectionStrings);
 
 			foreach (var property in properties)
 			{
 				var value = valueSelectors
-					.Select(filter => filter.Select(appSettings, connectionStrings, property))
+					.Select(filter => filter.Select(args.With(property)))
 					.Where(v => v != null)
 					.DefaultIfEmpty(null)
 					.First();
@@ -54,19 +52,6 @@ namespace Stronk
 					property.Assign(target, converted);
 				}
 			}
-		}
-	}
-
-	public interface IValueSelector
-	{
-		string Select(NameValueCollection appSettings, ConnectionStringSettingsCollection connectionStrings, PropertyDescriptor property);
-	}
-
-	public class PropertyNameValueSelector : IValueSelector
-	{
-		public string Select(NameValueCollection appSettings, ConnectionStringSettingsCollection connectionStrings, PropertyDescriptor property)
-		{
-			return appSettings[property.Name] ?? connectionStrings[property.Name]?.ConnectionString;
 		}
 	}
 }
