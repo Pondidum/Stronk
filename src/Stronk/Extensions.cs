@@ -2,33 +2,60 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Stronk.PropertySelection;
 using Stronk.ValueConversion;
 using Stronk.ValueSelection;
 
 namespace Stronk
 {
-	public static class Extensions
+	public interface IStronkConfiguration
 	{
-		public static void FromAppConfig(this object target)
+		IEnumerable<IValueConverter> Converters { get; }
+		IEnumerable<IPropertySelector> PropertySelectors { get; }
+		IEnumerable<IValueSelector> ValueSelectors { get; }
+	}
+
+	public class StronkConfiguration : IStronkConfiguration
+	{
+		public IEnumerable<IValueConverter> Converters { get; }
+		public IEnumerable<IPropertySelector> PropertySelectors { get; }
+		public IEnumerable<IValueSelector> ValueSelectors { get; }
+
+		public StronkConfiguration()
 		{
-			var converters = new IValueConverter[]
+			Converters = new IValueConverter[]
 			{
-				new LambdaValueConverter<Uri>(val => new Uri(val)), 
+				new LambdaValueConverter<Uri>(val => new Uri(val)),
 				new EnumValueConverter(),
 				new FallbackValueConverter()
 			};
 
-			var propertySelectors = new IPropertySelector[]
+			PropertySelectors = new IPropertySelector[]
 			{
 				new PrivateSetterPropertySelector(),
-				new BackingFieldPropertySelector(), 
+				new BackingFieldPropertySelector(),
 			};
 
-			var valueSelectors = new IValueSelector[]
+			ValueSelectors = new IValueSelector[]
 			{
 				new PropertyNameValueSelector(),
 			};
+		}
+	}
+
+	public static class Extensions
+	{
+		public static void FromAppConfig(this object target)
+		{
+			target.FromAppConfig(new StronkConfiguration());
+		}
+
+		public static void FromAppConfig(this object target, IStronkConfiguration configuration)
+		{
+			var propertySelectors = configuration.PropertySelectors;
+			var valueSelectors = configuration.ValueSelectors.ToArray();
+			var converters = configuration.Converters.ToArray();
 
 			var properties = propertySelectors
 				.SelectMany(selector => selector.Select(target.GetType()));
