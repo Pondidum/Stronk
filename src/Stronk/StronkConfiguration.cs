@@ -8,26 +8,30 @@ namespace Stronk
 {
 	public class StronkConfiguration : IStronkConfiguration
 	{
-		public IEnumerable<IValueConverter> ValueConverters { get; }
-		public IEnumerable<IPropertySelector> PropertySelectors { get; }
-		public IEnumerable<IValueSelector> ValueSelectors { get; }
+		public IEnumerable<IValueConverter> ValueConverters => _valueConverters;
+		public IEnumerable<IPropertySelector> PropertySelectors => _propertySelectors;
+		public IEnumerable<IValueSelector> ValueSelectors => _valueSelectors;
+
+		private readonly List<IValueConverter> _valueConverters;
+		private readonly List<IPropertySelector> _propertySelectors;
+		private readonly List<IValueSelector> _valueSelectors;
 
 		public StronkConfiguration()
 		{
-			ValueConverters = new IValueConverter[]
+			_valueConverters = new List<IValueConverter>
 			{
 				new LambdaValueConverter<Uri>(val => new Uri(val)),
 				new EnumValueConverter(),
 				new FallbackValueConverter()
 			};
 
-			PropertySelectors = new IPropertySelector[]
+			_propertySelectors = new List<IPropertySelector>
 			{
 				new PrivateSetterPropertySelector(),
 				new BackingFieldPropertySelector(),
 			};
 
-			ValueSelectors = new IValueSelector[]
+			_valueSelectors = new List<IValueSelector>
 			{
 				new PropertyNameValueSelector(),
 			};
