@@ -14,7 +14,7 @@ namespace Stronk.Tests
 		public void By_default_the_collections_are_initialised()
 		{
 			var config = new StronkConfiguration();
-			var converters = config.Converters.Select(c => c.GetType());
+			var converters = config.ValueConverters.Select(c => c.GetType());
 			var propertySelectors = config.PropertySelectors.Select(c => c.GetType());
 			var valueSelectors = config.ValueSelectors.Select(t => t.GetType());
 

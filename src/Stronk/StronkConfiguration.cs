@@ -8,13 +8,13 @@ namespace Stronk
 {
 	public class StronkConfiguration : IStronkConfiguration
 	{
-		public IEnumerable<IValueConverter> Converters { get; }
+		public IEnumerable<IValueConverter> ValueConverters { get; }
 		public IEnumerable<IPropertySelector> PropertySelectors { get; }
 		public IEnumerable<IValueSelector> ValueSelectors { get; }
 
 		public StronkConfiguration()
 		{
-			Converters = new IValueConverter[]
+			ValueConverters = new IValueConverter[]
 			{
 				new LambdaValueConverter<Uri>(val => new Uri(val)),
 				new EnumValueConverter(),

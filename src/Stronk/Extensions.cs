@@ -16,7 +16,7 @@ namespace Stronk
 		{
 			var propertySelectors = configuration.PropertySelectors;
 			var valueSelectors = configuration.ValueSelectors.ToArray();
-			var converters = configuration.Converters.ToArray();
+			var converters = configuration.ValueConverters.ToArray();
 
 			var properties = propertySelectors
 				.SelectMany(selector => selector.Select(target.GetType()));

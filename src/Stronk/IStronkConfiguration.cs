@@ -7,7 +7,7 @@ namespace Stronk
 {
 	public interface IStronkConfiguration
 	{
-		IEnumerable<IValueConverter> Converters { get; }
+		IEnumerable<IValueConverter> ValueConverters { get; }
 		IEnumerable<IPropertySelector> PropertySelectors { get; }
 		IEnumerable<IValueSelector> ValueSelectors { get; }
 	}
