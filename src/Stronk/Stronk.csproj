@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="IStronkConfiguration.cs" />
     <Compile Include="StronkConfiguration.cs" />
+    <Compile Include="StronkConfigurationException.cs" />
     <Compile Include="ValueSelection\IValueSelector.cs" />
     <Compile Include="ValueSelection\PropertyNameValueSelector.cs" />
     <Compile Include="PropertySelection\BackingFieldPropertySelector.cs" />

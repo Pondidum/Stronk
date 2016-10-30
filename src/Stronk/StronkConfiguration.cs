@@ -36,5 +36,37 @@ namespace Stronk
 				new PropertyNameValueSelector(),
 			};
 		}
+
+		public void Add(IValueConverter valueConverter) => _valueConverters.Add(valueConverter);
+		public void Add(IPropertySelector propertySelector) => _propertySelectors.Add(propertySelector);
+		public void Add(IValueSelector valueSelector) => _valueSelectors.Add(valueSelector);
+
+		public void AddBefore<T>(IValueConverter valueConverter) => InsertBefore(_valueConverters, typeof(T), valueConverter);
+		public void AddBefore<T>(IPropertySelector propertySelector) => InsertBefore(_propertySelectors, typeof(T), propertySelector);
+		public void AddBefore<T>(IValueSelector valueSelector) => InsertBefore(_valueSelectors, typeof(T), valueSelector);
+
+		public void AddAfter<T>(IValueConverter valueConverter) => InsertAfter(_valueConverters, typeof(T), valueConverter);
+		public void AddAfter<T>(IPropertySelector propertySelector) => InsertAfter(_propertySelectors, typeof(T), propertySelector);
+		public void AddAfter<T>(IValueSelector valueSelector) => InsertAfter(_valueSelectors, typeof(T), valueSelector);
+
+		private void InsertBefore<T>(List<T> collection, Type target, T value)
+		{
+			var index = collection.FindIndex(vc => vc.GetType() == target);
+
+			if (index < 0)
+				throw new StronkConfigurationException($"Unable to find a '{target.Name}' to add before");
+
+			collection.Insert(index, value);
+		}
+
+		private void InsertAfter<T>(List<T> collection, Type target, T value)
+		{
+			var index = collection.FindIndex(vc => vc.GetType() == target);
+
+			if (index < 0)
+				throw new StronkConfigurationException($"Unable to find a '{target.Name}' to add before");
+
+			collection.Insert(index + 1, value);
+		}
 	}
 }
