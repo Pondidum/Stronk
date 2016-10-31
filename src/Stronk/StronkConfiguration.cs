@@ -21,6 +21,7 @@ namespace Stronk
 			_valueConverters = new List<IValueConverter>
 			{
 				new LambdaValueConverter<Uri>(val => new Uri(val)),
+				new LambdaValueConverter<Guid>(Guid.Parse),
 				new EnumValueConverter(),
 				new FallbackValueConverter()
 			};

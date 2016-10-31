@@ -26,9 +26,9 @@ namespace Stronk.Tests
 			var valueSelectors = _config.ValueSelectors.Select(t => t.GetType());
 
 			_config.ShouldSatisfyAllConditions(
-				() => converters.ShouldBe(new[] { typeof(LambdaValueConverter<Uri>), typeof(EnumValueConverter), typeof(FallbackValueConverter) }),
-				() => propertySelectors.ShouldBe(new[] { typeof(PrivateSetterPropertySelector), typeof(BackingFieldPropertySelector) }),
-				() => valueSelectors.ShouldBe(new[] { typeof(PropertyNameValueSelector) })
+				() => converters.ShouldNotBeEmpty(),
+				() => propertySelectors.ShouldNotBeEmpty(),
+				() => valueSelectors.ShouldNotBeEmpty()
 			);
 		}
 
