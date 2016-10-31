@@ -16,7 +16,7 @@ namespace Stronk.ValueSelection
 			ConnectionStrings = connectionStrings;
 		}
 
-		public ValueSelectorArgs With(PropertyDescriptor property)
+		internal ValueSelectorArgs With(PropertyDescriptor property)
 		{
 			Property = property;
 			return this;
