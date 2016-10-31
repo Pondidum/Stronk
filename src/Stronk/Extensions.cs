@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.Linq;
+﻿using System.Linq;
 using System.Runtime.CompilerServices;
 using Stronk.ValueSelection;
 
@@ -12,7 +11,7 @@ namespace Stronk
 			target.FromAppConfig(new StronkConfiguration());
 		}
 
-		public static void FromAppConfig(this object target, IStronkConfiguration configuration)
+		public static void FromAppConfig(this object target, IStronkConfiguration configuration, IConfigurationProvider configProvider = null)
 		{
 			var propertySelectors = configuration.PropertySelectors;
 			var valueSelectors = configuration.ValueSelectors.ToArray();
@@ -21,7 +20,7 @@ namespace Stronk
 			var properties = propertySelectors
 				.SelectMany(selector => selector.Select(target.GetType()));
 
-			var args = new ValueSelectorArgs(ConfigurationManager.AppSettings, ConfigurationManager.ConnectionStrings);
+			var args = new ValueSelectorArgs(configProvider ?? new AppConfigProvider());
 
 			foreach (var property in properties)
 			{

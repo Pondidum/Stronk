@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppConfigProvider.cs" />
+    <Compile Include="IConfigurationProvider.cs" />
     <Compile Include="IStronkConfiguration.cs" />
     <Compile Include="StronkConfiguration.cs" />
     <Compile Include="StronkConfigurationException.cs" />
