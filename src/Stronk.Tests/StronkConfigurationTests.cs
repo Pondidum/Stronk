@@ -70,6 +70,45 @@ namespace Stronk.Tests
 
 
 
+
+		[Fact]
+		public void When_a_value_selector_is_added()
+		{
+			_config.Add(new DtoValueSelector());
+
+			_config.ValueSelectors.Last().ShouldBeOfType<DtoValueSelector>();
+		}
+
+		[Fact]
+		public void When_a_value_selector_is_added_before_an_existing_converter()
+		{
+			_config.AddBefore<PropertyNameValueSelector>(new DtoValueSelector());
+
+			InsertIndexShouldBeBefore(_config.ValueSelectors, typeof(PropertyNameValueSelector), typeof(DtoValueSelector));
+		}
+
+		[Fact]
+		public void When_a_value_selector_is_added_after_an_existing_converter()
+		{
+			_config.AddAfter<PropertyNameValueSelector>(new DtoValueSelector());
+
+			InsertIndexShouldBeAfter(_config.ValueSelectors, typeof(PropertyNameValueSelector), typeof(DtoValueSelector));
+		}
+
+		[Fact]
+		public void When_a_value_selector_is_added_before_a_non_existing_converter()
+		{
+			Should.Throw<StronkConfigurationException>(() => _config.AddBefore<UnusedValueSelector>(new DtoValueSelector()));
+		}
+
+		[Fact]
+		public void When_a_value_selector_is_added_after_a_non_existing_converter()
+		{
+			Should.Throw<StronkConfigurationException>(() => _config.AddAfter<UnusedValueSelector>(new DtoValueSelector()));
+		}
+
+
+
 		private static void InsertIndexShouldBeBefore<T>(IEnumerable<T> collection, Type search, Type inserted)
 		{
 			var converters = collection.Select(c => c.GetType()).ToList();
@@ -94,6 +133,24 @@ namespace Stronk.Tests
 		{
 			public bool CanMap(Type target) => target == typeof(Dto);
 			public object Map(Type target, string value) => new Dto();
+		}
+
+		private class DtoValueSelector : IValueSelector
+		{
+			public string Select(ValueSelectorArgs args) => "dto";
+		}
+
+		private class DtoPropertySelector : IPropertySelector
+		{
+			public IEnumerable<PropertyDescriptor> Select(Type targetType) => Enumerable.Empty<PropertyDescriptor>();
+		}
+
+		private class UnusedValueSelector : IValueSelector
+		{
+			public string Select(ValueSelectorArgs args)
+			{
+				throw new NotSupportedException();
+			}
 		}
 	}
 }
