@@ -109,6 +109,44 @@ namespace Stronk.Tests
 
 
 
+		[Fact]
+		public void When_a_property_selector_is_added()
+		{
+			_config.Add(new DtoPropertySelector());
+
+			_config.PropertySelectors.Last().ShouldBeOfType<DtoPropertySelector>();
+		}
+
+		[Fact]
+		public void When_a_property_selector_is_added_before_an_existing_converter()
+		{
+			_config.AddBefore<PrivateSetterPropertySelector>(new DtoPropertySelector());
+
+			InsertIndexShouldBeBefore(_config.PropertySelectors, typeof(PrivateSetterPropertySelector), typeof(DtoPropertySelector));
+		}
+
+		[Fact]
+		public void When_a_property_selector_is_added_after_an_existing_converter()
+		{
+			_config.AddAfter<PrivateSetterPropertySelector>(new DtoPropertySelector());
+
+			InsertIndexShouldBeAfter(_config.PropertySelectors, typeof(PrivateSetterPropertySelector), typeof(DtoPropertySelector));
+		}
+
+		[Fact]
+		public void When_a_property_selector_is_added_before_a_non_existing_converter()
+		{
+			Should.Throw<StronkConfigurationException>(() => _config.AddBefore<UnusedPropertySelector>(new DtoPropertySelector()));
+		}
+
+		[Fact]
+		public void When_a_property_selector_is_added_after_a_non_existing_converter()
+		{
+			Should.Throw<StronkConfigurationException>(() => _config.AddAfter<UnusedPropertySelector>(new DtoPropertySelector()));
+		}
+
+
+
 		private static void InsertIndexShouldBeBefore<T>(IEnumerable<T> collection, Type search, Type inserted)
 		{
 			var converters = collection.Select(c => c.GetType()).ToList();
@@ -148,6 +186,14 @@ namespace Stronk.Tests
 		private class UnusedValueSelector : IValueSelector
 		{
 			public string Select(ValueSelectorArgs args)
+			{
+				throw new NotSupportedException();
+			}
+		}
+
+		private class UnusedPropertySelector : IPropertySelector
+		{
+			public IEnumerable<PropertyDescriptor> Select(Type targetType)
 			{
 				throw new NotSupportedException();
 			}
