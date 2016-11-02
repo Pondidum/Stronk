@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Runtime.CompilerServices;
+using Stronk.PropertySelection;
+using Stronk.ValueConversion;
 using Stronk.ValueSelection;
 
 namespace Stronk
@@ -24,21 +26,42 @@ namespace Stronk
 
 			foreach (var property in properties)
 			{
-				var value = valueSelectors
-					.Select(filter => filter.Select(args.With(property)))
-					.Where(v => v != null)
-					.DefaultIfEmpty(null)
-					.First();
+				var value = GetValueFromSource(valueSelectors, args, property);
+
+				if (value == null)
+					continue;
+
+				IValueConverter converter = null;
+
+				foreach (var valueConverter in converters)
+				{
+					if (valueConverter.CanMap(property.Type) == false)
+						continue;
+
+					converter = valueConverter;
+					break;
+				}
+
+				if (converter == null)
+					continue;
+
+				var converted = converter.Map(property.Type, value);
+
+				property.Assign(target, converted);
+			}
+		}
+
+		private static string GetValueFromSource(IValueSelector[] valueSelectors, ValueSelectorArgs args, PropertyDescriptor property)
+		{
+			foreach (var filter in valueSelectors)
+			{
+				var value = filter.Select(args.With(property));
 
 				if (value != null)
-				{
-					var converted = converters
-						.First(c => c.CanMap(property.Type))
-						.Map(property.Type, value);
-
-					property.Assign(target, converted);
-				}
+					return value;
 			}
+
+			return null;
 		}
 	}
 }
