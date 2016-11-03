@@ -7,29 +7,32 @@ namespace Stronk.PropertySelection
 {
 	public class BackingFieldPropertySelector : IPropertySelector
 	{
+		private const BindingFlags PropertyBindingFlags = BindingFlags.Public | BindingFlags.Instance;
+		private const BindingFlags FieldBindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.IgnoreCase;
+
 		public IEnumerable<PropertyDescriptor> Select(Type targetType)
 		{
-			var fields = targetType
-				.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
-				.ToArray();
-
-			var properties = targetType
-				.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+			var properties = targetType.GetProperties(PropertyBindingFlags);
+			var descriptors = new List<PropertyDescriptor>(properties.Length);
 
 			foreach (var property in properties)
 			{
-				var field = fields.FirstOrDefault(f => f.Name.Equals(property.Name, StringComparison.OrdinalIgnoreCase))
-				            ?? fields.FirstOrDefault(f => f.Name.Equals("_" + property.Name, StringComparison.OrdinalIgnoreCase));
+				var field = targetType.GetField("_" + property.Name, FieldBindingFlags);
+
+				if (field == null)
+					field = targetType.GetField(property.Name, FieldBindingFlags);
 
 				if (field != null)
-					yield return new PropertyDescriptor
+					descriptors.Add(new PropertyDescriptor
 					{
 						Name = property.Name,
 						Type = property.PropertyType,
 						Assign = (target, value) => field.SetValue(target, value)
-					};
+					});
 
 			}
+
+			return descriptors;
 		}
 	}
 }
