@@ -14,7 +14,7 @@ namespace Stronk
 			_configuration = configuration;
 		}
 
-		public void Populate(object target, IConfigurationProvider configProvider = null)
+		public void Populate(object target, IConfigurationSource configSource = null)
 		{
 			var valueSelectors = _configuration.ValueSelectors.ToArray();
 			var converters = _configuration.ValueConverters.ToArray();
@@ -23,7 +23,7 @@ namespace Stronk
 				.PropertySelectors
 				.SelectMany(selector => selector.Select(target.GetType()));
 
-			var args = new ValueSelectorArgs(configProvider ?? new AppConfigProvider());
+			var args = new ValueSelectorArgs(configSource ?? new AppConfigSource());
 
 			foreach (var property in properties)
 			{

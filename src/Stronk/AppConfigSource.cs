@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace Stronk
 {
-	public class AppConfigProvider : IConfigurationProvider
+	public class AppConfigSource : IConfigurationSource
 	{
 		public NameValueCollection AppSettings => ConfigurationManager.AppSettings;
 		public ConnectionStringSettingsCollection ConnectionStrings => ConfigurationManager.ConnectionStrings;

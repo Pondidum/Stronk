@@ -10,10 +10,10 @@ namespace Stronk.ValueSelection
 		public ConnectionStringSettingsCollection ConnectionStrings { get; }
 		public PropertyDescriptor Property { get; private set; }
 
-		internal ValueSelectorArgs(IConfigurationProvider provider)
+		internal ValueSelectorArgs(IConfigurationSource source)
 		{
-			AppSettings = provider.AppSettings;
-			ConnectionStrings = provider.ConnectionStrings;
+			AppSettings = source.AppSettings;
+			ConnectionStrings = source.ConnectionStrings;
 		}
 
 		internal ValueSelectorArgs With(PropertyDescriptor property)

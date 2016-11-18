@@ -7,11 +7,11 @@
 			target.FromAppConfig(new StronkConfiguration());
 		}
 
-		public static void FromAppConfig(this object target, IStronkConfiguration configuration, IConfigurationProvider configProvider = null)
+		public static void FromAppConfig(this object target, IStronkConfiguration configuration, IConfigurationSource configSource = null)
 		{
 			var builder = new ConfigBuilder(configuration);
 
-			builder.Populate(target, configProvider);
+			builder.Populate(target, configSource);
 		}
 	}
 }

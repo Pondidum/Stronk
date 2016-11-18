@@ -15,18 +15,18 @@ namespace TestApp
 		{
 			var config = new MassiveConfig();
 			var configuration = new StronkConfiguration();
-			var provider = new InMemoryProvider();
+			var provider = new InMemorySource();
 
 			config.FromAppConfig(configuration, provider);
 		}
 	}
 
-	public class InMemoryProvider : IConfigurationProvider
+	public class InMemorySource : IConfigurationSource
 	{
 		public NameValueCollection AppSettings { get; }
 		public ConnectionStringSettingsCollection ConnectionStrings { get; }
 
-		public InMemoryProvider()
+		public InMemorySource()
 		{
 			AppSettings = new NameValueCollection();
 			ConnectionStrings = new ConnectionStringSettingsCollection();
