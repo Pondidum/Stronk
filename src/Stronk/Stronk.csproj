@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppConfigProvider.cs" />
+    <Compile Include="ConfigBuilder.cs" />
     <Compile Include="IConfigurationProvider.cs" />
     <Compile Include="IStronkConfiguration.cs" />
     <Compile Include="StronkConfiguration.cs" />
