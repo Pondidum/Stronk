@@ -11,3 +11,5 @@ project.lock.json
 /node_modules
 /.vs
 /.idea
+
+AssemblyVersion.cs

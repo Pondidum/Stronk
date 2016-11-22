@@ -30,14 +30,14 @@ gulp.task('restore', function() {
 
 gulp.task('version', function() {
   return gulp
-    .src(config.name + '/Properties/AssemblyVersion.base')
+    .src('**/Properties/AssemblyVersion.base')
     .pipe(rename("AssemblyVersion.cs"))
     .pipe(assemblyInfo({
       version: config.version,
       fileVersion: config.version,
       description: "Build: " +  config.buildNumber + ", Sha: " + config.commit
     }))
-    .pipe(gulp.dest('./' + config.name + '/Properties'));
+    .pipe(gulp.dest('./src/' + config.name + '/Properties'));
 });
 
 gulp.task('compile', [ "restore", "version" ], function() {
