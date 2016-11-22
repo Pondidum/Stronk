@@ -1,4 +1,5 @@
-﻿namespace Stronk.Tests
+﻿#pragma warning disable 649
+namespace Stronk.Tests
 {
 	public  class MassiveConfig
 	{

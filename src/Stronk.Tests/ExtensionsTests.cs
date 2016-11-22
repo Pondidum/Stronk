@@ -2,6 +2,7 @@
 using System.Configuration;
 using Shouldly;
 using Xunit;
+#pragma warning disable 649
 
 namespace Stronk.Tests
 {
