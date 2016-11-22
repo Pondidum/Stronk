@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Stronk</id>
+    <title>Stronk</title>
+    <version>$version$</version>
+    <authors>Andy Dote</authors>
+    <description>Strong typed application configuration</description>
+    <projectUrl>https://github.com/pondidum/Stronk</projectUrl>
+    <licenseUrl>https://github.com/Pondidum/Stronk/blob/master/LICENSE.txt</licenseUrl>
+    <tags>configuration app.config web.config config</tags>
+  </metadata>
+</package>
