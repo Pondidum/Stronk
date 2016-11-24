@@ -71,6 +71,7 @@
     <Compile Include="PropertySelection\BackingFieldPropertySelectorTests.cs" />
     <Compile Include="Scratchpad.cs" />
     <Compile Include="StronkConfigurationTests.cs" />
+    <Compile Include="ValueConversion\CsvValueConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

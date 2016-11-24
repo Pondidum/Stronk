@@ -23,6 +23,7 @@ namespace Stronk
 				new LambdaValueConverter<Uri>(val => new Uri(val)),
 				new LambdaValueConverter<Guid>(Guid.Parse),
 				new EnumValueConverter(),
+				new CsvValueConverter(),
 				new FallbackValueConverter()
 			};
 
