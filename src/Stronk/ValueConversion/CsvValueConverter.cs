@@ -19,28 +19,28 @@ namespace Stronk.ValueConversion
 		}
 
 
-		public object Map(Type target, string value)
+		public object Map(ValueConverterArgs e)
 		{
-			var values = value.Split(',');
+			var values = e.Input.Split(',');
 
-			if (IsIEnumerable(target))
+			if (IsIEnumerable(e.Target))
 			{
 				return values
-					.Select(val => Convert.ChangeType(val, target.GetGenericArguments()[0]))
+					.Select(val => Convert.ChangeType(val, e.Target.GetGenericArguments()[0]))
 					.ToArray();
 			}
 
-			if (IsIList(target))
+			if (IsIList(e.Target))
 			{
 				return values
-					.Select(val => Convert.ChangeType(val, target.GetGenericArguments()[0]))
+					.Select(val => Convert.ChangeType(val, e.Target.GetGenericArguments()[0]))
 					.ToList();
 			}
 
-			if (target.IsArray)
+			if (e.Target.IsArray)
 			{
 				return values
-					.Select(val =>  Convert.ChangeType(val, target.GetElementType()))
+					.Select(val =>  Convert.ChangeType(val, e.Target.GetElementType()))
 					.ToArray();
 			}
 

@@ -59,7 +59,7 @@ namespace Stronk.Tests.ValueConversion
 		public void When_mapping_int_csv_to_ienumerable()
 		{
 			_converter
-				.Map(typeof(IEnumerable<int>), "1,2,3,4")
+				.Map(Create<IList<int>>("1,2,3,4"))
 				.ShouldBe(new[] { 1, 2, 3, 4 });
 		}
 
@@ -67,7 +67,7 @@ namespace Stronk.Tests.ValueConversion
 		public void When_mapping_int_csv_to_array()
 		{
 			_converter
-				.Map(typeof(int[]), "1,2,3,4")
+				.Map(Create<IList<int>>("1,2,3,4"))
 				.ShouldBe(new[] { 1, 2, 3, 4 });
 		}
 
@@ -75,8 +75,16 @@ namespace Stronk.Tests.ValueConversion
 		public void When_mapping_int_csv_to_ilist()
 		{
 			_converter
-				.Map(typeof(IList<int>), "1,2,3,4")
+				.Map(Create<IList<int>>("1,2,3,4"))
 				.ShouldBe(new List<int> { 1, 2, 3, 4 });
+		}
+
+		private ValueConverterArgs Create<T>(string value)
+		{
+			return new ValueConverterArgs(
+				Enumerable.Empty<IValueConverter>(),
+				typeof(T),
+				value);
 		}
 	}
 }

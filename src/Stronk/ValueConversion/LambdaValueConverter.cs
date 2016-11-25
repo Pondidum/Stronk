@@ -13,9 +13,9 @@ namespace Stronk.ValueConversion
 
 		public bool CanMap(Type target) => typeof(T).IsAssignableFrom(target);
 
-		public object Map(Type target, string value)
+		public object Map(ValueConverterArgs e)
 		{
-			return _convert(value);
+			return _convert(e.Input);
 		}
 	}
 }

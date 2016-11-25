@@ -170,7 +170,7 @@ namespace Stronk.Tests
 		private class DtoValueConverter : IValueConverter
 		{
 			public bool CanMap(Type target) => target == typeof(Dto);
-			public object Map(Type target, string value) => new Dto();
+			public object Map(ValueConverterArgs e) => new Dto();
 		}
 
 		private class DtoValueSelector : IValueSelector

@@ -6,9 +6,9 @@ namespace Stronk.ValueConversion
 	{
 		public bool CanMap(Type target) => target.IsEnum;
 
-		public object Map(Type target, string value)
+		public object Map(ValueConverterArgs e)
 		{
-			return Enum.Parse(target, value, ignoreCase: true);
+			return Enum.Parse(e.Target, e.Input, ignoreCase: true);
 		}
 	}
 }

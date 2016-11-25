@@ -6,9 +6,9 @@ namespace Stronk.ValueConversion
 	{
 		public bool CanMap(Type target) => true;
 
-		public object Map(Type target, string value)
+		public object Map(ValueConverterArgs e)
 		{
-			return Convert.ChangeType(value, target);
+			return Convert.ChangeType(e.Input, e.Target);
 		}
 	}
 }

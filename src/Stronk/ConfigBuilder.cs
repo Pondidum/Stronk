@@ -46,7 +46,13 @@ namespace Stronk
 				if (converter == null)
 					continue;
 
-				var converted = converter.Map(property.Type, value);
+				var vca = new ValueConverterArgs(
+					converters.Where(x => x != converter),
+					property.Type,
+					value
+				);
+
+				var converted = converter.Map(vca);
 
 				property.Assign(target, converted);
 			}
