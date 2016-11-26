@@ -32,16 +32,7 @@ namespace Stronk
 				if (value == null)
 					continue;
 
-				IValueConverter converter = null;
-
-				foreach (var valueConverter in converters)
-				{
-					if (valueConverter.CanMap(property.Type) == false)
-						continue;
-
-					converter = valueConverter;
-					break;
-				}
+				var converter = GetValueConverter(converters, property);
 
 				if (converter == null)
 					continue;
@@ -56,6 +47,19 @@ namespace Stronk
 
 				property.Assign(target, converted);
 			}
+		}
+
+		private static IValueConverter GetValueConverter(IValueConverter[] converters, PropertyDescriptor property)
+		{
+			foreach (var valueConverter in converters)
+			{
+				if (valueConverter.CanMap(property.Type) == false)
+					continue;
+
+				return valueConverter;
+			}
+
+			return null;
 		}
 
 		private static string GetValueFromSource(IValueSelector[] valueSelectors, ValueSelectorArgs args, PropertyDescriptor property)
