@@ -18,31 +18,29 @@ namespace Stronk.ValueConversion
 				.Contains(typeof(IEnumerable<>));
 		}
 
-
 		public object Map(ValueConverterArgs e)
 		{
 			var values = e.Input.Split(',');
+			var converters = e.OtherConverters.ToArray();
+
+			var targetType = e.Target.IsGenericType
+				? e.Target.GetGenericArguments()[0]
+				: e.Target.GetElementType();
+
+			var converter = converters
+				.First(c => c.CanMap(targetType));
+
+			var convertedValues = values
+				.Select(val => converter.Map(new ValueConverterArgs(converters, targetType, val)));
 
 			if (IsIEnumerable(e.Target))
-			{
-				return values
-					.Select(val => Convert.ChangeType(val, e.Target.GetGenericArguments()[0]))
-					.ToArray();
-			}
+				return convertedValues.ToArray();
 
 			if (IsIList(e.Target))
-			{
-				return values
-					.Select(val => Convert.ChangeType(val, e.Target.GetGenericArguments()[0]))
-					.ToList();
-			}
+				return convertedValues.ToList();
 
 			if (e.Target.IsArray)
-			{
-				return values
-					.Select(val =>  Convert.ChangeType(val, e.Target.GetElementType()))
-					.ToArray();
-			}
+				return convertedValues.ToArray();
 
 			throw new NotSupportedException("Only arrays, IEnumerable<T> an IList<T> are supported at the moment");
 		}

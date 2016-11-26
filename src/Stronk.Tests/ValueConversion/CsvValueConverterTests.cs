@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
 using Stronk.ValueConversion;
@@ -79,10 +80,31 @@ namespace Stronk.Tests.ValueConversion
 				.ShouldBe(new List<int> { 1, 2, 3, 4 });
 		}
 
-		private ValueConverterArgs Create<T>(string value)
+		[Fact]
+		public void When_mapping_a_type_supported_by_another_converter()
+		{
+			var converters = new IValueConverter[]
+			{
+				new LambdaValueConverter<Guid>(Guid.Parse),
+				new FallbackValueConverter()
+			};
+
+			var guids = new[]
+			{
+				Guid.NewGuid(),
+				Guid.NewGuid(),
+				Guid.NewGuid()
+			};
+
+			_converter
+				.Map(Create<IEnumerable<Guid>>(string.Join(",", guids), converters))
+				.ShouldBe(guids);
+		}
+
+		private ValueConverterArgs Create<T>(string value, IEnumerable<IValueConverter> others = null)
 		{
 			return new ValueConverterArgs(
-				Enumerable.Empty<IValueConverter>(),
+				others ?? new[] { new FallbackValueConverter() },
 				typeof(T),
 				value);
 		}
