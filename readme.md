@@ -35,6 +35,7 @@ public enum ConfigurationMode
 }
 ```
 
+`App.Config` or `Web.Config`
 ```xml
 <configuration>
   <appSettings>
@@ -50,36 +51,75 @@ public enum ConfigurationMode
 
 ## Customisation
 
+You can configure **how** Stronk handles configuration, and **where** Stronk reads it from.
+
+The rough pipeline is as follows:
+
+Select Properties to be populated
+-> Get a Value from `ConfigurationSource` for each Property
+-> Find an `IValueConverter` for the property
+-> Convert the value with the selected converter
+-> Assign to the property
+
+To specify your own conversion and mapping you can either implement `IStronkConfiguration`, or use the customisation methods on `StronkConfiguration`, e.g.
+
 ```csharp
-public class PrivatePropertyBindingPolicy : IBindingPolicy
+var sc = new StronkConfiguration();
+sc.AddBefore<EnumValueConverter>(new SpecialEnumValueConverter());
+
+this.FromAppConfig(sc);
+```
+
+### Customising Conversion and Mapping
+
+#### Property Selection
+*This is used to scan the target `Type` and provide a set of `PropertyDescriptor`s for it.*
+
+Stronk comes with two implementations of `IPropertySelector`, which are both enabled by default:
+
+* [PrivateSetterPropertySelector](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/PropertySelection/PrivateSetterPropertySelector.cs) - this will select any public property which can be written to.
+* [BackingFieldPropertySelector](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/PropertySelection/BackingFieldPropertySelector.cs)) - this will select any public property with a backing field which matches the property name (optionally with a preceding underscore.)
+
+In your own implementation, you just need to return an enumerable of `PropertyDescriptor`:
+
+```csharp
+new PropertyDescriptor
 {
-    public Action<object, object> CreateBinder(BindingPolicyArgs args)
-    {
-        var target = args.TargetType; // typeof(SomeApplication.MyApplicationConfiguration)
-        var name = args.SourceName; //"ApiVersion"
-
-        var setter = target
-          .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-          .Where(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-          .Where(p => p.CanWrite)
-          .Select(p => p.GetSetMethod(nonPublic: true))
-          .SingleOrDefault();
-
-        if (setter == null)
-            return null;
-
-        return (config, value) => setter.Invoke(config, new[] { value });
-    }
+	Name = prop.Name,
+	Type = prop.PropertyType,
+	Assign = (target, value) => prop.GetSetMethod(true).Invoke(target, new[] { value })
 }
 ```
 
-```csharp
-public static void Main()
-{
-    StronkConfiguration.Policies(c => {
-      c.Use(new ConnectionStringSuffixMappingPolicy("DB"));
-      c.Use(new PrivatePropertyBindingPolicy());
-      c.Use(new BackingFieldBindingPolicy());
-    })
-}
-```
+#### Value Selection
+*This is used to match a `PropertyDescriptor` to a value provided by `IConfigurationSource`.*
+
+Stronk comes with one implementation of `IValueSelector`, which is enabled by default:
+
+* [PropertyNameValueSelector](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/ValueSelection/PropertyNameValueSelector.cs) - this will return a value from the `AppSettings` section of the app.config file, matching on `PropertyDescriptor.Name`, if there is no match in `AppSettings`, it will try the `connectionStrings` section also.
+
+#### Value Conversion
+*This is used to take the value from an `IValueSelector` and convert it to the type from `PropertyDescriptor`.*
+
+Stronk comes with many converters, which are attempted to be used in order of specification.  By default this is the conversion order:
+* Uri - calls `val, type => new Uri(val)`
+* Guid - calls `val, type => Guid.Parse(val)`
+* [EnumValueConverter](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/ValueConversion/EnumValueConverter.cs) - Makes use of `Enum.Parse` and `Enum.IsDefined`
+* [CsvValueConverter](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/ValueConversion/CsvValueConverter.cs) - calls other value converters to convert individual values
+* [FallbackValueConverter](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/ValueConversion/FallbackValueConverter.cs) - calls `val, type => Convert.ChangeType(val, type)`
+
+The easiest way of creating a new converter is to just add an instance of `LambdaValueConverter<T>` to the `IStronkConfiguration`.  This is how `Uri` and `Guid` are implemented.
+
+### Customising Configuration Source
+*This is used to customise where Stronk will read configuration values from.*
+
+Stronk comes with one implementaion of `IConfigurationSource`:
+
+* [AppConfigSource](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/AppConfigSource.cs) - this uses the `ConfigurationManager` class, which means both `App.Config` and `Web.Config` are supported out of the box.
+
+## To Do
+
+* Customisable error policy
+  * no value found
+  * no converter found
+  * converter was not happy
