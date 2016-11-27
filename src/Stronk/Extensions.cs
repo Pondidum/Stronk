@@ -2,28 +2,18 @@
 {
 	public static class Extensions
 	{
-		public static void FromAppConfig(this object target)
+		public static void FromAppConfig(this object target, IStronkConfiguration configuration = null, IConfigurationSource configSource = null)
 		{
-			target.FromAppConfig(new StronkConfiguration());
+			var builder = new ConfigBuilder(configuration ?? new StronkConfiguration());
+
+			builder.Populate(target, configSource ?? new AppConfigSource());
 		}
 
-		public static void FromAppConfig(this object target, IStronkConfiguration configuration, IConfigurationSource configSource = null)
+		public static void FromWebConfig(this object target, IStronkConfiguration configuration = null, IConfigurationSource configSource = null)
 		{
-			var builder = new ConfigBuilder(configuration);
+			var builder = new ConfigBuilder(configuration ?? new StronkConfiguration());
 
-			builder.Populate(target, configSource);
-		}
-
-		public static void FromWebConfig(this object target)
-		{
-			target.FromWebConfig(new StronkConfiguration());
-		}
-
-		public static void FromWebConfig(this object target, IStronkConfiguration configuration, IConfigurationSource configSource = null)
-		{
-			var builder = new ConfigBuilder(configuration);
-
-			builder.Populate(target, configSource);
+			builder.Populate(target, configSource ?? new AppConfigSource());
 		}
 	}
 }
