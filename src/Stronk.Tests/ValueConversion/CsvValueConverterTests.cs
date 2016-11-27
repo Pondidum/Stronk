@@ -68,7 +68,7 @@ namespace Stronk.Tests.ValueConversion
 		public void When_mapping_int_csv_to_array()
 		{
 			_converter
-				.Map(Create<IList<int>>("1,2,3,4"))
+				.Map(Create<int[]>("1,2,3,4"))
 				.ShouldBe(new[] { 1, 2, 3, 4 });
 		}
 
