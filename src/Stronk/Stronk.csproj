@@ -49,6 +49,7 @@
     <Compile Include="StronkConfiguration.cs" />
     <Compile Include="StronkConfigurationException.cs" />
     <Compile Include="ValueConversion\CsvValueConverter.cs" />
+    <Compile Include="ValueConversion\ValueConverterArgs.cs" />
     <Compile Include="ValueSelection\IValueSelector.cs" />
     <Compile Include="ValueSelection\PropertyNameValueSelector.cs" />
     <Compile Include="PropertySelection\BackingFieldPropertySelector.cs" />
