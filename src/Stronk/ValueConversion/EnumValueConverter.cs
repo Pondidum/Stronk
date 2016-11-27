@@ -8,7 +8,19 @@ namespace Stronk.ValueConversion
 
 		public object Map(ValueConverterArgs e)
 		{
-			return Enum.Parse(e.Target, e.Input, ignoreCase: true);
+			try
+			{
+				var value =  Enum.Parse(e.Target, e.Input, ignoreCase: true);
+
+				return Enum.IsDefined(e.Target, value)
+					? value
+					: null;
+			}
+			catch (ArgumentException)
+			{
+				return null;
+			}
+			
 		}
 	}
 }

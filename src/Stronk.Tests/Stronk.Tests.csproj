@@ -72,6 +72,7 @@
     <Compile Include="Scratchpad.cs" />
     <Compile Include="StronkConfigurationTests.cs" />
     <Compile Include="ValueConversion\CsvValueConverterTests.cs" />
+    <Compile Include="ValueConversion\EnumValueConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
