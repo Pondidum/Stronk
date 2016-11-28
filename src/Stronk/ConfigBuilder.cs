@@ -62,9 +62,9 @@ namespace Stronk
 			return null;
 		}
 
-		private static string GetValueFromSource(IValueSelector[] valueSelectors, ValueSelectorArgs args, PropertyDescriptor property)
+		private static string GetValueFromSource(ISourceValueSelector[] sourceValueSelectors, ValueSelectorArgs args, PropertyDescriptor property)
 		{
-			foreach (var filter in valueSelectors)
+			foreach (var filter in sourceValueSelectors)
 			{
 				var value = filter.Select(args.With(property));
 

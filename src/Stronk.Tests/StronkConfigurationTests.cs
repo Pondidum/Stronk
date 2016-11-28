@@ -74,37 +74,37 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_value_selector_is_added()
 		{
-			_config.Add(new DtoValueSelector());
+			_config.Add(new DtoSourceValueSelector());
 
-			_config.ValueSelectors.Last().ShouldBeOfType<DtoValueSelector>();
+			_config.ValueSelectors.Last().ShouldBeOfType<DtoSourceValueSelector>();
 		}
 
 		[Fact]
 		public void When_a_value_selector_is_added_before_an_existing_converter()
 		{
-			_config.AddBefore<PropertyNameValueSelector>(new DtoValueSelector());
+			_config.AddBefore<PropertyNameSourceValueSelector>(new DtoSourceValueSelector());
 
-			InsertIndexShouldBeBefore(_config.ValueSelectors, typeof(PropertyNameValueSelector), typeof(DtoValueSelector));
+			InsertIndexShouldBeBefore(_config.ValueSelectors, typeof(PropertyNameSourceValueSelector), typeof(DtoSourceValueSelector));
 		}
 
 		[Fact]
 		public void When_a_value_selector_is_added_after_an_existing_converter()
 		{
-			_config.AddAfter<PropertyNameValueSelector>(new DtoValueSelector());
+			_config.AddAfter<PropertyNameSourceValueSelector>(new DtoSourceValueSelector());
 
-			InsertIndexShouldBeAfter(_config.ValueSelectors, typeof(PropertyNameValueSelector), typeof(DtoValueSelector));
+			InsertIndexShouldBeAfter(_config.ValueSelectors, typeof(PropertyNameSourceValueSelector), typeof(DtoSourceValueSelector));
 		}
 
 		[Fact]
 		public void When_a_value_selector_is_added_before_a_non_existing_converter()
 		{
-			Should.Throw<StronkConfigurationException>(() => _config.AddBefore<UnusedValueSelector>(new DtoValueSelector()));
+			Should.Throw<StronkConfigurationException>(() => _config.AddBefore<UnusedSourceValueSelector>(new DtoSourceValueSelector()));
 		}
 
 		[Fact]
 		public void When_a_value_selector_is_added_after_a_non_existing_converter()
 		{
-			Should.Throw<StronkConfigurationException>(() => _config.AddAfter<UnusedValueSelector>(new DtoValueSelector()));
+			Should.Throw<StronkConfigurationException>(() => _config.AddAfter<UnusedSourceValueSelector>(new DtoSourceValueSelector()));
 		}
 
 
@@ -173,7 +173,7 @@ namespace Stronk.Tests
 			public object Map(ValueConverterArgs e) => new Dto();
 		}
 
-		private class DtoValueSelector : IValueSelector
+		private class DtoSourceValueSelector : ISourceValueSelector
 		{
 			public string Select(ValueSelectorArgs args) => "dto";
 		}
@@ -183,7 +183,7 @@ namespace Stronk.Tests
 			public IEnumerable<PropertyDescriptor> Select(Type targetType) => Enumerable.Empty<PropertyDescriptor>();
 		}
 
-		private class UnusedValueSelector : IValueSelector
+		private class UnusedSourceValueSelector : ISourceValueSelector
 		{
 			public string Select(ValueSelectorArgs args)
 			{

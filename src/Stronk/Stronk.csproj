@@ -50,8 +50,8 @@
     <Compile Include="StronkConfigurationException.cs" />
     <Compile Include="ValueConversion\CsvValueConverter.cs" />
     <Compile Include="ValueConversion\ValueConverterArgs.cs" />
-    <Compile Include="ValueSelection\IValueSelector.cs" />
-    <Compile Include="ValueSelection\PropertyNameValueSelector.cs" />
+    <Compile Include="ValueSelection\ISourceValueSelector.cs" />
+    <Compile Include="ValueSelection\PropertyNameSourceValueSelector.cs" />
     <Compile Include="PropertySelection\BackingFieldPropertySelector.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PropertySelection\IPropertySelector.cs" />

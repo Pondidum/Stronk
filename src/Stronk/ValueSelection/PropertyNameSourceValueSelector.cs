@@ -1,6 +1,6 @@
 ﻿namespace Stronk.ValueSelection
 {
-	public class PropertyNameValueSelector : IValueSelector
+	public class PropertyNameSourceValueSelector : ISourceValueSelector
 	{
 		public string Select(ValueSelectorArgs args)
 		{

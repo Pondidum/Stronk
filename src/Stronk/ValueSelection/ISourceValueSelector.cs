@@ -1,6 +1,6 @@
 ﻿namespace Stronk.ValueSelection
 {
-	public interface IValueSelector
+	public interface ISourceValueSelector
 	{
 		string Select(ValueSelectorArgs args);
 	}

@@ -9,6 +9,6 @@ namespace Stronk
 	{
 		IEnumerable<IValueConverter> ValueConverters { get; }
 		IEnumerable<IPropertySelector> PropertySelectors { get; }
-		IEnumerable<IValueSelector> ValueSelectors { get; }
+		IEnumerable<ISourceValueSelector> ValueSelectors { get; }
 	}
 }

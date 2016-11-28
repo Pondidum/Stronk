@@ -94,12 +94,12 @@ new PropertyDescriptor
 #### Value Selection
 *This is used to match a `PropertyDescriptor` to a value provided by `IConfigurationSource`.*
 
-Stronk comes with one implementation of `IValueSelector`, which is enabled by default:
+Stronk comes with one implementation of `ISourceValueSelector`, which is enabled by default:
 
-* [PropertyNameValueSelector](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/ValueSelection/PropertyNameValueSelector.cs) - this will return a value from the `AppSettings` section of the app.config file, matching on `PropertyDescriptor.Name`, if there is no match in `AppSettings`, it will try the `connectionStrings` section also.
+* [PropertyNameSourceValueSelector](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/ValueSelection/PropertyNameSourceValueSelector.cs) - this will return a value from the `AppSettings` section of the app.config file, matching on `PropertyDescriptor.Name`, if there is no match in `AppSettings`, it will try the `connectionStrings` section also.
 
 #### Value Conversion
-*This is used to take the value from an `IValueSelector` and convert it to the type from `PropertyDescriptor`.*
+*This is used to take the value from an `ISourceValueSelector` and convert it to the type from `PropertyDescriptor`.*
 
 Stronk comes with many converters, which are attempted to be used in order of specification.  By default this is the conversion order:
 * Uri - calls `val, type => new Uri(val)`
