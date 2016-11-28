@@ -50,8 +50,8 @@
     <Compile Include="StronkConfigurationException.cs" />
     <Compile Include="ValueConversion\CsvValueConverter.cs" />
     <Compile Include="ValueConversion\ValueConverterArgs.cs" />
-    <Compile Include="ValueSelection\ISourceValueSelector.cs" />
-    <Compile Include="ValueSelection\PropertyNameSourceValueSelector.cs" />
+    <Compile Include="SourceValueSelection\ISourceValueSelector.cs" />
+    <Compile Include="SourceValueSelection\PropertyNameSourceValueSelector.cs" />
     <Compile Include="PropertySelection\BackingFieldPropertySelector.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PropertySelection\IPropertySelector.cs" />
@@ -62,7 +62,7 @@
     <Compile Include="ValueConversion\IValueConverter.cs" />
     <Compile Include="ValueConversion\LambdaValueConverter.cs" />
     <Compile Include="ValueConversion\FallbackValueConverter.cs" />
-    <Compile Include="ValueSelection\ValueSelectorArgs.cs" />
+    <Compile Include="SourceValueSelection\ValueSelectorArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

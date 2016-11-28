@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
 using Stronk.PropertySelection;
+using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
-using Stronk.ValueSelection;
 using Xunit;
 
 namespace Stronk.Tests

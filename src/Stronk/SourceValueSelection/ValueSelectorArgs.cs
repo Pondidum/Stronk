@@ -2,7 +2,7 @@
 using System.Configuration;
 using Stronk.PropertySelection;
 
-namespace Stronk.ValueSelection
+namespace Stronk.SourceValueSelection
 {
 	public class ValueSelectorArgs
 	{

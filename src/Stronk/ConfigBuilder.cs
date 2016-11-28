@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Stronk.PropertySelection;
+using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
-using Stronk.ValueSelection;
 
 namespace Stronk
 {

@@ -1,4 +1,4 @@
-﻿namespace Stronk.ValueSelection
+﻿namespace Stronk.SourceValueSelection
 {
 	public class PropertyNameSourceValueSelector : ISourceValueSelector
 	{
