@@ -11,11 +11,11 @@ namespace Stronk.Tests
 {
 	public class StronkConfigurationTests
 	{
-		private readonly StronkConfiguration _config;
+		private readonly StronkOptions _config;
 
 		public StronkConfigurationTests()
 		{
-			_config = new StronkConfiguration();
+			_config = new StronkOptions();
 		}
 
 		[Fact]

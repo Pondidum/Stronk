@@ -61,10 +61,10 @@ Select Properties to be populated
 -> Convert the value with the selected converter
 -> Assign to the property
 
-To specify your own conversion and mapping you can either implement `IStronkConfiguration`, or use the customisation methods on `StronkConfiguration`, e.g.
+To specify your own conversion and mapping you can either implement `IStronkOptions`, or use the customisation methods on `StronkOptions`, e.g.
 
 ```csharp
-var sc = new StronkConfiguration();
+var sc = new StronkOptions();
 sc.AddBefore<EnumValueConverter>(new SpecialEnumValueConverter());
 
 this.FromAppConfig(sc);
@@ -108,7 +108,7 @@ Stronk comes with many converters, which are attempted to be used in order of sp
 * [CsvValueConverter](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/ValueConversion/CsvValueConverter.cs) - calls other value converters to convert individual values
 * [FallbackValueConverter](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/ValueConversion/FallbackValueConverter.cs) - calls `val, type => Convert.ChangeType(val, type)`
 
-The easiest way of creating a new converter is to just add an instance of `LambdaValueConverter<T>` to the `IStronkConfiguration`.  This is how `Uri` and `Guid` are implemented.
+The easiest way of creating a new converter is to just add an instance of `LambdaValueConverter<T>` to the `IStronkOptions`.  This is how `Uri` and `Guid` are implemented.
 
 ### Customising Configuration Source
 *This is used to customise where Stronk will read configuration values from.*

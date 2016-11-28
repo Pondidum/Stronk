@@ -44,9 +44,9 @@
     <Compile Include="AppConfigSource.cs" />
     <Compile Include="ConfigBuilder.cs" />
     <Compile Include="IConfigurationSource.cs" />
-    <Compile Include="IStronkConfiguration.cs" />
+    <Compile Include="IStronkOptions.cs" />
     <Compile Include="Properties\AssemblyVersion.cs" />
-    <Compile Include="StronkConfiguration.cs" />
+    <Compile Include="StronkOptions.cs" />
     <Compile Include="StronkConfigurationException.cs" />
     <Compile Include="ValueConversion\CsvValueConverter.cs" />
     <Compile Include="ValueConversion\ValueConverterArgs.cs" />

@@ -14,7 +14,7 @@ namespace TestApp
 		static void Main(string[] args)
 		{
 			var config = new MassiveConfig();
-			var configuration = new StronkConfiguration();
+			var configuration = new StronkOptions();
 			var provider = new InMemorySource();
 
 			config.FromAppConfig(configuration, provider);

@@ -6,7 +6,7 @@ using Stronk.ValueSelection;
 
 namespace Stronk
 {
-	public class StronkConfiguration : IStronkConfiguration
+	public class StronkOptions : IStronkOptions
 	{
 		public IEnumerable<IValueConverter> ValueConverters => _valueConverters;
 		public IEnumerable<IPropertySelector> PropertySelectors => _propertySelectors;
@@ -16,7 +16,7 @@ namespace Stronk
 		private readonly List<IPropertySelector> _propertySelectors;
 		private readonly List<ISourceValueSelector> _valueSelectors;
 
-		public StronkConfiguration()
+		public StronkOptions()
 		{
 			_valueConverters = new List<IValueConverter>
 			{

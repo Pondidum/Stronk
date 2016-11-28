@@ -7,19 +7,19 @@ namespace Stronk
 {
 	public class ConfigBuilder
 	{
-		private readonly IStronkConfiguration _configuration;
+		private readonly IStronkOptions _options;
 
-		public ConfigBuilder(IStronkConfiguration configuration)
+		public ConfigBuilder(IStronkOptions options)
 		{
-			_configuration = configuration;
+			_options = options;
 		}
 
 		public void Populate(object target, IConfigurationSource configSource)
 		{
-			var valueSelectors = _configuration.ValueSelectors.ToArray();
-			var converters = _configuration.ValueConverters.ToArray();
+			var valueSelectors = _options.ValueSelectors.ToArray();
+			var converters = _options.ValueConverters.ToArray();
 
-			var properties = _configuration
+			var properties = _options
 				.PropertySelectors
 				.SelectMany(selector => selector.Select(target.GetType()));
 

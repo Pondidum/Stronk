@@ -5,7 +5,7 @@ using Stronk.ValueSelection;
 
 namespace Stronk
 {
-	public interface IStronkConfiguration
+	public interface IStronkOptions
 	{
 		IEnumerable<IValueConverter> ValueConverters { get; }
 		IEnumerable<IPropertySelector> PropertySelectors { get; }
