@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
 using Stronk.ValueConversion;
@@ -73,6 +74,39 @@ namespace Stronk.Tests
 
 		[Fact]
 		public void Enum_value_arrays_are_is_converted() => Convert<Enum[]>("2,3").ShouldBe(new[] { Enum.Two, Enum.Three });
+
+
+
+		[Fact]
+		public void String_lists_are_converted() => Convert<IList<string>>("a,b,c,d").ShouldBe(new[] { "a", "b", "c", "d" });
+
+		[Fact]
+		public void Integer_lists_are_converted() => Convert<IList<int>>("1,3,5,9").ShouldBe(new[] { 1, 3, 5, 9 });
+
+		[Fact]
+		public void Decimal_lists_are_converted() => Convert<IList<decimal>>("1.2,3.4,5.6,9.871").ShouldBe(new[] { 1.2M, 3.4M, 5.6M, 9.871M });
+
+		[Fact]
+		public void Guid_lists_are_converted() => Convert<IList<Guid>>("7AB987EE-0ACE-45FF-B6CA-DE75091D045D,1D19B692-6115-41FF-AB78-7731E3BECE21").ShouldBe(new[]
+		{
+		  Guid.Parse("7AB987EE-0ACE-45FF-B6CA-DE75091D045D"),
+		  Guid.Parse("1D19B692-6115-41FF-AB78-7731E3BECE21")
+		});
+
+		[Fact]
+		public void Url_lists_are_converted() => Convert<IList<Uri>>("https://example.com/123,http://www.example.org").ShouldBe(new[]
+		{
+		  new Uri("https://example.com/123"),
+		  new Uri("http://www.example.org")
+		});
+
+		[Fact]
+		public void Enum_text_lists_are_converted() => Convert<IList<Enum>>("One,Two").ShouldBe(new[] { Enum.One, Enum.Two });
+
+		[Fact]
+		public void Enum_value_lists_are_is_converted() => Convert<IList<Enum>>("2,3").ShouldBe(new[] { Enum.Two, Enum.Three });
+
+
 
 		private enum Enum
 		{

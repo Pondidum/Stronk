@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Stronk.ValueConversion
 {
@@ -34,15 +36,29 @@ namespace Stronk.ValueConversion
 				.Select(val => converter.Map(new ValueConverterArgs(converters, targetType, val)));
 
 			if (IsIEnumerable(e.Target))
-				return convertedValues.ToArray();
-
-			if (IsIList(e.Target))
-				return convertedValues.ToList();
+				return CastArray(targetType, convertedValues.ToArray());
 
 			if (e.Target.IsArray)
 				return CastArray(targetType, convertedValues.ToArray());
 
-			throw new NotSupportedException("Only arrays, IEnumerable<T> an IList<T> are supported at the moment");
+			if (IsList(e.Target))
+				return GenerateList(targetType, convertedValues);
+
+			throw new NotSupportedException($"Unable to cast to '{e.Target.Name}', as only arrays, IEnumerable<T> an IList<T> are supported at the moment");
+		}
+
+		private static object GenerateList(Type targetType, IEnumerable<object> convertedValues)
+		{
+			var castMethod = typeof(Enumerable).GetMethod("Cast", BindingFlags.Static | BindingFlags.Public);
+			var genericCast = castMethod.MakeGenericMethod(targetType);
+
+			var toListMethod = typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public);
+			var genericToList = toListMethod.MakeGenericMethod(targetType);
+
+			var casted = genericCast.Invoke(null, new object[] { convertedValues });
+			var list = genericToList.Invoke(null, new[] { casted });
+
+			return list;
 		}
 
 		private static bool IsIEnumerable(Type target)
@@ -50,9 +66,13 @@ namespace Stronk.ValueConversion
 			return target.IsGenericType && target.GetGenericTypeDefinition() == typeof(IEnumerable<>);
 		}
 
-		private static bool IsIList(Type target)
+		private static bool IsList(Type target)
 		{
-			return target.IsGenericType && target.GetGenericTypeDefinition() == typeof(IList<>);
+			return target.IsGenericType && (
+				target.GetGenericTypeDefinition() == typeof(IList<>)
+				||
+				target.GetGenericTypeDefinition() == typeof(List<>)
+			);
 		}
 
 		private static IEnumerable<Type> GetGenericInterfaces(Type target)
