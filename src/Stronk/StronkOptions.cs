@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Stronk.PropertySelection;
 using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
@@ -18,25 +19,9 @@ namespace Stronk
 
 		public StronkOptions()
 		{
-			_valueConverters = new List<IValueConverter>
-			{
-				new LambdaValueConverter<Uri>(val => new Uri(val)),
-				new LambdaValueConverter<Guid>(Guid.Parse),
-				new EnumValueConverter(),
-				new CsvValueConverter(),
-				new FallbackValueConverter()
-			};
-
-			_propertySelectors = new List<IPropertySelector>
-			{
-				new PrivateSetterPropertySelector(),
-				new BackingFieldPropertySelector(),
-			};
-
-			_valueSelectors = new List<ISourceValueSelector>
-			{
-				new PropertyNameSourceValueSelector(),
-			};
+			_valueConverters = Default.ValueConverters.ToList();
+			_propertySelectors = Default.PropertySelectors.ToList();
+			_valueSelectors = Default.SourceValueSelectors.ToList();
 		}
 
 		public void Add(IValueConverter valueConverter) => _valueConverters.Add(valueConverter);
