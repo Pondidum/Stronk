@@ -44,6 +44,9 @@ namespace Stronk.Tests
 		[Fact]
 		public void Enum_value_is_converted() => Convert<Enum>("3").ShouldBe(Enum.Three);
 
+		[Fact]
+		public void TimeSpan_value_is_converted() => Convert<TimeSpan>("1.02:03:04.0050000").ShouldBe(new TimeSpan(1, 2, 3, 4, 5));
+
 
 
 		[Fact]
@@ -73,7 +76,14 @@ namespace Stronk.Tests
 		public void Enum_text_arrays_are_converted() => Convert<Enum[]>("One,Two").ShouldBe(new[] { Enum.One, Enum.Two });
 
 		[Fact]
-		public void Enum_value_arrays_are_is_converted() => Convert<Enum[]>("2,3").ShouldBe(new[] { Enum.Two, Enum.Three });
+		public void Enum_value_arrays_are_converted() => Convert<Enum[]>("2,3").ShouldBe(new[] { Enum.Two, Enum.Three });
+
+		[Fact]
+		public void TimeSpan_value_arrays_are_converted() => Convert<TimeSpan[]>("1.02:03:04.0050000,09:08:05").ShouldBe(new[]
+		{
+			new TimeSpan(1, 2, 3, 4, 5),
+			new TimeSpan(9,8,5)
+		});
 
 
 
@@ -104,8 +114,14 @@ namespace Stronk.Tests
 		public void Enum_text_lists_are_converted() => Convert<IList<Enum>>("One,Two").ShouldBe(new[] { Enum.One, Enum.Two });
 
 		[Fact]
-		public void Enum_value_lists_are_is_converted() => Convert<IList<Enum>>("2,3").ShouldBe(new[] { Enum.Two, Enum.Three });
+		public void Enum_value_lists_are_converted() => Convert<IList<Enum>>("2,3").ShouldBe(new[] { Enum.Two, Enum.Three });
 
+		[Fact]
+		public void TimeSpan_value_lists_are_converted() => Convert<IList<TimeSpan>>("1.02:03:04.0050000,09:08:05").ShouldBe(new[]
+		{
+			new TimeSpan(1, 2, 3, 4, 5),
+			new TimeSpan(9,8,5)
+		});
 
 
 		private enum Enum

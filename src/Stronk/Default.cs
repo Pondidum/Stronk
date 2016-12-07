@@ -11,6 +11,7 @@ namespace Stronk
 		public static IValueConverter[] ValueConverters { get; } = {
 			new LambdaValueConverter<Uri>(val => new Uri(val)),
 			new LambdaValueConverter<Guid>(Guid.Parse),
+			new LambdaValueConverter<TimeSpan>(TimeSpan.Parse),
 			new EnumValueConverter(),
 			new CsvValueConverter(),
 			new FallbackValueConverter()
