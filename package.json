@@ -1,6 +1,6 @@
 {
   "name": "Stronk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
     "gulp": "^3.9.0",
     "gulp-bump": "^1.0.0",
