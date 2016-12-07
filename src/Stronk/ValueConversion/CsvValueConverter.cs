@@ -40,7 +40,7 @@ namespace Stronk.ValueConversion
 				return convertedValues.ToList();
 
 			if (e.Target.IsArray)
-				return convertedValues.ToArray();
+				return CastArray(targetType, convertedValues.ToArray());
 
 			throw new NotSupportedException("Only arrays, IEnumerable<T> an IList<T> are supported at the moment");
 		}
@@ -61,6 +61,14 @@ namespace Stronk.ValueConversion
 				.GetInterfaces()
 				.Where(i => i.IsGenericType)
 				.Select(i => i.GetGenericTypeDefinition());
+		}
+
+		private static Array CastArray(Type target, object[] input)
+		{
+			Array dest = Array.CreateInstance(target, input.Length);
+			Array.Copy(input, dest, input.Length);
+
+			return dest;
 		}
 	}
 }
