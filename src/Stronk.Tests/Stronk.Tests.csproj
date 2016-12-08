@@ -65,7 +65,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultConversionTests.cs" />
+    <Compile Include="DefaultConversionTests\DecimalConversion.cs" />
+    <Compile Include="DefaultConversionTests\DefaultConversionTests.cs" />
+    <Compile Include="DefaultConversionTests\DoubleConversion.cs" />
+    <Compile Include="DefaultConversionTests\Enumeration.cs" />
+    <Compile Include="DefaultConversionTests\EnumTextConversion.cs" />
+    <Compile Include="DefaultConversionTests\EnumValueConversion.cs" />
+    <Compile Include="DefaultConversionTests\GuidConversion.cs" />
+    <Compile Include="DefaultConversionTests\IntConversion.cs" />
+    <Compile Include="DefaultConversionTests\StringConversion.cs" />
+    <Compile Include="DefaultConversionTests\TimeSpanConversion.cs" />
+    <Compile Include="DefaultConversionTests\TypeConversionTest.cs" />
+    <Compile Include="DefaultConversionTests\UrlConversion.cs" />
     <Compile Include="ExtensionsTests.cs" />
     <Compile Include="MassiveConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
