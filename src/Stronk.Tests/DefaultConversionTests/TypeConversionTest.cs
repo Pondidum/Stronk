@@ -34,13 +34,18 @@ namespace Stronk.Tests.DefaultConversionTests
 
 
 		[Fact]
-		public void Strings_are_converted() => Convert<T>(_inputSingle).ShouldBe(_expected);
+		public void Single_items_are_convertable() => Convert<T>(_inputSingle).ShouldBe(_expected);
 
 		[Fact]
-		public void String_arrays_are_converted() => Convert<T[]>(_inputMultiple).ShouldBe(_expectedCollection);
+		public void Arrays_are_convertable() => Convert<T[]>(_inputMultiple).ShouldBe(_expectedCollection);
 
 		[Fact]
-		public void String_lists_are_converted() => Convert<IList<T>>(_inputMultiple).ShouldBe(_expectedCollection);
+		public void ILists_are_convertable() => Convert<IList<T>>(_inputMultiple).ShouldBe(_expectedCollection);
 
+		[Fact]
+		public void Lists_are_convertable() => Convert<List<T>>(_inputMultiple).ShouldBe(_expectedCollection);
+
+		[Fact]
+		public void IEnumerables_are_convertable() => Convert<IEnumerable<T>>(_inputMultiple).ShouldBe(_expectedCollection);
 	}
 }
