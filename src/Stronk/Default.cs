@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Stronk.PropertySelection;
 using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
@@ -12,6 +13,7 @@ namespace Stronk
 			new LambdaValueConverter<Uri>(val => new Uri(val)),
 			new LambdaValueConverter<Guid>(Guid.Parse),
 			new LambdaValueConverter<TimeSpan>(TimeSpan.Parse),
+			new LambdaValueConverter<DateTime>(val => DateTime.Parse(val, null, DateTimeStyles.RoundtripKind)),
 			new EnumValueConverter(),
 			new CsvValueConverter(),
 			new FallbackValueConverter()
