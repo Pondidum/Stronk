@@ -9,11 +9,11 @@ using Xunit;
 
 namespace Stronk.Tests
 {
-	public class StronkConfigurationTests
+	public class StronkOptionsTests
 	{
 		private readonly StronkOptions _config;
 
-		public StronkConfigurationTests()
+		public StronkOptionsTests()
 		{
 			_config = new StronkOptions();
 		}

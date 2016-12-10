@@ -78,11 +78,13 @@
     <Compile Include="DefaultConversionTests\TypeConversionTest.cs" />
     <Compile Include="DefaultConversionTests\UrlConversion.cs" />
     <Compile Include="ExtensionsTests.cs" />
-    <Compile Include="MassiveConfig.cs" />
+    <Compile Include="PropertySelection\MassiveBackingFieldConfig.cs" />
+    <Compile Include="PropertySelection\MassiveConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertySelection\AutoPropertySelectorTests.cs" />
     <Compile Include="PropertySelection\BackingFieldPropertySelectorTests.cs" />
     <Compile Include="Scratchpad.cs" />
-    <Compile Include="StronkConfigurationTests.cs" />
+    <Compile Include="StronkOptionsTests.cs" />
     <Compile Include="ValueConversion\CsvValueConverterTests.cs" />
     <Compile Include="ValueConversion\EnumValueConverterTests.cs" />
   </ItemGroup>
