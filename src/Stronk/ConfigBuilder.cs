@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Stronk.Policies;
 using Stronk.PropertySelection;
 using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
@@ -27,10 +28,13 @@ namespace Stronk
 
 			foreach (var property in properties)
 			{
-				var value = GetValueFromSource(valueSelectors, args, property);
+				var value = GetValueFromSource(valueSelectors, args.With(property));
 
 				if (value == null)
-					continue;
+					if (_options.ErrorPolicy.OnSourceValueNotFound == PolicyActions.ThrowException)
+						throw new SourceValueNotFoundException(valueSelectors, property);
+					else
+						continue;
 
 				var converter = GetValueConverter(converters, property);
 
@@ -62,11 +66,11 @@ namespace Stronk
 			return null;
 		}
 
-		private static string GetValueFromSource(ISourceValueSelector[] sourceValueSelectors, ValueSelectorArgs args, PropertyDescriptor property)
+		private static string GetValueFromSource(ISourceValueSelector[] sourceValueSelectors, ValueSelectorArgs args)
 		{
 			foreach (var filter in sourceValueSelectors)
 			{
-				var value = filter.Select(args.With(property));
+				var value = filter.Select(args);
 
 				if (value != null)
 					return value;

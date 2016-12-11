@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Stronk.Policies;
 using Stronk.PropertySelection;
 using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
@@ -12,6 +13,7 @@ namespace Stronk
 		public IEnumerable<IValueConverter> ValueConverters => _valueConverters;
 		public IEnumerable<IPropertySelector> PropertySelectors => _propertySelectors;
 		public IEnumerable<ISourceValueSelector> ValueSelectors => _valueSelectors;
+		public ErrorPolicy ErrorPolicy { get; set; }
 
 		private readonly List<IValueConverter> _valueConverters;
 		private readonly List<IPropertySelector> _propertySelectors;
@@ -22,6 +24,8 @@ namespace Stronk
 			_valueConverters = Default.ValueConverters.ToList();
 			_propertySelectors = Default.PropertySelectors.ToList();
 			_valueSelectors = Default.SourceValueSelectors.ToList();
+
+			ErrorPolicy = new ErrorPolicy();
 		}
 
 		public void Add(IValueConverter valueConverter) => _valueConverters.Add(valueConverter);
