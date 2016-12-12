@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="AppConfigSource.cs" />
     <Compile Include="ConfigBuilder.cs" />
+    <Compile Include="ConverterNotFoundException.cs" />
     <Compile Include="Default.cs" />
     <Compile Include="IConfigurationSource.cs" />
     <Compile Include="IStronkOptions.cs" />
