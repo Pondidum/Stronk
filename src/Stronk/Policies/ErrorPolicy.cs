@@ -3,7 +3,7 @@
 	public class ErrorPolicy
 	{
 		public PolicyActions OnSourceValueNotFound { get; set; }
-		public PolicyActions OnNoConverterFound { get; set; }
+		public PolicyActions OnConverterNotFound { get; set; }
 	}
 
 	public enum PolicyActions

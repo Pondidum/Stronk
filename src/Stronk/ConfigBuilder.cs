@@ -39,7 +39,7 @@ namespace Stronk
 				var converter = GetValueConverter(converters, property);
 
 				if (converter == null)
-					if (_options.ErrorPolicy.OnNoConverterFound == PolicyActions.ThrowException)
+					if (_options.ErrorPolicy.OnConverterNotFound == PolicyActions.ThrowException)
 						throw new ConverterNotFoundException(converters, property);
 					else
 						continue;
