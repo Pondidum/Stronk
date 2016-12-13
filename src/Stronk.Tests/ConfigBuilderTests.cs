@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Linq;
 using NSubstitute;
 using Shouldly;
 using Stronk.Policies;
@@ -80,6 +81,166 @@ namespace Stronk.Tests
 			_options.ValueConverters.Returns(new[]
 			{
 				new LambdaValueConverter<Uri>(val => new Uri(val)),
+			});
+
+			_builder.Populate(_target, _source);
+
+			_target.Value.ShouldBe(0);
+		}
+
+		[Fact]
+		public void When_a_converter_throws_an_exception_and_policy_is_throw()
+		{
+			_policy.OnConverterException = ConverterExceptionPolicy.ThrowException;
+			_source.AppSettings["Value"] = "12";
+
+			_options.ValueConverters.Returns(new[]
+			{
+				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
+			});
+
+			Should
+				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source))
+				.InnerException.ShouldBeOfType<NotFiniteNumberException>();
+		}
+
+		[Fact]
+		public void When_a_converter_throws_an_exception_and_policy_is_skip()
+		{
+			_policy.OnConverterException = ConverterExceptionPolicy.Skip;
+			_source.AppSettings["Value"] = "12";
+
+			_options.ValueConverters.Returns(new[]
+			{
+				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
+			});
+
+			_builder.Populate(_target, _source);
+
+			_target.Value.ShouldBe(0);
+		}
+
+		[Fact]
+		public void When_a_converter_throws_and_policy_is_fallback_or_throw_and_there_is_no_fallback()
+		{
+			_policy.OnConverterException = ConverterExceptionPolicy.FallbackOrThrow;
+			_source.AppSettings["Value"] = "12";
+
+			_options.ValueConverters.Returns(new[]
+			{
+				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
+			});
+
+			_builder.Populate(_target, _source);
+
+			Should
+				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source))
+				.InnerException.ShouldBeOfType<NotFiniteNumberException>();
+		}
+
+		[Fact]
+		public void When_a_converter_throws_and_policy_is_fallback_or_throw_and_fallback_works()
+		{
+			_policy.OnConverterException = ConverterExceptionPolicy.FallbackOrThrow;
+			_source.AppSettings["Value"] = "12";
+
+			_options.ValueConverters.Returns(new IValueConverter[]
+			{
+				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
+				new FallbackValueConverter()
+			});
+
+			_builder.Populate(_target, _source);
+
+			_target.Value.ShouldBe(12);
+		}
+
+		[Fact]
+		public void When_a_converter_throws_and_policy_is_fallback_or_throw_and_fallback_fails()
+		{
+			_policy.OnConverterException = ConverterExceptionPolicy.FallbackOrThrow;
+			_source.AppSettings["Value"] = "12";
+
+			_options.ValueConverters.Returns(new IValueConverter[]
+			{
+				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
+				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
+			});
+
+			_builder.Populate(_target, _source);
+
+			var ex = Should
+				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source));
+
+			ex.InnerExceptions.First().ShouldBeOfType<NotFiniteNumberException>();
+			ex.InnerExceptions.Last().ShouldBeOfType<NotFiniteNumberException>();
+		}
+
+		[Fact]
+		public void When_a_converter_throws_and_policy_is_fallback_or_throw_and_multiple_fallbacks_fail()
+		{
+			_policy.OnConverterException = ConverterExceptionPolicy.FallbackOrThrow;
+			_source.AppSettings["Value"] = "12";
+
+			_options.ValueConverters.Returns(new IValueConverter[]
+			{
+				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
+				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
+				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
+				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
+			});
+
+			_builder.Populate(_target, _source);
+
+			var ex = Should
+				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source));
+
+			ex.InnerExceptions.Count().ShouldBe(4);
+		}
+
+		[Fact]
+		public void When_a_converter_throws_and_policy_is_fallback_or_skip_and_there_is_no_fallback()
+		{
+			_policy.OnConverterException = ConverterExceptionPolicy.FallbackOrSkip;
+			_source.AppSettings["Value"] = "12";
+
+			_options.ValueConverters.Returns(new[]
+			{
+				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
+			});
+
+			_builder.Populate(_target, _source);
+
+			_target.Value.ShouldBe(0);
+		}
+
+		[Fact]
+		public void When_a_converter_throws_and_policy_is_fallback_or_skip_and_fallback_works()
+		{
+			_policy.OnConverterException = ConverterExceptionPolicy.FallbackOrSkip;
+			_source.AppSettings["Value"] = "12";
+
+			_options.ValueConverters.Returns(new IValueConverter[]
+			{
+				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
+				new FallbackValueConverter()
+			});
+
+			_builder.Populate(_target, _source);
+
+			_target.Value.ShouldBe(12);
+		}
+
+		[Fact]
+		public void When_a_converter_throws_and_policy_is_fallback_or_skip_and_fallback_fails()
+		{
+			_policy.OnConverterException = ConverterExceptionPolicy.FallbackOrSkip;
+			_source.AppSettings["Value"] = "12";
+
+			_options.ValueConverters.Returns(new IValueConverter[]
+			{
+				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
+				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
 			});
 
 			_builder.Populate(_target, _source);

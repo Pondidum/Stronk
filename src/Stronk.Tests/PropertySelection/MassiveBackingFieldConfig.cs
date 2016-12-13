@@ -1,3 +1,4 @@
+#pragma warning disable 649
 namespace Stronk.Tests.PropertySelection
 {
 	public class MassiveBackingFieldConfig
