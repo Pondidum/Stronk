@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Stronk.Policies;
 using Stronk.PropertySelection;
 using Stronk.SourceValueSelection;
@@ -50,7 +51,19 @@ namespace Stronk
 					value
 				);
 
-				var converted = converter.Map(vca);
+				object converted;
+
+				try
+				{
+					converted = converter.Map(vca);
+				}
+				catch (Exception ex)
+				{
+					if (_options.ErrorPolicy.OnConverterException == ConverterExceptionPolicy.ThrowException)
+						throw new ValueConversionException("Error converting",new [] { ex });
+					else
+						continue;
+				}
 
 				property.Assign(target, converted);
 			}
