@@ -131,8 +131,6 @@ namespace Stronk.Tests
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
 			});
 
-			_builder.Populate(_target, _source);
-
 			Should
 				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source))
 				.InnerException.ShouldBeOfType<NotFiniteNumberException>();
@@ -167,13 +165,11 @@ namespace Stronk.Tests
 				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
 			});
 
-			_builder.Populate(_target, _source);
-
 			var ex = Should
 				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source));
 
 			ex.InnerExceptions.First().ShouldBeOfType<NotFiniteNumberException>();
-			ex.InnerExceptions.Last().ShouldBeOfType<NotFiniteNumberException>();
+			ex.InnerExceptions.Last().ShouldBeOfType<IndexOutOfRangeException>();
 		}
 
 		[Fact]
@@ -189,8 +185,6 @@ namespace Stronk.Tests
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
 				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
 			});
-
-			_builder.Populate(_target, _source);
 
 			var ex = Should
 				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source));

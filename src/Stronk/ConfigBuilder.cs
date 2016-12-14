@@ -78,6 +78,9 @@ namespace Stronk
 					exceptions.Add(ex);
 				}
 			}
+
+			if (exceptions.Any() && _options.ErrorPolicy.OnConverterException == ConverterExceptionPolicy.FallbackOrThrow)
+				throw new ValueConversionException("Error converting", exceptions.ToArray());
 		}
 
 		private static IValueConverter[] GetValueConverters(IValueConverter[] converters, PropertyDescriptor property)
