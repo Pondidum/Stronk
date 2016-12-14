@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Stronk.Policies;
 using Stronk.PropertySelection;
 using Stronk.SourceValueSelection;
@@ -19,7 +21,7 @@ namespace Stronk
 		public void Populate(object target, IConfigurationSource configSource)
 		{
 			var valueSelectors = _options.ValueSelectors.ToArray();
-			var converters = _options.ValueConverters.ToArray();
+			var availableConverters = _options.ValueConverters.ToArray();
 
 			var properties = _options
 				.PropertySelectors
@@ -37,49 +39,52 @@ namespace Stronk
 					else
 						continue;
 
-				var converter = GetValueConverter(converters, property);
+				var converters = GetValueConverters(availableConverters, property);
 
-				if (converter == null)
+				if (converters.Any() == false)
 					if (_options.ErrorPolicy.OnConverterNotFound == PolicyActions.ThrowException)
-						throw new ConverterNotFoundException(converters, property);
+						throw new ConverterNotFoundException(availableConverters, property);
 					else
 						continue;
 
+				ApplyConversion(availableConverters, converters, target, property, value);
+			}
+		}
+
+		private void ApplyConversion(IValueConverter[] availableConverters, IEnumerable<IValueConverter> chosenConverters, object target, PropertyDescriptor property, string value)
+		{
+			var exceptions = new List<Exception>();
+
+			foreach (var converter in chosenConverters)
+			{
 				var vca = new ValueConverterArgs(
-					converters.Where(x => x != converter),
+					availableConverters.Where(x => x != converter),
 					property.Type,
 					value
 				);
 
-				object converted;
-
 				try
 				{
-					converted = converter.Map(vca);
+					var converted = converter.Map(vca);
+					property.Assign(target, converted);
+
+					return;
 				}
 				catch (Exception ex)
 				{
 					if (_options.ErrorPolicy.OnConverterException == ConverterExceptionPolicy.ThrowException)
-						throw new ValueConversionException("Error converting",new [] { ex });
-					else
-						continue;
-				}
+						throw new ValueConversionException("Error converting", new[] { ex });
 
-				property.Assign(target, converted);
+					exceptions.Add(ex);
+				}
 			}
 		}
 
-		private static IValueConverter GetValueConverter(IValueConverter[] converters, PropertyDescriptor property)
+		private static IValueConverter[] GetValueConverters(IValueConverter[] converters, PropertyDescriptor property)
 		{
-			foreach (var valueConverter in converters)
-			{
-				if (valueConverter.CanMap(property.Type) == false)
-					continue;
-
-				return valueConverter;
-			}
-
-			return null;
+			return converters
+				.Where(c => c.CanMap(property.Type))
+				.ToArray();
 		}
 
 		private static string GetValueFromSource(ISourceValueSelector[] sourceValueSelectors, ValueSelectorArgs args)
