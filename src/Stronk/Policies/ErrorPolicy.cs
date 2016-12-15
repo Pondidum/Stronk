@@ -4,7 +4,14 @@
 	{
 		public PolicyActions OnSourceValueNotFound { get; set; }
 		public PolicyActions OnConverterNotFound { get; set; }
-		public ConverterExceptionPolicy OnConverterException { get; set; }
+		public ConversionPolicy ConversionPolicy { get; set; }
+
+		public ErrorPolicy()
+		{
+			OnSourceValueNotFound = PolicyActions.ThrowException;
+			OnConverterNotFound = PolicyActions.ThrowException;
+			ConversionPolicy = new ConversionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
+		}
 	}
 
 	public enum ConverterExceptionPolicy

@@ -53,7 +53,8 @@ namespace Stronk
 
 		private void ApplyConversion(IValueConverter[] availableConverters, IEnumerable<IValueConverter> chosenConverters, object target, PropertyDescriptor property, string value)
 		{
-			var exceptions = new List<Exception>();
+			var conversionPolicy = _options.ErrorPolicy.ConversionPolicy;
+			conversionPolicy.BeforeConversion();
 
 			foreach (var converter in chosenConverters)
 			{
@@ -72,15 +73,11 @@ namespace Stronk
 				}
 				catch (Exception ex)
 				{
-					if (_options.ErrorPolicy.OnConverterException == ConverterExceptionPolicy.ThrowException)
-						throw new ValueConversionException("Error converting", new[] { ex });
-
-					exceptions.Add(ex);
+					conversionPolicy.OnConversionException(ex);
 				}
 			}
 
-			if (exceptions.Any() && _options.ErrorPolicy.OnConverterException == ConverterExceptionPolicy.FallbackOrThrow)
-				throw new ValueConversionException("Error converting", exceptions.ToArray());
+			conversionPolicy.AfterConversion();
 		}
 
 		private static IValueConverter[] GetValueConverters(IValueConverter[] converters, PropertyDescriptor property)
