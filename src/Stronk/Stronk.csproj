@@ -44,6 +44,7 @@
     <Compile Include="IStronkOptions.cs" />
     <Compile Include="Policies\ConversionPolicy.cs" />
     <Compile Include="Policies\ErrorPolicy.cs" />
+    <Compile Include="Policies\IConversionPolicy.cs" />
     <Compile Include="Properties\AssemblyVersion.cs" />
     <Compile Include="SourceValueNotFoundException.cs" />
     <Compile Include="StronkOptions.cs" />

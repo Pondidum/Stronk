@@ -4,7 +4,7 @@
 	{
 		public PolicyActions OnSourceValueNotFound { get; set; }
 		public PolicyActions OnConverterNotFound { get; set; }
-		public ConversionPolicy ConversionPolicy { get; set; }
+		public IConversionPolicy ConversionPolicy { get; set; }
 
 		public ErrorPolicy()
 		{

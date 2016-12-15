@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Stronk.Policies
 {
-	public class ConversionPolicy
+	public class ConversionPolicy : IConversionPolicy
 	{
 		private readonly ConverterExceptionPolicy _policy;
 		private readonly List<Exception> _exceptions;
