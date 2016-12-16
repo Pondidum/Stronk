@@ -1,14 +1,16 @@
-﻿namespace Stronk.Policies
+﻿using Stronk.PropertySelection;
+
+namespace Stronk.Policies
 {
 	public class ErrorPolicy
 	{
-		public PolicyActions OnSourceValueNotFound { get; set; }
+		public ISourceValueNotFoundPolicy OnSourceValueNotFound { get; set; }
 		public PolicyActions OnConverterNotFound { get; set; }
 		public IConversionPolicy ConversionPolicy { get; set; }
 
 		public ErrorPolicy()
 		{
-			OnSourceValueNotFound = PolicyActions.ThrowException;
+			OnSourceValueNotFound = new SourceValueNotFoundPolicy(PolicyActions.ThrowException);
 			OnConverterNotFound = PolicyActions.ThrowException;
 			ConversionPolicy = new ConversionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 		}

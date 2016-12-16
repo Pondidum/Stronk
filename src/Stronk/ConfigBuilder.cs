@@ -31,13 +31,14 @@ namespace Stronk
 
 			foreach (var property in properties)
 			{
-				var value = GetValueFromSource(valueSelectors, args.With(property));
-
-				if (value == null && _options.ErrorPolicy.OnSourceValueNotFound == PolicyActions.ThrowException)
-					throw new SourceValueNotFoundException(valueSelectors, property);
+				var selectorArgs = args.With(property);
+				var value = GetValueFromSource(valueSelectors, selectorArgs);
 
 				if (value == null)
+				{
+					_options.ErrorPolicy.OnSourceValueNotFound.Handle(valueSelectors, selectorArgs);
 					continue;
+				}
 
 				var converters = GetValueConverters(availableConverters, property);
 

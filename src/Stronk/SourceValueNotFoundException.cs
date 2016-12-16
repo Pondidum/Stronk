@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Stronk.PropertySelection;
@@ -8,12 +9,12 @@ namespace Stronk
 {
 	public class SourceValueNotFoundException : Exception
 	{
-		public SourceValueNotFoundException(ISourceValueSelector[] valueSelectors, PropertyDescriptor property)
+		public SourceValueNotFoundException(IEnumerable<ISourceValueSelector> valueSelectors, PropertyDescriptor property)
 			: base(BuildMessage(valueSelectors, property))
 		{
 		}
 
-		private static string BuildMessage(ISourceValueSelector[] valueSelectors, PropertyDescriptor property)
+		private static string BuildMessage(IEnumerable<ISourceValueSelector> valueSelectors, PropertyDescriptor property)
 		{
 			var sb = new StringBuilder();
 

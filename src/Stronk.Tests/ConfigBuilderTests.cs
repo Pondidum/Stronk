@@ -39,7 +39,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_source_value_is_not_found_and_policy_is_throw()
 		{
-			_policy.OnSourceValueNotFound = PolicyActions.ThrowException;
+			_policy.OnSourceValueNotFound = new SourceValueNotFoundPolicy(PolicyActions.ThrowException);
 
 			Should
 				.Throw<SourceValueNotFoundException>(() => _builder.Populate(_target, _source))
@@ -49,7 +49,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_source_value_is_not_found_and_policy_is_skip()
 		{
-			_policy.OnSourceValueNotFound = PolicyActions.Skip;
+			_policy.OnSourceValueNotFound = new SourceValueNotFoundPolicy(PolicyActions.Skip);
 
 			_builder.Populate(_target, _source);
 
