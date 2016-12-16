@@ -43,8 +43,10 @@
     <Compile Include="IConfigurationSource.cs" />
     <Compile Include="IStronkOptions.cs" />
     <Compile Include="Policies\ConversionPolicy.cs" />
+    <Compile Include="Policies\ConverterNotFoundPolicy.cs" />
     <Compile Include="Policies\ErrorPolicy.cs" />
     <Compile Include="Policies\IConversionPolicy.cs" />
+    <Compile Include="Policies\IConverterNotFoundPolicy.cs" />
     <Compile Include="Policies\ISourceValueNotFoundPolicy.cs" />
     <Compile Include="Policies\SourceValueNotFoundPolicy.cs" />
     <Compile Include="Properties\AssemblyVersion.cs" />

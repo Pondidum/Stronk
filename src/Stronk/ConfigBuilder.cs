@@ -42,11 +42,11 @@ namespace Stronk
 
 				var converters = GetValueConverters(availableConverters, property);
 
-				if (converters.Any() == false && _options.ErrorPolicy.OnConverterNotFound == PolicyActions.ThrowException)
-					throw new ConverterNotFoundException(availableConverters, property);
-
 				if (converters.Any() == false)
+				{
+					_options.ErrorPolicy.OnConverterNotFound.Handle(availableConverters, property);
 					continue;
+				}
 
 				ApplyConversion(availableConverters, converters, target, property, value);
 			}

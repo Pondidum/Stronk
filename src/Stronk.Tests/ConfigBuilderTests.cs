@@ -59,7 +59,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_converter_cannot_be_found_and_policy_is_throw()
 		{
-			_policy.OnConverterNotFound = PolicyActions.ThrowException;
+			_policy.OnConverterNotFound = new ConverterNotFoundPolicy(PolicyActions.ThrowException);
 			_source.AppSettings["Value"] = "12";
 
 			_options.ValueConverters.Returns(new[]
@@ -75,7 +75,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_converter_cannot_be_found_and_policy_is_skip()
 		{
-			_policy.OnConverterNotFound = PolicyActions.Skip;
+			_policy.OnConverterNotFound = new ConverterNotFoundPolicy(PolicyActions.Skip);
 			_source.AppSettings["Value"] = "12";
 
 			_options.ValueConverters.Returns(new[]
