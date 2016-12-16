@@ -69,7 +69,7 @@ namespace Stronk.Tests
 
 			Should
 				.Throw<Exception>(() => _builder.Populate(_target, _source))
-				.Message.ShouldStartWith("None of the following converters was suitable to handle property 'Value' of type 'Int32':");
+				.Message.ShouldStartWith("None of the following converters were suitable to handle property 'Value' of type 'Int32':");
 		}
 
 		[Fact]
