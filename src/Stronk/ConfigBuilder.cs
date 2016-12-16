@@ -33,19 +33,19 @@ namespace Stronk
 			{
 				var value = GetValueFromSource(valueSelectors, args.With(property));
 
+				if (value == null && _options.ErrorPolicy.OnSourceValueNotFound == PolicyActions.ThrowException)
+					throw new SourceValueNotFoundException(valueSelectors, property);
+
 				if (value == null)
-					if (_options.ErrorPolicy.OnSourceValueNotFound == PolicyActions.ThrowException)
-						throw new SourceValueNotFoundException(valueSelectors, property);
-					else
-						continue;
+					continue;
 
 				var converters = GetValueConverters(availableConverters, property);
 
+				if (converters.Any() == false && _options.ErrorPolicy.OnConverterNotFound == PolicyActions.ThrowException)
+					throw new ConverterNotFoundException(availableConverters, property);
+
 				if (converters.Any() == false)
-					if (_options.ErrorPolicy.OnConverterNotFound == PolicyActions.ThrowException)
-						throw new ConverterNotFoundException(availableConverters, property);
-					else
-						continue;
+					continue;
 
 				ApplyConversion(availableConverters, converters, target, property, value);
 			}
