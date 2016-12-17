@@ -13,18 +13,4 @@
 			ConversionPolicy = new ConversionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 		}
 	}
-
-	public enum ConverterExceptionPolicy
-	{
-		ThrowException,
-		FallbackOrThrow,
-		FallbackOrSkip,
-		Skip
-	}
-
-	public enum PolicyActions
-	{
-		ThrowException,
-		Skip
-	}
 }
