@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Stronk.Tests
 {
-	public class ExtensionsTests
+	public class AcceptanceTests
 	{
 		[Fact]
 		public void When_loading_the_configuration_to_private_setters()
