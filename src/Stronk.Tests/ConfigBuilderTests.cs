@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
@@ -16,18 +17,20 @@ namespace Stronk.Tests
 		private readonly ErrorPolicy _policy;
 		private readonly TargetConfig _target;
 		private readonly IConfigurationSource _source;
-		private readonly IStronkOptions _options;
+		private readonly StronkOptions _options;
 
 		public ConfigBuilderTests()
 		{
 			_target = new TargetConfig();
 			_policy = new ErrorPolicy();
 
-			_options = Substitute.For<IStronkOptions>();
-			_options.ErrorPolicy.Returns(_policy);
-			_options.ValueSelectors.Returns(Default.SourceValueSelectors);
-			_options.ValueConverters.Returns(Default.ValueConverters);
-			_options.PropertySelectors.Returns(Default.PropertySelectors);
+			_options = new StronkOptions
+			{
+				ErrorPolicy = _policy,
+				ValueSelectors = Default.SourceValueSelectors.ToList(),
+				ValueConverters = Default.ValueConverters.ToList(),
+				PropertySelectors = Default.PropertySelectors.ToList()
+			};
 
 			_builder = new ConfigBuilder(_options);
 
@@ -62,10 +65,10 @@ namespace Stronk.Tests
 			_policy.OnConverterNotFound = new ConverterNotFoundPolicy(PolicyActions.ThrowException);
 			_source.AppSettings["Value"] = "12";
 
-			_options.ValueConverters.Returns(new[]
+			_options.ValueConverters = new List<IValueConverter>
 			{
 				new LambdaValueConverter<Uri>(val => new Uri(val)),
-			});
+			};
 
 			Should
 				.Throw<Exception>(() => _builder.Populate(_target, _source))
@@ -78,10 +81,10 @@ namespace Stronk.Tests
 			_policy.OnConverterNotFound = new ConverterNotFoundPolicy(PolicyActions.Skip);
 			_source.AppSettings["Value"] = "12";
 
-			_options.ValueConverters.Returns(new[]
+			_options.ValueConverters = new List<IValueConverter>
 			{
 				new LambdaValueConverter<Uri>(val => new Uri(val)),
-			});
+			};
 
 			_builder.Populate(_target, _source);
 
@@ -94,10 +97,10 @@ namespace Stronk.Tests
 			_policy.ConversionPolicy = new ConversionPolicy(ConverterExceptionPolicy.ThrowException);
 			_source.AppSettings["Value"] = "12";
 
-			_options.ValueConverters.Returns(new[]
+			_options.ValueConverters = new List<IValueConverter>
 			{
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-			});
+			};
 
 			Should
 				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source))
@@ -110,10 +113,10 @@ namespace Stronk.Tests
 			_policy.ConversionPolicy = new ConversionPolicy(ConverterExceptionPolicy.Skip);
 			_source.AppSettings["Value"] = "12";
 
-			_options.ValueConverters.Returns(new[]
+			_options.ValueConverters = new List<IValueConverter>
 			{
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-			});
+			};
 
 			_builder.Populate(_target, _source);
 
@@ -126,10 +129,10 @@ namespace Stronk.Tests
 			_policy.ConversionPolicy = new ConversionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 			_source.AppSettings["Value"] = "12";
 
-			_options.ValueConverters.Returns(new[]
+			_options.ValueConverters = new List<IValueConverter>
 			{
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-			});
+			};
 
 			Should
 				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source))
@@ -142,11 +145,11 @@ namespace Stronk.Tests
 			_policy.ConversionPolicy = new ConversionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 			_source.AppSettings["Value"] = "12";
 
-			_options.ValueConverters.Returns(new IValueConverter[]
+			_options.ValueConverters = new List<IValueConverter>
 			{
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
 				new FallbackValueConverter()
-			});
+			};
 
 			_builder.Populate(_target, _source);
 
@@ -159,11 +162,11 @@ namespace Stronk.Tests
 			_policy.ConversionPolicy = new ConversionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 			_source.AppSettings["Value"] = "12";
 
-			_options.ValueConverters.Returns(new IValueConverter[]
+			_options.ValueConverters = new List<IValueConverter>
 			{
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
 				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
-			});
+			};
 
 			var ex = Should
 				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source));
@@ -178,13 +181,13 @@ namespace Stronk.Tests
 			_policy.ConversionPolicy = new ConversionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 			_source.AppSettings["Value"] = "12";
 
-			_options.ValueConverters.Returns(new IValueConverter[]
+			_options.ValueConverters = new List<IValueConverter>
 			{
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
 				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
 				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
-			});
+			};
 
 			var ex = Should
 				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source));
@@ -198,10 +201,10 @@ namespace Stronk.Tests
 			_policy.ConversionPolicy = new ConversionPolicy(ConverterExceptionPolicy.FallbackOrSkip);
 			_source.AppSettings["Value"] = "12";
 
-			_options.ValueConverters.Returns(new[]
+			_options.ValueConverters = new List<IValueConverter>
 			{
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-			});
+			};
 
 			_builder.Populate(_target, _source);
 
@@ -214,11 +217,11 @@ namespace Stronk.Tests
 			_policy.ConversionPolicy = new ConversionPolicy(ConverterExceptionPolicy.FallbackOrSkip);
 			_source.AppSettings["Value"] = "12";
 
-			_options.ValueConverters.Returns(new IValueConverter[]
+			_options.ValueConverters = new List<IValueConverter>
 			{
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
 				new FallbackValueConverter()
-			});
+			};
 
 			_builder.Populate(_target, _source);
 
@@ -231,11 +234,11 @@ namespace Stronk.Tests
 			_policy.ConversionPolicy = new ConversionPolicy(ConverterExceptionPolicy.FallbackOrSkip);
 			_source.AppSettings["Value"] = "12";
 
-			_options.ValueConverters.Returns(new IValueConverter[]
+			_options.ValueConverters = new List<IValueConverter>
 			{
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
 				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
-			});
+			};
 
 			_builder.Populate(_target, _source);
 

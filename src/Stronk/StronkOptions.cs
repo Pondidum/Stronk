@@ -8,37 +8,33 @@ using Stronk.ValueConversion;
 
 namespace Stronk
 {
-	public class StronkOptions : IStronkOptions
+	public class StronkOptions
 	{
-		public IEnumerable<IValueConverter> ValueConverters => _valueConverters;
-		public IEnumerable<IPropertySelector> PropertySelectors => _propertySelectors;
-		public IEnumerable<ISourceValueSelector> ValueSelectors => _valueSelectors;
+		public List<IValueConverter> ValueConverters { get; set; }
+		public List<IPropertySelector> PropertySelectors { get; set; }
+		public List<ISourceValueSelector> ValueSelectors { get; set; }
 		public ErrorPolicy ErrorPolicy { get; set; }
-
-		private readonly List<IValueConverter> _valueConverters;
-		private readonly List<IPropertySelector> _propertySelectors;
-		private readonly List<ISourceValueSelector> _valueSelectors;
 
 		public StronkOptions()
 		{
-			_valueConverters = Default.ValueConverters.ToList();
-			_propertySelectors = Default.PropertySelectors.ToList();
-			_valueSelectors = Default.SourceValueSelectors.ToList();
+			ValueConverters = Default.ValueConverters.ToList();
+			PropertySelectors = Default.PropertySelectors.ToList();
+			ValueSelectors = Default.SourceValueSelectors.ToList();
 
 			ErrorPolicy = new ErrorPolicy();
 		}
 
-		public void Add(IValueConverter valueConverter) => _valueConverters.Add(valueConverter);
-		public void Add(IPropertySelector propertySelector) => _propertySelectors.Add(propertySelector);
-		public void Add(ISourceValueSelector sourceValueSelector) => _valueSelectors.Add(sourceValueSelector);
+		public void Add(IValueConverter valueConverter) => ValueConverters.Add(valueConverter);
+		public void Add(IPropertySelector propertySelector) => PropertySelectors.Add(propertySelector);
+		public void Add(ISourceValueSelector sourceValueSelector) => ValueSelectors.Add(sourceValueSelector);
 
-		public void AddBefore<T>(IValueConverter valueConverter) => InsertBefore(_valueConverters, typeof(T), valueConverter);
-		public void AddBefore<T>(IPropertySelector propertySelector) => InsertBefore(_propertySelectors, typeof(T), propertySelector);
-		public void AddBefore<T>(ISourceValueSelector sourceValueSelector) => InsertBefore(_valueSelectors, typeof(T), sourceValueSelector);
+		public void AddBefore<T>(IValueConverter valueConverter) => InsertBefore(ValueConverters, typeof(T), valueConverter);
+		public void AddBefore<T>(IPropertySelector propertySelector) => InsertBefore(PropertySelectors, typeof(T), propertySelector);
+		public void AddBefore<T>(ISourceValueSelector sourceValueSelector) => InsertBefore(ValueSelectors, typeof(T), sourceValueSelector);
 
-		public void AddAfter<T>(IValueConverter valueConverter) => InsertAfter(_valueConverters, typeof(T), valueConverter);
-		public void AddAfter<T>(IPropertySelector propertySelector) => InsertAfter(_propertySelectors, typeof(T), propertySelector);
-		public void AddAfter<T>(ISourceValueSelector sourceValueSelector) => InsertAfter(_valueSelectors, typeof(T), sourceValueSelector);
+		public void AddAfter<T>(IValueConverter valueConverter) => InsertAfter(ValueConverters, typeof(T), valueConverter);
+		public void AddAfter<T>(IPropertySelector propertySelector) => InsertAfter(PropertySelectors, typeof(T), propertySelector);
+		public void AddAfter<T>(ISourceValueSelector sourceValueSelector) => InsertAfter(ValueSelectors, typeof(T), sourceValueSelector);
 
 		private void InsertBefore<T>(List<T> collection, Type target, T value)
 		{
