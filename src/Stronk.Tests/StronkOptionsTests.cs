@@ -35,7 +35,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_value_converter_is_added()
 		{
-			_config.Add(new DtoValueConverter());
+			_config.ValueConverters.Add(new DtoValueConverter());
 
 			_config.ValueConverters.Last().ShouldBeOfType<DtoValueConverter>();
 		}
@@ -43,7 +43,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_value_converter_is_added_before_an_existing_converter()
 		{
-			_config.AddBefore<LambdaValueConverter<Uri>>(new DtoValueConverter());
+			_config.ValueConverters.AddBefore<LambdaValueConverter<Uri>>(new DtoValueConverter());
 
 			InsertIndexShouldBeBefore(_config.ValueConverters, typeof(LambdaValueConverter<Uri>), typeof(DtoValueConverter));
 		}
@@ -51,7 +51,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_value_converter_is_added_after_an_existing_converter()
 		{
-			_config.AddAfter<LambdaValueConverter<Uri>>(new DtoValueConverter());
+			_config.ValueConverters.AddAfter<LambdaValueConverter<Uri>>(new DtoValueConverter());
 
 			InsertIndexShouldBeAfter(_config.ValueConverters, typeof(LambdaValueConverter<Uri>), typeof(DtoValueConverter));
 		}
@@ -59,13 +59,13 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_value_converter_is_added_before_a_non_existing_converter()
 		{
-			Should.Throw<StronkConfigurationException>(() => _config.AddBefore<LambdaValueConverter<object>>(new DtoValueConverter()));
+			Should.Throw<StronkConfigurationException>(() => _config.ValueConverters.AddBefore<LambdaValueConverter<object>>(new DtoValueConverter()));
 		}
 
 		[Fact]
 		public void When_a_value_converter_is_added_after_a_non_existing_converter()
 		{
-			Should.Throw<StronkConfigurationException>(() => _config.AddAfter<LambdaValueConverter<object>>(new DtoValueConverter()));
+			Should.Throw<StronkConfigurationException>(() => _config.ValueConverters.AddAfter<LambdaValueConverter<object>>(new DtoValueConverter()));
 		}
 
 
@@ -74,7 +74,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_value_selector_is_added()
 		{
-			_config.Add(new DtoSourceValueSelector());
+			_config.ValueSelectors.Add(new DtoSourceValueSelector());
 
 			_config.ValueSelectors.Last().ShouldBeOfType<DtoSourceValueSelector>();
 		}
@@ -82,7 +82,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_value_selector_is_added_before_an_existing_converter()
 		{
-			_config.AddBefore<PropertyNameSourceValueSelector>(new DtoSourceValueSelector());
+			_config.ValueSelectors.AddBefore<PropertyNameSourceValueSelector>(new DtoSourceValueSelector());
 
 			InsertIndexShouldBeBefore(_config.ValueSelectors, typeof(PropertyNameSourceValueSelector), typeof(DtoSourceValueSelector));
 		}
@@ -90,7 +90,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_value_selector_is_added_after_an_existing_converter()
 		{
-			_config.AddAfter<PropertyNameSourceValueSelector>(new DtoSourceValueSelector());
+			_config.ValueSelectors.AddAfter<PropertyNameSourceValueSelector>(new DtoSourceValueSelector());
 
 			InsertIndexShouldBeAfter(_config.ValueSelectors, typeof(PropertyNameSourceValueSelector), typeof(DtoSourceValueSelector));
 		}
@@ -98,13 +98,13 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_value_selector_is_added_before_a_non_existing_converter()
 		{
-			Should.Throw<StronkConfigurationException>(() => _config.AddBefore<UnusedSourceValueSelector>(new DtoSourceValueSelector()));
+			Should.Throw<StronkConfigurationException>(() => _config.ValueSelectors.AddBefore<UnusedSourceValueSelector>(new DtoSourceValueSelector()));
 		}
 
 		[Fact]
 		public void When_a_value_selector_is_added_after_a_non_existing_converter()
 		{
-			Should.Throw<StronkConfigurationException>(() => _config.AddAfter<UnusedSourceValueSelector>(new DtoSourceValueSelector()));
+			Should.Throw<StronkConfigurationException>(() => _config.ValueSelectors.AddAfter<UnusedSourceValueSelector>(new DtoSourceValueSelector()));
 		}
 
 
@@ -112,7 +112,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_property_selector_is_added()
 		{
-			_config.Add(new DtoPropertySelector());
+			_config.PropertySelectors.Add(new DtoPropertySelector());
 
 			_config.PropertySelectors.Last().ShouldBeOfType<DtoPropertySelector>();
 		}
@@ -120,7 +120,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_property_selector_is_added_before_an_existing_converter()
 		{
-			_config.AddBefore<PrivateSetterPropertySelector>(new DtoPropertySelector());
+			_config.PropertySelectors.AddBefore<PrivateSetterPropertySelector>(new DtoPropertySelector());
 
 			InsertIndexShouldBeBefore(_config.PropertySelectors, typeof(PrivateSetterPropertySelector), typeof(DtoPropertySelector));
 		}
@@ -128,7 +128,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_property_selector_is_added_after_an_existing_converter()
 		{
-			_config.AddAfter<PrivateSetterPropertySelector>(new DtoPropertySelector());
+			_config.PropertySelectors.AddAfter<PrivateSetterPropertySelector>(new DtoPropertySelector());
 
 			InsertIndexShouldBeAfter(_config.PropertySelectors, typeof(PrivateSetterPropertySelector), typeof(DtoPropertySelector));
 		}
@@ -136,13 +136,13 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_property_selector_is_added_before_a_non_existing_converter()
 		{
-			Should.Throw<StronkConfigurationException>(() => _config.AddBefore<UnusedPropertySelector>(new DtoPropertySelector()));
+			Should.Throw<StronkConfigurationException>(() => _config.PropertySelectors.AddBefore<UnusedPropertySelector>(new DtoPropertySelector()));
 		}
 
 		[Fact]
 		public void When_a_property_selector_is_added_after_a_non_existing_converter()
 		{
-			Should.Throw<StronkConfigurationException>(() => _config.AddAfter<UnusedPropertySelector>(new DtoPropertySelector()));
+			Should.Throw<StronkConfigurationException>(() => _config.PropertySelectors.AddAfter<UnusedPropertySelector>(new DtoPropertySelector()));
 		}
 
 
