@@ -80,6 +80,7 @@
     <Compile Include="DefaultConversionTests\UrlConversion.cs" />
     <Compile Include="AcceptanceTests.cs" />
     <Compile Include="ExtensionsTests.cs" />
+    <Compile Include="PropertySelection\AutoSetOnlyPropertySelector.cs" />
     <Compile Include="PropertySelection\MassiveBackingFieldConfig.cs" />
     <Compile Include="PropertySelection\MassiveConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
