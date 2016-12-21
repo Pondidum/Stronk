@@ -27,6 +27,7 @@ namespace Stronk.Tests.DefaultConversionTests
 			var converter = allConverters.First(c => c.CanMap(typeof(TTarget)));
 
 			return (TTarget)converter.Map(new ValueConverterArgs(
+				(template, args) => { },
 				allConverters.Where(x => x != converter),
 				typeof(TTarget),
 				sourceValue));

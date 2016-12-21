@@ -104,6 +104,7 @@ namespace Stronk.Tests.ValueConversion
 		private ValueConverterArgs Create<T>(string value, IEnumerable<IValueConverter> others = null)
 		{
 			return new ValueConverterArgs(
+				(template, args) => { },
 				others ?? new[] { new FallbackValueConverter() },
 				typeof(T),
 				value);

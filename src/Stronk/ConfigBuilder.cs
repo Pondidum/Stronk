@@ -21,13 +21,15 @@ namespace Stronk
 			var valueSelectors = _options.ValueSelectors.ToArray();
 			var availableConverters = _options.ValueConverters.ToArray();
 
-			var propertySelectorArgs = new PropertySelectorArgs(target.GetType());
+			var propertySelectorArgs = new PropertySelectorArgs(
+				_options.Logger,
+				target.GetType());
 
 			var properties = _options
 				.PropertySelectors
 				.SelectMany(selector => selector.Select(propertySelectorArgs));
 
-			var args = new ValueSelectorArgs(configSource);
+			var args = new ValueSelectorArgs(_options.Logger, configSource);
 
 			foreach (var property in properties)
 			{
@@ -60,6 +62,7 @@ namespace Stronk
 			foreach (var converter in chosenConverters)
 			{
 				var vca = new ValueConverterArgs(
+					_options.Logger,
 					availableConverters.Where(x => x != converter),
 					property.Type,
 					value

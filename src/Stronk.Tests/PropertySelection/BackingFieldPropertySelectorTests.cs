@@ -11,7 +11,9 @@ namespace Stronk.Tests.PropertySelection
 		public void When_selecing_fields_in_a_large_class()
 		{
 			var selector = new BackingFieldPropertySelector();
-			var properties = selector.Select(new PropertySelectorArgs(typeof(MassiveBackingFieldConfig))).ToArray();
+			var properties = selector
+				.Select(new PropertySelectorArgs((template, args) => { }, typeof(MassiveBackingFieldConfig)))
+				.ToArray();
 
 			properties.Count().ShouldBe(200);
 		}

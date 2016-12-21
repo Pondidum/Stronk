@@ -11,7 +11,9 @@ namespace Stronk.Tests.PropertySelection
 		public void When_selecting_properties_in_a_large_class()
 		{
 			var selector = new PrivateSetterPropertySelector();
-			var properties = selector.Select(new PropertySelectorArgs(typeof(MassiveConfig))).ToArray();
+			var properties = selector
+				.Select(new PropertySelectorArgs((template, args) => {}, typeof(MassiveConfig)))
+				.ToArray();
 
 			properties.Count().ShouldBe(200);
 		}

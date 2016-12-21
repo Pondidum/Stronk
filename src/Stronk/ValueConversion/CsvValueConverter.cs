@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -33,7 +32,7 @@ namespace Stronk.ValueConversion
 				.First(c => c.CanMap(targetType));
 
 			var convertedValues = values
-				.Select(val => converter.Map(new ValueConverterArgs(converters, targetType, val)));
+				.Select(val => converter.Map(new ValueConverterArgs(e.Logger, converters, targetType, val)));
 
 			if (IsIEnumerable(e.Target))
 				return CastArray(targetType, convertedValues.ToArray());
