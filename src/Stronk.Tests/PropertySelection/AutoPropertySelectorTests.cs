@@ -12,7 +12,7 @@ namespace Stronk.Tests.PropertySelection
 		{
 			var selector = new PrivateSetterPropertySelector();
 			var properties = selector
-				.Select(new PropertySelectorArgs((template, args) => {}, typeof(MassiveConfig)))
+				.Select(new PropertySelectorArgs(message => {}, typeof(MassiveConfig)))
 				.ToArray();
 
 			properties.Count().ShouldBe(200);

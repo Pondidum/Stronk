@@ -41,6 +41,7 @@
     <Compile Include="ConverterNotFoundException.cs" />
     <Compile Include="Default.cs" />
     <Compile Include="IConfigurationSource.cs" />
+    <Compile Include="LogMessage.cs" />
     <Compile Include="Policies\ConversionPolicy.cs" />
     <Compile Include="Policies\ConverterExceptionPolicy.cs" />
     <Compile Include="Policies\ConverterNotFoundPolicy.cs" />

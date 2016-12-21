@@ -7,12 +7,12 @@ namespace Stronk.SourceValueSelection
 {
 	public class ValueSelectorArgs
 	{
-		public Action<string, object[]> Logger { get; }
+		public Action<LogMessage> Logger { get; }
 		public NameValueCollection AppSettings { get; }
 		public ConnectionStringSettingsCollection ConnectionStrings { get; }
 		public PropertyDescriptor Property { get; private set; }
 
-		internal ValueSelectorArgs(Action<string, object[]> logger, IConfigurationSource source)
+		internal ValueSelectorArgs(Action<LogMessage> logger, IConfigurationSource source)
 		{
 			Logger = logger;
 			AppSettings = source.AppSettings;

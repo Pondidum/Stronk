@@ -4,10 +4,10 @@ namespace Stronk.PropertySelection
 {
 	public class PropertySelectorArgs
 	{
-		public Action<string, object[]> Logger { get; }
+		public Action<LogMessage> Logger { get; }
 		public Type TargetType { get; }
 
-		public PropertySelectorArgs(Action<string, object[]> logger, Type targetType)
+		public PropertySelectorArgs(Action<LogMessage> logger, Type targetType)
 		{
 			Logger = logger;
 			TargetType = targetType;

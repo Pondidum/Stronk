@@ -12,7 +12,7 @@ namespace Stronk.Tests.PropertySelection
 		{
 			var selector = new BackingFieldPropertySelector();
 			var properties = selector
-				.Select(new PropertySelectorArgs((template, args) => { }, typeof(MassiveBackingFieldConfig)))
+				.Select(new PropertySelectorArgs(message => { }, typeof(MassiveBackingFieldConfig)))
 				.ToArray();
 
 			properties.Count().ShouldBe(200);

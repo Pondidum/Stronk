@@ -14,7 +14,7 @@ namespace Stronk
 		public List<IPropertySelector> PropertySelectors { get; set; }
 		public List<ISourceValueSelector> ValueSelectors { get; set; }
 		public ErrorPolicy ErrorPolicy { get; set; }
-		public Action<string, object[]> Logger { get; set; }
+		public Action<LogMessage> Logger { get; set; }
 
 		public StronkOptions()
 		{
@@ -23,7 +23,7 @@ namespace Stronk
 			ValueSelectors = Default.SourceValueSelectors.ToList();
 
 			ErrorPolicy = new ErrorPolicy();
-			Logger = (format, args) => { };
+			Logger = message => { };
 		}
 	}
 }
