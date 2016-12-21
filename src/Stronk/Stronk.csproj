@@ -52,6 +52,7 @@
     <Compile Include="Policies\SourceValueNotFoundPolicy.cs" />
     <Compile Include="Properties\AssemblyVersion.cs" />
     <Compile Include="PropertySelection\AutoSetOnlyPropertySelector.cs" />
+    <Compile Include="PropertySelection\PropertySelectorArgs.cs" />
     <Compile Include="SourceValueNotFoundException.cs" />
     <Compile Include="StronkOptions.cs" />
     <Compile Include="StronkConfigurationException.cs" />

@@ -21,9 +21,11 @@ namespace Stronk
 			var valueSelectors = _options.ValueSelectors.ToArray();
 			var availableConverters = _options.ValueConverters.ToArray();
 
+			var propertySelectorArgs = new PropertySelectorArgs(target.GetType());
+
 			var properties = _options
 				.PropertySelectors
-				.SelectMany(selector => selector.Select(target.GetType()));
+				.SelectMany(selector => selector.Select(propertySelectorArgs));
 
 			var args = new ValueSelectorArgs(configSource);
 

@@ -170,7 +170,7 @@ namespace Stronk.Tests
 
 		private class DtoPropertySelector : IPropertySelector
 		{
-			public IEnumerable<PropertyDescriptor> Select(Type targetType) => Enumerable.Empty<PropertyDescriptor>();
+			public IEnumerable<PropertyDescriptor> Select(PropertySelectorArgs args) => Enumerable.Empty<PropertyDescriptor>();
 		}
 
 		private class UnusedSourceValueSelector : ISourceValueSelector
@@ -183,7 +183,7 @@ namespace Stronk.Tests
 
 		private class UnusedPropertySelector : IPropertySelector
 		{
-			public IEnumerable<PropertyDescriptor> Select(Type targetType)
+			public IEnumerable<PropertyDescriptor> Select(PropertySelectorArgs args)
 			{
 				throw new NotSupportedException();
 			}

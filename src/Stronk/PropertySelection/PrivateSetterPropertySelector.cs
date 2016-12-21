@@ -7,9 +7,10 @@ namespace Stronk.PropertySelection
 {
 	public class PrivateSetterPropertySelector : IPropertySelector
 	{
-		public IEnumerable<PropertyDescriptor> Select(Type targetType)
+		public IEnumerable<PropertyDescriptor> Select(PropertySelectorArgs args)
 		{
-			return targetType
+			return args
+				.TargetType
 				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
 				.Where(prop => prop.CanWrite)
 				.Select(prop => new PropertyDescriptor

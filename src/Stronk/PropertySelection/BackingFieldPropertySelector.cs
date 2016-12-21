@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Reflection;
 
 namespace Stronk.PropertySelection
@@ -10,8 +8,9 @@ namespace Stronk.PropertySelection
 		private const BindingFlags PropertyBindingFlags = BindingFlags.Public | BindingFlags.Instance;
 		private const BindingFlags FieldBindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.IgnoreCase;
 
-		public IEnumerable<PropertyDescriptor> Select(Type targetType)
+		public IEnumerable<PropertyDescriptor> Select(PropertySelectorArgs args)
 		{
+			var targetType = args.TargetType;
 			var properties = targetType.GetProperties(PropertyBindingFlags);
 			var descriptors = new List<PropertyDescriptor>(properties.Length);
 
