@@ -135,6 +135,26 @@ namespace Stronk.Tests
 			Should.Throw<StronkConfigurationException>(() => _propertySelectors.AddAfter<UnusedPropertySelector>(new DtoPropertySelector()));
 		}
 
+		[Fact]
+		public void When_selecting_type_names()
+		{
+			var types = new[]
+			{
+				typeof(LambdaValueConverter<Uri>),
+				typeof(LambdaValueConverter<Guid>),
+				typeof(CsvValueConverter),
+				typeof(LambdaValueConverter<List<Dictionary<string, int>>>)
+			};
+
+			types.SelectTypeNames().ShouldBe(new []
+			{
+				"LambdaValueConverter<Uri>",
+				"LambdaValueConverter<Guid>",
+				"CsvValueConverter",
+				"LambdaValueConverter<List<Dictionary<String, Int32>>>"
+			});
+		}
+
 
 
 		private static void InsertIndexShouldBeBefore<T>(IEnumerable<T> collection, Type search, Type inserted)

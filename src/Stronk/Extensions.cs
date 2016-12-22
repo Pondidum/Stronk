@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Stronk.PropertySelection;
 using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
@@ -20,6 +21,27 @@ namespace Stronk
 			var builder = new ConfigBuilder(options ?? new StronkOptions());
 
 			builder.Populate(target, configSource ?? new AppConfigSource());
+		}
+
+		public static IEnumerable<string> SelectTypeNames(this IEnumerable<object> instances)
+		{
+			return instances.Select(instance => RecurseTypeName(instance.GetType()));
+		}
+
+		public static IEnumerable<string> SelectTypeNames(this IEnumerable<Type> types)
+		{
+			return types.Select(RecurseTypeName);
+		}
+
+		private static string RecurseTypeName(Type type)
+		{
+			if (type.IsConstructedGenericType == false)
+				return type.Name;
+
+			var typeName = type.Name.Substring(0, type.Name.IndexOf("`"));
+			var arguments = string.Join(", ", type.GetGenericArguments().Select(RecurseTypeName));
+
+			return $"{typeName}<{arguments}>";
 		}
 
 		public static void AddBefore<T>(this List<IValueConverter> collection, IValueConverter valueConverter) => InsertBefore(collection, typeof(T), valueConverter);

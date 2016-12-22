@@ -26,9 +26,9 @@ namespace Stronk
 				"Populating '{typeName}', from {sourceTypeName} using\nPropertySelectors: {propertySelectors}\nSourceValueSelectors: {valueSelectors}\nValueConverters: {valueConverters}.",
 				target.GetType().Name,
 				configSource.GetType().Name,
-				propertySelectors.Select(s => s.GetType().Name),
-				valueSelectors.Select(s => s.GetType().Name),
-				availableConverters.Select(s => s.GetType().Name));
+				propertySelectors.SelectTypeNames(),
+				valueSelectors.SelectTypeNames(),
+				availableConverters.SelectTypeNames());
 
 			var propertySelectorArgs = new PropertySelectorArgs(
 				_options.Logger,
