@@ -20,14 +20,28 @@ namespace Stronk
 		{
 			var valueSelectors = _options.ValueSelectors.ToArray();
 			var availableConverters = _options.ValueConverters.ToArray();
+			var propertySelectors = _options.PropertySelectors.ToArray();
+
+			WriteLog(
+				"Populating '{typeName}', from {sourceTypeName} using\nPropertySelectors: {propertySelectors}\nSourceValueSelectors: {valueSelectors}\nValueConverters: {valueConverters}.",
+				target.GetType().Name,
+				configSource.GetType().Name,
+				propertySelectors,
+				valueSelectors,
+				availableConverters);
 
 			var propertySelectorArgs = new PropertySelectorArgs(
 				_options.Logger,
 				target.GetType());
 
-			var properties = _options
-				.PropertySelectors
-				.SelectMany(selector => selector.Select(propertySelectorArgs));
+			var properties = propertySelectors
+				.SelectMany(selector => selector.Select(propertySelectorArgs))
+				.ToArray();
+
+			WriteLog(
+				"Selected {count} properties to populate: {properties}",
+				properties.Length,
+				properties.Select(p => p.Name));
 
 			var args = new ValueSelectorArgs(_options.Logger, configSource);
 
@@ -38,6 +52,7 @@ namespace Stronk
 
 				if (value == null)
 				{
+					WriteLog("Unable to find a value for {propertyName}", property.Name);
 					_options.ErrorPolicy.OnSourceValueNotFound.Handle(valueSelectors, selectorArgs);
 					continue;
 				}
@@ -46,12 +61,18 @@ namespace Stronk
 
 				if (converters.Any() == false)
 				{
+					WriteLog("Unable to any converters for {typeName} for property {propertyName}", property.Type.Name, property.Name);
 					_options.ErrorPolicy.OnConverterNotFound.Handle(availableConverters, property);
 					continue;
 				}
 
 				ApplyConversion(availableConverters, converters, target, property, value);
 			}
+		}
+
+		private void WriteLog(string template, params object[] args)
+		{
+			_options.Logger(new LogMessage(template, args));
 		}
 
 		private void ApplyConversion(IValueConverter[] availableConverters, IEnumerable<IValueConverter> chosenConverters, object target, PropertyDescriptor property, string value)
