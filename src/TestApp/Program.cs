@@ -18,7 +18,7 @@ namespace TestApp
 				.WriteTo.ColoredConsole()
 				.CreateLogger();
 
-			var config = new MassiveConfig();
+			var config = new SmallConfig();
 			var options = new StronkOptions
 			{
 				Logger = message => Log.Information(message.Template, message.Args)

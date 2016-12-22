@@ -1,4 +1,6 @@
-﻿namespace TestApp
+﻿// ReSharper disable UnusedAutoPropertyAccessor.Local
+// ReSharper disable UnusedMember.Global
+namespace TestApp
 {
 	public  class MassiveConfig
 	{
