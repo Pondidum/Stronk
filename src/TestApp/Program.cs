@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Serilog;
 using Stronk;
 
 namespace TestApp
@@ -13,11 +14,22 @@ namespace TestApp
 	{
 		static void Main(string[] args)
 		{
+			Log.Logger = new LoggerConfiguration()
+				.WriteTo.ColoredConsole()
+				.CreateLogger();
+
 			var config = new MassiveConfig();
-			var configuration = new StronkOptions();
+			var options = new StronkOptions
+			{
+				Logger = message => Log.Information(message.Template, message.Args)
+			};
+
 			var provider = new InMemorySource();
 
-			config.FromAppConfig(configuration, provider);
+			config.FromAppConfig(options, provider);
+
+			Console.WriteLine("Done...");
+			Console.ReadKey();
 		}
 	}
 
