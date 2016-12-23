@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using Stronk.PropertySelection;
-using Stronk.ValueConversion;
-
-namespace Stronk.Policies
+﻿namespace Stronk.Policies
 {
 	public class ConverterNotFoundPolicy : IConverterNotFoundPolicy
 	{
@@ -13,10 +9,10 @@ namespace Stronk.Policies
 			_action = action;
 		}
 
-		public void Handle(IEnumerable<IValueConverter> availableConverters, PropertyDescriptor property)
+		public void Handle(ConverterNotFoundArgs args)
 		{
 			if (_action == PolicyActions.ThrowException)
-				throw new ConverterNotFoundException(availableConverters, property);
+				throw new ConverterNotFoundException(args.AvailableConverters, args.Property);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Stronk.Policies;
 using Stronk.PropertySelection;
 using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
@@ -62,7 +63,13 @@ namespace Stronk
 				if (converters.Any() == false)
 				{
 					WriteLog("Unable to any converters for {typeName} for property {propertyName}", property.Type.Name, property.Name);
-					_options.ErrorPolicy.OnConverterNotFound.Handle(availableConverters, property);
+
+					_options.ErrorPolicy.OnConverterNotFound.Handle(new ConverterNotFoundArgs
+					{
+						AvailableConverters = availableConverters,
+						Property = property
+					});
+
 					continue;
 				}
 
