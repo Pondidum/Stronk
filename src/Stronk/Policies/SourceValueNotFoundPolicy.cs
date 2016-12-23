@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Stronk.SourceValueSelection;
-
-namespace Stronk.Policies
+﻿namespace Stronk.Policies
 {
 	public class SourceValueNotFoundPolicy : ISourceValueNotFoundPolicy
 	{
@@ -12,10 +9,10 @@ namespace Stronk.Policies
 			_action = action;
 		}
 
-		public void Handle(IEnumerable<ISourceValueSelector> valueSelectors, ValueSelectorArgs selectorArgs)
+		public void Handle(SourceValueNotFoundArgs args)
 		{
 			if (_action == PolicyActions.ThrowException)
-				throw new SourceValueNotFoundException(valueSelectors, selectorArgs.Property);
+				throw new SourceValueNotFoundException(args.ValueSelectors, args.Property);
 		}
 	}
 }

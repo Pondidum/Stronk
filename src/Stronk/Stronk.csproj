@@ -51,6 +51,7 @@
     <Compile Include="Policies\IConverterNotFoundPolicy.cs" />
     <Compile Include="Policies\ISourceValueNotFoundPolicy.cs" />
     <Compile Include="Policies\PolicyActions.cs" />
+    <Compile Include="Policies\SourceValueNotFoundArgs.cs" />
     <Compile Include="Policies\SourceValueNotFoundPolicy.cs" />
     <Compile Include="Properties\AssemblyVersion.cs" />
     <Compile Include="PropertySelection\AutoSetOnlyPropertySelector.cs" />

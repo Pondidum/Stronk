@@ -54,7 +54,12 @@ namespace Stronk
 				if (value == null)
 				{
 					WriteLog("Unable to find a value for {propertyName}", property.Name);
-					_options.ErrorPolicy.OnSourceValueNotFound.Handle(valueSelectors, selectorArgs);
+
+					_options.ErrorPolicy.OnSourceValueNotFound.Handle(new SourceValueNotFoundArgs {
+						ValueSelectors = valueSelectors,
+						Property = selectorArgs.Property
+					});
+
 					continue;
 				}
 
