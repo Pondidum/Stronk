@@ -15,20 +15,20 @@ namespace Stronk.Policies
 			_exceptions = new List<Exception>();
 		}
 
-		public void BeforeConversion()
+		public void BeforeConversion(ConversionPolicyBeforeArgs args)
 		{
 			_exceptions.Clear();
 		}
 
-		public void OnConversionException(Exception ex)
+		public void OnConversionException(ConversionPolicyExceptionArgs args)
 		{
 			if (_policy == ConverterExceptionPolicy.ThrowException)
-				throw new ValueConversionException("Error converting", new[] { ex });
+				throw new ValueConversionException("Error converting", new[] { args.Exception });
 
-			_exceptions.Add(ex);
+			_exceptions.Add(args.Exception);
 		}
 
-		public void AfterConversion()
+		public void AfterConversion(ConversionPolicyAfterArgs args)
 		{
 			if (_exceptions.Any() && _policy == ConverterExceptionPolicy.FallbackOrThrow)
 				throw new ValueConversionException("Error converting", _exceptions.ToArray());
