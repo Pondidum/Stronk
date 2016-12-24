@@ -4,23 +4,23 @@ using System.Linq;
 
 namespace Stronk.Policies
 {
-	public class ConversionPolicy : IConversionPolicy
+	public class ConversionExceptionPolicy : IConversionExceptionPolicy
 	{
 		private readonly ConverterExceptionPolicy _policy;
 		private readonly List<Exception> _exceptions;
 
-		public ConversionPolicy(ConverterExceptionPolicy policy)
+		public ConversionExceptionPolicy(ConverterExceptionPolicy policy)
 		{
 			_policy = policy;
 			_exceptions = new List<Exception>();
 		}
 
-		public void BeforeConversion(ConversionPolicyBeforeArgs args)
+		public void BeforeConversion(ConversionExceptionBeforeArgs args)
 		{
 			_exceptions.Clear();
 		}
 
-		public void OnConversionException(ConversionPolicyExceptionArgs args)
+		public void OnConversionException(ConversionExceptionArgs args)
 		{
 			if (_policy == ConverterExceptionPolicy.ThrowException)
 				throw new ValueConversionException("Error converting", new[] { args.Exception });
@@ -28,7 +28,7 @@ namespace Stronk.Policies
 			_exceptions.Add(args.Exception);
 		}
 
-		public void AfterConversion(ConversionPolicyAfterArgs args)
+		public void AfterConversion(ConversionExceptionAfterArgs args)
 		{
 			if (_exceptions.Any() && _policy == ConverterExceptionPolicy.FallbackOrThrow)
 				throw new ValueConversionException("Error converting", _exceptions.ToArray());

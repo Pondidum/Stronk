@@ -42,12 +42,15 @@
     <Compile Include="Default.cs" />
     <Compile Include="IConfigurationSource.cs" />
     <Compile Include="LogMessage.cs" />
-    <Compile Include="Policies\ConversionPolicy.cs" />
+    <Compile Include="Policies\ConversionExceptionAfterArgs.cs" />
+    <Compile Include="Policies\ConversionExceptionArgs.cs" />
+    <Compile Include="Policies\ConversionExceptionBeforeArgs.cs" />
+    <Compile Include="Policies\ConversionExceptionPolicy.cs" />
     <Compile Include="Policies\ConverterExceptionPolicy.cs" />
     <Compile Include="Policies\ConverterNotFoundArgs.cs" />
     <Compile Include="Policies\ConverterNotFoundPolicy.cs" />
     <Compile Include="Policies\ErrorPolicy.cs" />
-    <Compile Include="Policies\IConversionPolicy.cs" />
+    <Compile Include="Policies\IConversionExceptionPolicy.cs" />
     <Compile Include="Policies\IConverterNotFoundPolicy.cs" />
     <Compile Include="Policies\ISourceValueNotFoundPolicy.cs" />
     <Compile Include="Policies\PolicyActions.cs" />

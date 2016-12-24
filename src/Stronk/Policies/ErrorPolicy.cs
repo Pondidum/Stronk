@@ -4,13 +4,13 @@
 	{
 		public ISourceValueNotFoundPolicy OnSourceValueNotFound { get; set; }
 		public IConverterNotFoundPolicy OnConverterNotFound { get; set; }
-		public IConversionPolicy ConversionPolicy { get; set; }
+		public IConversionExceptionPolicy ConversionExceptionPolicy { get; set; }
 
 		public ErrorPolicy()
 		{
 			OnSourceValueNotFound = new SourceValueNotFoundPolicy(PolicyActions.ThrowException);
 			OnConverterNotFound = new ConverterNotFoundPolicy(PolicyActions.ThrowException);
-			ConversionPolicy = new ConversionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
+			ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 		}
 	}
 }
