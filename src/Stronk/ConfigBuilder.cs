@@ -55,7 +55,8 @@ namespace Stronk
 				{
 					WriteLog("Unable to find a value for {propertyName}", property.Name);
 
-					_options.ErrorPolicy.OnSourceValueNotFound.Handle(new SourceValueNotFoundArgs {
+					_options.ErrorPolicy.OnSourceValueNotFound.Handle(new SourceValueNotFoundArgs
+					{
 						ValueSelectors = valueSelectors,
 						Property = selectorArgs.Property
 					});
@@ -90,7 +91,10 @@ namespace Stronk
 		private void ApplyConversion(IValueConverter[] availableConverters, IEnumerable<IValueConverter> chosenConverters, object target, PropertyDescriptor property, string value)
 		{
 			var conversionPolicy = _options.ErrorPolicy.ConversionExceptionPolicy;
-			conversionPolicy.BeforeConversion(new ConversionExceptionBeforeArgs());
+			conversionPolicy.BeforeConversion(new ConversionExceptionBeforeArgs
+			{
+				Logger = _options.Logger
+			});
 
 			foreach (var converter in chosenConverters)
 			{
@@ -112,12 +116,16 @@ namespace Stronk
 				{
 					conversionPolicy.OnConversionException(new ConversionExceptionArgs
 					{
+						Logger = _options.Logger,
 						Exception = ex
 					});
 				}
 			}
 
-			conversionPolicy.AfterConversion(new ConversionExceptionAfterArgs());
+			conversionPolicy.AfterConversion(new ConversionExceptionAfterArgs
+			{
+				Logger = _options.Logger
+			});
 		}
 
 		private static IValueConverter[] GetValueConverters(IValueConverter[] converters, PropertyDescriptor property)
