@@ -107,6 +107,8 @@ namespace Stronk
 
 				try
 				{
+					WriteLog("Converting '{value}' and assigning to {typeName}.{propertyName} ", value, target.GetType().Name, property.Name);
+
 					var converted = converter.Map(vca);
 					property.Assign(target, converted);
 
