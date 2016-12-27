@@ -70,6 +70,19 @@ sc.AddBefore<EnumValueConverter>(new SpecialEnumValueConverter());
 this.FromAppConfig(sc);
 ```
 
+### Logging
+
+Logging is supported by means of a single callback, providing a template, and an array of objects.  The template is designed for serilog (or other structured logging), in that it uses named substitutions rather than index based, for example `Converting '{value}' and assigning to {typeName}.{propertyName}`.
+
+```csharp
+var sc = new StronkOptions
+{
+    Logger = message => Serilog.Log.Information(message.Template, message.Args)
+};
+
+this.FromAppConfig(sc);
+```
+
 ### Customising Conversion and Mapping
 
 #### Property Selection
@@ -113,7 +126,7 @@ The easiest way of creating a new converter is to just add an instance of `Lambd
 ### Customising Configuration Source
 *This is used to customise where Stronk will read configuration values from.*
 
-Stronk comes with one implementaion of `IConfigurationSource`:
+Stronk comes with one implementation of `IConfigurationSource`:
 
 * [AppConfigSource](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/AppConfigSource.cs) - this uses the `ConfigurationManager` class, which means both `App.Config` and `Web.Config` are supported out of the box.
 
