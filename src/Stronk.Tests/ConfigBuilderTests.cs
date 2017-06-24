@@ -35,7 +35,7 @@ namespace Stronk.Tests
 			_builder = new ConfigBuilder(_options);
 
 			_source = Substitute.For<IConfigurationSource>();
-			_source.AppSettings.Returns(new NameValueCollection());
+			_source.AppSettings.Returns(new Dictionary<string, string>());
 			_source.ConnectionStrings.Returns(new ConnectionStringSettingsCollection());
 		}
 

@@ -6,7 +6,10 @@
 		{
 			var propertyName = args.Property.Name;
 
-			return args.AppSettings[propertyName] ?? args.ConnectionStrings[propertyName]?.ConnectionString;
+			string value = null;
+			args.AppSettings.TryGetValue(propertyName, out value);
+
+			return value ?? args.ConnectionStrings[propertyName]?.ConnectionString;
 		}
 	}
 }

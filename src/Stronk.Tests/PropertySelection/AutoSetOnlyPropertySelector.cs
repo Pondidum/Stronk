@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using NSubstitute;
@@ -15,7 +16,7 @@ namespace Stronk.Tests.PropertySelection
 		public void When_loading_values()
 		{
 			var source = Substitute.For<IConfigurationSource>();
-			source.AppSettings.Returns(new NameValueCollection());
+			source.AppSettings.Returns(new Dictionary<string, string>());
 			source.ConnectionStrings.Returns(new ConnectionStringSettingsCollection());
 			source.AppSettings["Name"] = "Testing";
 			source.AppSettings["Value"] = "16";

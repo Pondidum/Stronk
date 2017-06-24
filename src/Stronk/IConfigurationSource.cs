@@ -1,11 +1,11 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
 using System.Configuration;
 
 namespace Stronk
 {
 	public interface IConfigurationSource
 	{
-		NameValueCollection AppSettings { get; }
+		IDictionary<string, string> AppSettings { get; }
 		ConnectionStringSettingsCollection ConnectionStrings { get; }
 	}
 }
