@@ -1,4 +1,6 @@
-﻿namespace Stronk.SourceValueSelection
+﻿using System.Configuration;
+
+namespace Stronk.SourceValueSelection
 {
 	public class PropertyNameSourceValueSelector : ISourceValueSelector
 	{
@@ -9,7 +11,13 @@
 			string value = null;
 			args.AppSettings.TryGetValue(propertyName, out value);
 
-			return value ?? args.ConnectionStrings[propertyName]?.ConnectionString;
+			if (value != null)
+				return value;
+
+			ConnectionStringSettings connection = null;
+			args.ConnectionStrings.TryGetValue(propertyName, out connection);
+
+			return connection?.ConnectionString;
 		}
 	}
 }

@@ -36,7 +36,7 @@ namespace Stronk.Tests
 
 			_source = Substitute.For<IConfigurationSource>();
 			_source.AppSettings.Returns(new Dictionary<string, string>());
-			_source.ConnectionStrings.Returns(new ConnectionStringSettingsCollection());
+			_source.ConnectionStrings.Returns(new Dictionary<string, ConnectionStringSettings>());
 		}
 
 		[Fact]

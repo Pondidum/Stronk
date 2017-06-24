@@ -17,7 +17,7 @@ namespace Stronk.Tests.PropertySelection
 		{
 			var source = Substitute.For<IConfigurationSource>();
 			source.AppSettings.Returns(new Dictionary<string, string>());
-			source.ConnectionStrings.Returns(new ConnectionStringSettingsCollection());
+			source.ConnectionStrings.Returns(new Dictionary<string, ConnectionStringSettings>());
 			source.AppSettings["Name"] = "Testing";
 			source.AppSettings["Value"] = "16";
 

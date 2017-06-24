@@ -10,7 +10,7 @@ namespace Stronk.SourceValueSelection
 	{
 		public Action<LogMessage> Logger { get; }
 		public IDictionary<string, string> AppSettings { get; }
-		public ConnectionStringSettingsCollection ConnectionStrings { get; }
+		public IDictionary<string, ConnectionStringSettings> ConnectionStrings { get; }
 		public PropertyDescriptor Property { get; private set; }
 
 		internal ValueSelectorArgs(Action<LogMessage> logger, IConfigurationSource source)

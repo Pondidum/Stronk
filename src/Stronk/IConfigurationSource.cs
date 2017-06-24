@@ -6,6 +6,6 @@ namespace Stronk
 	public interface IConfigurationSource
 	{
 		IDictionary<string, string> AppSettings { get; }
-		ConnectionStringSettingsCollection ConnectionStrings { get; }
+		IDictionary<string, ConnectionStringSettings> ConnectionStrings { get; }
 	}
 }

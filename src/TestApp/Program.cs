@@ -36,12 +36,12 @@ namespace TestApp
 	public class InMemorySource : IConfigurationSource
 	{
 		public IDictionary<string, string> AppSettings { get; }
-		public ConnectionStringSettingsCollection ConnectionStrings { get; }
+		public IDictionary<string, ConnectionStringSettings> ConnectionStrings { get; }
 
 		public InMemorySource()
 		{
 			AppSettings = new Dictionary<string, string>();
-			ConnectionStrings = new ConnectionStringSettingsCollection();
+			ConnectionStrings = new Dictionary<string, ConnectionStringSettings>();
 
 			for (int i = 0; i < 200; i++)
 				AppSettings["SomeProperty" + i] = i.ToString();
