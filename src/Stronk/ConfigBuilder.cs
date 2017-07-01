@@ -44,40 +44,45 @@ namespace Stronk
 				properties.Length,
 				properties.Select(p => p.Name));
 
-			foreach (var property in properties)
-			{
-				var selectorArgs = new ValueSelectorArgs(_options.Logger, configSource, property);
-				var value = GetValueFromSource(valueSelectors, selectorArgs);
-
-				if (value == null)
+			var values = properties
+				.Select(property =>  new ValueSelectorArgs(_options.Logger, configSource, property))
+				.Select(args => new
 				{
-					WriteLog("Unable to find a value for {propertyName}", property.Name);
+					Property = args.Property,
+					Value = GetValueFromSource(valueSelectors, args)
+				});
+
+			foreach (var descriptor in values)
+			{
+				if (descriptor.Value == null)
+				{
+					WriteLog("Unable to find a value for {propertyName}", descriptor.Property.Name);
 
 					_options.ErrorPolicy.OnSourceValueNotFound.Handle(new SourceValueNotFoundArgs
 					{
 						ValueSelectors = valueSelectors,
-						Property = selectorArgs.Property
+						Property = descriptor.Property
 					});
 
 					continue;
 				}
 
-				var converters = GetValueConverters(availableConverters, property);
+				var converters = GetValueConverters(availableConverters, descriptor.Property);
 
 				if (converters.Any() == false)
 				{
-					WriteLog("Unable to any converters for {typeName} for property {propertyName}", property.Type.Name, property.Name);
+					WriteLog("Unable to any converters for {typeName} for property {propertyName}", descriptor.Property.Type.Name, descriptor.Property.Name);
 
 					_options.ErrorPolicy.OnConverterNotFound.Handle(new ConverterNotFoundArgs
 					{
 						AvailableConverters = availableConverters,
-						Property = property
+						Property = descriptor.Property
 					});
 
 					continue;
 				}
 
-				ApplyConversion(availableConverters, converters, target, property, value);
+				ApplyConversion(availableConverters, converters, target, descriptor.Property, descriptor.Value);
 			}
 		}
 
