@@ -50,12 +50,12 @@ namespace Stronk
 				{
 					Property = args.Property,
 					Value = GetValueFromSource(valueSelectors, args)
-				});
-
-			foreach (var descriptor in values)
-			{
-				if (descriptor.Value == null)
+				})
+				.Where(descriptor =>
 				{
+					if (descriptor.Value != null) 
+						return true;
+					
 					WriteLog("Unable to find a value for {propertyName}", descriptor.Property.Name);
 
 					_options.ErrorPolicy.OnSourceValueNotFound.Handle(new SourceValueNotFoundArgs
@@ -64,9 +64,11 @@ namespace Stronk
 						Property = descriptor.Property
 					});
 
-					continue;
-				}
+					return false;
+				});
 
+			foreach (var descriptor in values)
+			{
 				var converters = GetValueConverters(availableConverters, descriptor.Property);
 
 				if (converters.Any() == false)
