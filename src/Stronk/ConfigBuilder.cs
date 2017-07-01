@@ -45,12 +45,11 @@ namespace Stronk
 				properties.Select(p => p.Name));
 
 			var values = properties
-				.Select(property => new ValueSelectorArgs(_options.Logger, configSource, property))
-				.Select(args => new
+				.Select(property => new
 				{
-					Property = args.Property,
-					Converters = GetValueConverters(availableConverters, args.Property),
-					Value = GetValueFromSource(valueSelectors, args)
+					Property = property,
+					Converters = GetValueConverters(availableConverters, property),
+					Value = GetValueFromSource(valueSelectors, new ValueSelectorArgs(_options.Logger, configSource, property))
 				})
 				.Where(descriptor =>
 				{
