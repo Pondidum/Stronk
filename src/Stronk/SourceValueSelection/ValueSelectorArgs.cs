@@ -18,6 +18,7 @@ namespace Stronk.SourceValueSelection
 			Logger = logger;
 			AppSettings = source.AppSettings;
 			ConnectionStrings = source.ConnectionStrings;
+			Property = property;
 		}
 	}
 }
