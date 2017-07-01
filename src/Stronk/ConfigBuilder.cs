@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Stronk.Policies;
 using Stronk.PropertySelection;
 using Stronk.SourceValueSelection;
@@ -43,9 +41,10 @@ namespace Stronk
 				"Selected {count} properties to populate: {properties}",
 				properties.Length,
 				properties.Select(p => p.Name));
+			var applicator = new Applicator(_options);
 
 			var values = properties
-				.Select(property => new
+				.Select(property => new PropertyConversionUnit
 				{
 					Property = property,
 					Converters = GetValueConverters(availableConverters, property),
@@ -84,55 +83,8 @@ namespace Stronk
 
 			foreach (var descriptor in values)
 			{
-				ApplyConversion(availableConverters, descriptor.Converters, target, descriptor.Property, descriptor.Value);
+				applicator.Apply(descriptor, target);
 			}
-		}
-
-		private void WriteLog(string template, params object[] args)
-		{
-			_options.Logger(new LogMessage(template, args));
-		}
-
-		private void ApplyConversion(IValueConverter[] availableConverters, IEnumerable<IValueConverter> chosenConverters, object target, PropertyDescriptor property, string value)
-		{
-			var conversionPolicy = _options.ErrorPolicy.ConversionExceptionPolicy;
-			conversionPolicy.BeforeConversion(new ConversionExceptionBeforeArgs
-			{
-				Logger = _options.Logger
-			});
-
-			foreach (var converter in chosenConverters)
-			{
-				var vca = new ValueConverterArgs(
-					_options.Logger,
-					availableConverters.Where(x => x != converter),
-					property.Type,
-					value
-				);
-
-				try
-				{
-					WriteLog("Converting '{value}' and assigning to {typeName}.{propertyName}", value, target.GetType().Name, property.Name);
-
-					var converted = converter.Map(vca);
-					property.Assign(target, converted);
-
-					return;
-				}
-				catch (Exception ex)
-				{
-					conversionPolicy.OnConversionException(new ConversionExceptionArgs
-					{
-						Logger = _options.Logger,
-						Exception = ex
-					});
-				}
-			}
-
-			conversionPolicy.AfterConversion(new ConversionExceptionAfterArgs
-			{
-				Logger = _options.Logger
-			});
 		}
 
 		private static IValueConverter[] GetValueConverters(IValueConverter[] converters, PropertyDescriptor property)
