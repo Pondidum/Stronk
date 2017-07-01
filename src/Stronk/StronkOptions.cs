@@ -25,5 +25,7 @@ namespace Stronk
 			ErrorPolicy = new ErrorPolicy();
 			Logger = message => { };
 		}
+
+		public void WriteLog(string template, params object[] args) => Logger(new LogMessage(template, args));
 	}
 }

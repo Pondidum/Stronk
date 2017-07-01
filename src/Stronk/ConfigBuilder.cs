@@ -23,7 +23,7 @@ namespace Stronk
 			var availableConverters = _options.ValueConverters.ToArray();
 			var propertySelectors = _options.PropertySelectors.ToArray();
 
-			WriteLog(
+			_options.WriteLog(
 				"Populating '{typeName}', from {sourceTypeName} using\nPropertySelectors: {propertySelectors}\nSourceValueSelectors: {valueSelectors}\nValueConverters: {valueConverters}.",
 				target.GetType().Name,
 				configSource.GetType().Name,
@@ -39,7 +39,7 @@ namespace Stronk
 				.SelectMany(selector => selector.Select(propertySelectorArgs))
 				.ToArray();
 
-			WriteLog(
+			_options.WriteLog(
 				"Selected {count} properties to populate: {properties}",
 				properties.Length,
 				properties.Select(p => p.Name));
@@ -56,7 +56,7 @@ namespace Stronk
 					if (descriptor.Value != null)
 						return true;
 
-					WriteLog("Unable to find a value for {propertyName}", descriptor.Property.Name);
+					_options.WriteLog("Unable to find a value for {propertyName}", descriptor.Property.Name);
 
 					_options.ErrorPolicy.OnSourceValueNotFound.Handle(new SourceValueNotFoundArgs
 					{
@@ -71,7 +71,7 @@ namespace Stronk
 					if (descriptor.Converters.Any())
 						return true;
 
-					WriteLog("Unable to any converters for {typeName} for property {propertyName}", descriptor.Property.Type.Name, descriptor.Property.Name);
+					_options.WriteLog("Unable to any converters for {typeName} for property {propertyName}", descriptor.Property.Type.Name, descriptor.Property.Name);
 
 					_options.ErrorPolicy.OnConverterNotFound.Handle(new ConverterNotFoundArgs
 					{
