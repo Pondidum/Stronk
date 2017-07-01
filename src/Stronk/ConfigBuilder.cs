@@ -45,7 +45,7 @@ namespace Stronk
 				properties.Select(p => p.Name));
 
 			var values = properties
-				.Select(property =>  new ValueSelectorArgs(_options.Logger, configSource, property))
+				.Select(property => new ValueSelectorArgs(_options.Logger, configSource, property))
 				.Select(args => new
 				{
 					Property = args.Property,
@@ -54,9 +54,9 @@ namespace Stronk
 				})
 				.Where(descriptor =>
 				{
-					if (descriptor.Value != null) 
+					if (descriptor.Value != null)
 						return true;
-					
+
 					WriteLog("Unable to find a value for {propertyName}", descriptor.Property.Name);
 
 					_options.ErrorPolicy.OnSourceValueNotFound.Handle(new SourceValueNotFoundArgs
@@ -66,12 +66,12 @@ namespace Stronk
 					});
 
 					return false;
-				});
-
-			foreach (var descriptor in values)
-			{
-				if (descriptor.Converters.Any() == false)
+				})
+				.Where(descriptor =>
 				{
+					if (descriptor.Converters.Any())
+						return true;
+
 					WriteLog("Unable to any converters for {typeName} for property {propertyName}", descriptor.Property.Type.Name, descriptor.Property.Name);
 
 					_options.ErrorPolicy.OnConverterNotFound.Handle(new ConverterNotFoundArgs
@@ -80,9 +80,11 @@ namespace Stronk
 						Property = descriptor.Property
 					});
 
-					continue;
-				}
+					return false;
+				});
 
+			foreach (var descriptor in values)
+			{
 				ApplyConversion(availableConverters, descriptor.Converters, target, descriptor.Property, descriptor.Value);
 			}
 		}
