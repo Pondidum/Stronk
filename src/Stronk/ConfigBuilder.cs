@@ -49,6 +49,7 @@ namespace Stronk
 				.Select(args => new
 				{
 					Property = args.Property,
+					Converters = GetValueConverters(availableConverters, args.Property),
 					Value = GetValueFromSource(valueSelectors, args)
 				})
 				.Where(descriptor =>
@@ -69,9 +70,7 @@ namespace Stronk
 
 			foreach (var descriptor in values)
 			{
-				var converters = GetValueConverters(availableConverters, descriptor.Property);
-
-				if (converters.Any() == false)
+				if (descriptor.Converters.Any() == false)
 				{
 					WriteLog("Unable to any converters for {typeName} for property {propertyName}", descriptor.Property.Type.Name, descriptor.Property.Name);
 
@@ -84,7 +83,7 @@ namespace Stronk
 					continue;
 				}
 
-				ApplyConversion(availableConverters, converters, target, descriptor.Property, descriptor.Value);
+				ApplyConversion(availableConverters, descriptor.Converters, target, descriptor.Property, descriptor.Value);
 			}
 		}
 
