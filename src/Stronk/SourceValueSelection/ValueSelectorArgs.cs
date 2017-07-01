@@ -11,19 +11,13 @@ namespace Stronk.SourceValueSelection
 		public Action<LogMessage> Logger { get; }
 		public IDictionary<string, string> AppSettings { get; }
 		public IDictionary<string, ConnectionStringSettings> ConnectionStrings { get; }
-		public PropertyDescriptor Property { get; private set; }
+		public PropertyDescriptor Property { get; }
 
-		internal ValueSelectorArgs(Action<LogMessage> logger, IConfigurationSource source)
+		internal ValueSelectorArgs(Action<LogMessage> logger, IConfigurationSource source, PropertyDescriptor property)
 		{
 			Logger = logger;
 			AppSettings = source.AppSettings;
 			ConnectionStrings = source.ConnectionStrings;
-		}
-
-		internal ValueSelectorArgs With(PropertyDescriptor property)
-		{
-			Property = property;
-			return this;
 		}
 	}
 }

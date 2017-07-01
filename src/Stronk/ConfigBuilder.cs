@@ -44,11 +44,9 @@ namespace Stronk
 				properties.Length,
 				properties.Select(p => p.Name));
 
-			var args = new ValueSelectorArgs(_options.Logger, configSource);
-
 			foreach (var property in properties)
 			{
-				var selectorArgs = args.With(property);
+				var selectorArgs = new ValueSelectorArgs(_options.Logger, configSource, property);
 				var value = GetValueFromSource(valueSelectors, selectorArgs);
 
 				if (value == null)
