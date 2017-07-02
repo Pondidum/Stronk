@@ -36,12 +36,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppConfigSource.cs" />
     <Compile Include="Applicator.cs" />
     <Compile Include="ConfigBuilder.cs" />
+    <Compile Include="ConfigurationSourcing\AppConfigSource.cs" />
+    <Compile Include="ConfigurationSourcing\IConfigurationSource.cs" />
     <Compile Include="ConverterNotFoundException.cs" />
     <Compile Include="Default.cs" />
-    <Compile Include="IConfigurationSource.cs" />
     <Compile Include="LogMessage.cs" />
     <Compile Include="Policies\ConversionExceptionAfterArgs.cs" />
     <Compile Include="Policies\ConversionExceptionArgs.cs" />

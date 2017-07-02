@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Serilog;
 using Stronk;
+using Stronk.ConfigurationSourcing;
 
 namespace TestApp
 {

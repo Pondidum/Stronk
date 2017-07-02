@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using NSubstitute;
 using Shouldly;
+using Stronk.ConfigurationSourcing;
 using Stronk.PropertySelection;
 using Xunit;
 

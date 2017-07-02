@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
 using Stronk.PropertySelection;
 using Stronk.SourceValueSelection;

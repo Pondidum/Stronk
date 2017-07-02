@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using Stronk.ConfigurationSourcing;
 using Stronk.PropertySelection;
 
 namespace Stronk.SourceValueSelection
