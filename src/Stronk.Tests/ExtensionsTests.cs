@@ -31,7 +31,27 @@ namespace Stronk.Tests
 		}
 
 		[Fact]
-		public void When_selecting_type_names()
+		public void When_selecting_type_names_of_instances()
+		{
+			var types = new IValueConverter[]
+			{
+				new LambdaValueConverter<Uri>(x => new Uri(x)),
+				new LambdaValueConverter<Guid>(x => Guid.Parse(x)),
+				new CsvValueConverter(),
+				new LambdaValueConverter<List<Dictionary<string, int>>>(x => new List<Dictionary<string, int>>())
+			};
+
+			types.SelectTypeNames().ShouldBe(new []
+			{
+				"LambdaValueConverter<Uri>",
+				"LambdaValueConverter<Guid>",
+				"CsvValueConverter",
+				"LambdaValueConverter<List<Dictionary<String, Int32>>>"
+			});
+		}
+
+		[Fact]
+		public void When_selecting_type_names_of_types()
 		{
 			var types = new[]
 			{

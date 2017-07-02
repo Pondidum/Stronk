@@ -22,12 +22,7 @@ namespace Stronk
 
 		public static IEnumerable<string> SelectTypeNames(this IEnumerable<object> instances)
 		{
-			return instances.Select(instance => RecurseTypeName(instance.GetType()));
-		}
-
-		public static IEnumerable<string> SelectTypeNames(this IEnumerable<Type> types)
-		{
-			return types.Select(RecurseTypeName);
+			return instances.Select(instance => RecurseTypeName(instance is Type ? (Type)instance : instance.GetType()));
 		}
 
 		private static string RecurseTypeName(Type type)
