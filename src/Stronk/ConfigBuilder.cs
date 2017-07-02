@@ -17,8 +17,6 @@ namespace Stronk
 
 		public void Populate(object target, IConfigurationSource configSource)
 		{
-			var valueSelectors = _options.ValueSelectors.ToArray();
-			var availableConverters = _options.ValueConverters.ToArray();
 			var propertySelectors = _options.PropertySelectors.ToArray();
 
 			_options.WriteLog(
@@ -26,8 +24,8 @@ namespace Stronk
 				target.GetType().Name,
 				configSource.GetType().Name,
 				propertySelectors.SelectTypeNames(),
-				valueSelectors.SelectTypeNames(),
-				availableConverters.SelectTypeNames());
+				_options.ValueSelectors.SelectTypeNames(),
+				_options.ValueConverters.SelectTypeNames());
 
 			var propertySelectorArgs = new PropertySelectorArgs(
 				_options.Logger,
@@ -44,12 +42,7 @@ namespace Stronk
 			var applicator = new Applicator(_options);
 
 			var values = properties
-				.Select(property => new PropertyConversionUnit
-				{
-					Property = property,
-					Converters = GetValueConverters(availableConverters, property),
-					Value = GetValueFromSource(valueSelectors, new ValueSelectorArgs(_options.Logger, configSource, property))
-				})
+				.Select(property => NewPropertyConversionUnit(configSource, property))
 				.Where(descriptor =>
 				{
 					if (descriptor.Value != null)
@@ -59,7 +52,7 @@ namespace Stronk
 
 					_options.ErrorPolicy.OnSourceValueNotFound.Handle(new SourceValueNotFoundArgs
 					{
-						ValueSelectors = valueSelectors,
+						ValueSelectors = _options.ValueSelectors,
 						Property = descriptor.Property
 					});
 
@@ -74,7 +67,7 @@ namespace Stronk
 
 					_options.ErrorPolicy.OnConverterNotFound.Handle(new ConverterNotFoundArgs
 					{
-						AvailableConverters = availableConverters,
+						AvailableConverters = _options.ValueConverters,
 						Property = descriptor.Property
 					});
 
@@ -87,24 +80,16 @@ namespace Stronk
 			}
 		}
 
-		private static IValueConverter[] GetValueConverters(IValueConverter[] converters, PropertyDescriptor property)
+		private PropertyConversionUnit NewPropertyConversionUnit(IConfigurationSource configSource, PropertyDescriptor property)
 		{
-			return converters
-				.Where(c => c.CanMap(property.Type))
-				.ToArray();
-		}
-
-		private static string GetValueFromSource(ISourceValueSelector[] sourceValueSelectors, ValueSelectorArgs args)
-		{
-			foreach (var filter in sourceValueSelectors)
+			var selectionArgs = new ValueSelectorArgs(_options.Logger, configSource, property);
+			
+			return new PropertyConversionUnit
 			{
-				var value = filter.Select(args);
-
-				if (value != null)
-					return value;
-			}
-
-			return null;
+				Property = property,
+				Converters = _options.ValueConverters.Where(c => c.CanMap(property.Type)).ToArray(),
+				Value = _options.ValueSelectors.Select(x => x.Select(selectionArgs)).FirstOrDefault(v => v != null)
+			};
 		}
 	}
 }
