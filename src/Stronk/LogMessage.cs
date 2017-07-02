@@ -5,6 +5,8 @@ namespace Stronk
 {
 	public class LogMessage
 	{
+		private static readonly Regex MergeFields = new Regex(@"\{(.*?)\}");
+		
 		public string  Template { get; }
 		public object[] Args { get; }
 
@@ -16,9 +18,8 @@ namespace Stronk
 
 		public override string ToString()
 		{
-			var rx = new Regex(@"\{(.*?)\}");
 			var index = 0;
-			var rendered = rx.Replace(Template, eval => Convert.ToString(Args[index++]));
+			var rendered = MergeFields.Replace(Template, eval => Convert.ToString(Args[index++]));
 
 			return rendered;
 		}

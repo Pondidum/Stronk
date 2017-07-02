@@ -5,7 +5,7 @@ namespace Stronk
 {
 	public class ValueConversionException : Exception
 	{
-		public Exception[] InnerExceptions { get; private set; }
+		public Exception[] InnerExceptions { get; }
 
 		public ValueConversionException(string message, Exception[] exceptions)
 			: base(message, exceptions.FirstOrDefault())

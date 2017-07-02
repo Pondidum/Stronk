@@ -13,6 +13,7 @@ namespace Stronk
 		public List<IValueConverter> ValueConverters { get; set; }
 		public List<IPropertySelector> PropertySelectors { get; set; }
 		public List<ISourceValueSelector> ValueSelectors { get; set; }
+
 		public ErrorPolicy ErrorPolicy { get; set; }
 		public Action<LogMessage> Logger { get; set; }
 
