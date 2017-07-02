@@ -4,7 +4,7 @@ using System.Text;
 using Stronk.PropertySelection;
 using Stronk.ValueConversion;
 
-namespace Stronk
+namespace Stronk.Policies
 {
 	public class ConverterNotFoundException : Exception
 	{

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Stronk.PropertySelection;
 using Stronk.SourceValueSelection;
 
-namespace Stronk
+namespace Stronk.Policies
 {
 	public class SourceValueNotFoundException : Exception
 	{

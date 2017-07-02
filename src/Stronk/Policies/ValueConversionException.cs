@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Stronk
+namespace Stronk.Policies
 {
 	public class ValueConversionException : Exception
 	{

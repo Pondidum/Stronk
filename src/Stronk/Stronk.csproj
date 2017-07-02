@@ -40,7 +40,6 @@
     <Compile Include="ConfigBuilder.cs" />
     <Compile Include="ConfigurationSourcing\AppConfigSource.cs" />
     <Compile Include="ConfigurationSourcing\IConfigurationSource.cs" />
-    <Compile Include="ConverterNotFoundException.cs" />
     <Compile Include="Default.cs" />
     <Compile Include="LogMessage.cs" />
     <Compile Include="Policies\ConversionExceptionAfterArgs.cs" />
@@ -49,6 +48,7 @@
     <Compile Include="Policies\ConversionExceptionPolicy.cs" />
     <Compile Include="Policies\ConverterExceptionPolicy.cs" />
     <Compile Include="Policies\ConverterNotFoundArgs.cs" />
+    <Compile Include="Policies\ConverterNotFoundException.cs" />
     <Compile Include="Policies\ConverterNotFoundPolicy.cs" />
     <Compile Include="Policies\ErrorPolicy.cs" />
     <Compile Include="Policies\IConversionExceptionPolicy.cs" />
@@ -56,14 +56,14 @@
     <Compile Include="Policies\ISourceValueNotFoundPolicy.cs" />
     <Compile Include="Policies\PolicyActions.cs" />
     <Compile Include="Policies\SourceValueNotFoundArgs.cs" />
+    <Compile Include="Policies\SourceValueNotFoundException.cs" />
     <Compile Include="Policies\SourceValueNotFoundPolicy.cs" />
+    <Compile Include="Policies\ValueConversionException.cs" />
     <Compile Include="Properties\AssemblyVersion.cs" />
     <Compile Include="PropertyConversionUnit.cs" />
     <Compile Include="PropertySelection\AutoSetOnlyPropertySelector.cs" />
     <Compile Include="PropertySelection\PropertySelectorArgs.cs" />
-    <Compile Include="SourceValueNotFoundException.cs" />
     <Compile Include="StronkOptions.cs" />
-    <Compile Include="ValueConversionException.cs" />
     <Compile Include="ValueConversion\CsvValueConverter.cs" />
     <Compile Include="ValueConversion\ValueConverterArgs.cs" />
     <Compile Include="SourceValueSelection\ISourceValueSelector.cs" />
