@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using Shouldly;
+using Stronk.Policies;
 using Xunit;
 #pragma warning disable 649
 
@@ -45,6 +46,24 @@ namespace Stronk.Tests
 			);
 		}
 
+		[Fact]
+		public void When_loading_the_configuration_and_a_property_throws()
+		{
+			var config = new ThrowingSetter();
+			Should.Throw<ValueConversionException>(() => config.FromWebConfig());
+		}
+
+		public class ThrowingSetter
+		{
+			private string _name;
+
+			public string Name
+			{
+				get { return _name; }
+				set { throw new NotFiniteNumberException(); }
+			}
+		}
+		
 		public class ConfigWithPrivateSetters
 		{
 			public string Name { get; private set; }
