@@ -63,7 +63,6 @@
     <Compile Include="PropertySelection\PropertySelectorArgs.cs" />
     <Compile Include="SourceValueNotFoundException.cs" />
     <Compile Include="StronkOptions.cs" />
-    <Compile Include="StronkConfigurationException.cs" />
     <Compile Include="ValueConversionException.cs" />
     <Compile Include="ValueConversion\CsvValueConverter.cs" />
     <Compile Include="ValueConversion\ValueConverterArgs.cs" />
