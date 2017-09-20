@@ -2,7 +2,7 @@
   "name": "Stronk",
   "version": "3.0.0",
   "dependencies": {
-    "gulp": "^3.9.0",
+    "gulp": "^3.9.1",
     "gulp-bump": "^1.0.0",
     "gulp-debug": "^2.1.2",
     "gulp-dotnet-assembly-info": "^0.1.11",
