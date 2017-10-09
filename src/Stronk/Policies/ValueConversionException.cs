@@ -10,7 +10,7 @@ namespace Stronk.Policies
 		public ValueConversionException(string message, Exception[] exceptions)
 			: base(message, exceptions.FirstOrDefault())
 		{
-			InnerExceptions = exceptions.ToArray();
+			InnerExceptions = exceptions;
 		}
 	}
 }

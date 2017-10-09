@@ -44,6 +44,8 @@ namespace Stronk
 				{
 					conversionPolicy.OnConversionException(new ConversionExceptionArgs
 					{
+						Property = unit.Property,
+						Value = unit.Value,
 						Logger = _options.Logger,
 						Exception = ex
 					});

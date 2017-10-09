@@ -1,4 +1,5 @@
 using System;
+using Stronk.PropertySelection;
 
 namespace Stronk.Policies
 {
@@ -6,5 +7,7 @@ namespace Stronk.Policies
 	{
 		public Action<LogMessage> Logger { get; set; }
 		public Exception Exception { get; set; }
+		public PropertyDescriptor Property { get; set; }
+		public string Value { get; set; }
 	}
 }
