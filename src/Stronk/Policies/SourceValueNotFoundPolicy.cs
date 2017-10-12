@@ -12,7 +12,7 @@
 		public void Handle(SourceValueNotFoundArgs args)
 		{
 			if (_action == PolicyActions.ThrowException)
-				throw new SourceValueNotFoundException(args.ValueSelectors, args.Property);
+				throw new SourceValueNotFoundException(args);
 		}
 	}
 }

@@ -79,7 +79,9 @@ namespace Stronk
 			_options.ErrorPolicy.OnSourceValueNotFound.Handle(new SourceValueNotFoundArgs
 			{
 				ValueSelectors = _options.ValueSelectors,
-				Property = descriptor.Property
+				Property = descriptor.Property,
+				Converters = descriptor.Converters,
+				Source = descriptor.Source
 			});
 
 			return false;
@@ -91,6 +93,7 @@ namespace Stronk
 			
 			return new PropertyConversionUnit
 			{
+				Source = configSource,
 				Property = property,
 				Converters = _options.ValueConverters.Where(c => c.CanMap(property.Type)).ToArray(),
 				Value = _options.ValueSelectors.Select(x => x.Select(selectionArgs)).FirstOrDefault(v => v != null)
