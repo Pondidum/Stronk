@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
 using Stronk.ConfigurationSourcing;
 using Stronk.PropertySelection;
 
@@ -9,17 +6,18 @@ namespace Stronk.SourceValueSelection
 {
 	public class ValueSelectorArgs
 	{
-		public Action<LogMessage> Logger { get; }
-		public IDictionary<string, string> AppSettings { get; }
-		public IDictionary<string, ConnectionStringSettings> ConnectionStrings { get; }
-		public PropertyDescriptor Property { get; }
+		private readonly IConfigurationSource _source;
 
 		internal ValueSelectorArgs(Action<LogMessage> logger, IConfigurationSource source, PropertyDescriptor property)
 		{
+			_source = source;
 			Logger = logger;
-			AppSettings = source.AppSettings;
-			ConnectionStrings = source.ConnectionStrings;
 			Property = property;
 		}
+		
+		public Action<LogMessage> Logger { get; }
+		public PropertyDescriptor Property { get; }
+
+		public string GetValue(string key) => _source.GetValue(key);
 	}
 }

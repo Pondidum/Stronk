@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.Linq;
+﻿using System.Linq;
 using NSubstitute;
 using Shouldly;
 using Stronk.ConfigurationSourcing;
@@ -17,10 +14,8 @@ namespace Stronk.Tests.PropertySelection
 		public void When_loading_values()
 		{
 			var source = Substitute.For<IConfigurationSource>();
-			source.AppSettings.Returns(new Dictionary<string, string>());
-			source.ConnectionStrings.Returns(new Dictionary<string, ConnectionStringSettings>());
-			source.AppSettings["Name"] = "Testing";
-			source.AppSettings["Value"] = "16";
+			source.GetValue("Name").Returns("Testing");
+			source.GetValue("Value").Returns("16");
 
 			var selector = new AutoSetOnlyPropertySelector();
 

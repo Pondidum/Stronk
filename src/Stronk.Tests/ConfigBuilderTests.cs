@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
 using System.Linq;
-using NSubstitute;
 using Shouldly;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
@@ -19,6 +16,7 @@ namespace Stronk.Tests
 		private readonly TargetConfig _target;
 		private readonly IConfigurationSource _source;
 		private readonly StronkOptions _options;
+		private IDictionary<string, string> _settings;
 
 		public ConfigBuilderTests()
 		{
@@ -35,9 +33,8 @@ namespace Stronk.Tests
 
 			_builder = new ConfigBuilder(_options);
 
-			_source = Substitute.For<IConfigurationSource>();
-			_source.AppSettings.Returns(new Dictionary<string, string>());
-			_source.ConnectionStrings.Returns(new Dictionary<string, ConnectionStringSettings>());
+			_settings = new Dictionary<string, string>();
+			_source = new DictionaryConfigurationSource(_settings);
 		}
 
 		[Fact]
@@ -47,7 +44,7 @@ namespace Stronk.Tests
 
 			Should
 				.Throw<SourceValueNotFoundException>(() => _builder.Populate(_target, _source))
-				.Message.ShouldStartWith("Unable to find a value for property 'Value' using the following selectors:");
+				.Message.ShouldStartWith("Unable to find a value for 'Int32' property 'Value'");
 		}
 
 		[Fact]
@@ -64,7 +61,7 @@ namespace Stronk.Tests
 		public void When_a_converter_cannot_be_found_and_policy_is_throw()
 		{
 			_policy.OnConverterNotFound = new ConverterNotFoundPolicy(PolicyActions.ThrowException);
-			_source.AppSettings["Value"] = "12";
+			_settings["Value"] = "12";
 
 			_options.ValueConverters = new List<IValueConverter>
 			{
@@ -80,7 +77,7 @@ namespace Stronk.Tests
 		public void When_a_converter_cannot_be_found_and_policy_is_skip()
 		{
 			_policy.OnConverterNotFound = new ConverterNotFoundPolicy(PolicyActions.Skip);
-			_source.AppSettings["Value"] = "12";
+			_settings["Value"] = "12";
 
 			_options.ValueConverters = new List<IValueConverter>
 			{
@@ -96,7 +93,7 @@ namespace Stronk.Tests
 		public void When_a_converter_throws_an_exception_and_policy_is_throw()
 		{
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.ThrowException);
-			_source.AppSettings["Value"] = "12";
+			_settings["Value"] = "12";
 
 			_options.ValueConverters = new List<IValueConverter>
 			{
@@ -112,7 +109,7 @@ namespace Stronk.Tests
 		public void When_a_converter_throws_an_exception_and_policy_is_skip()
 		{
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.Skip);
-			_source.AppSettings["Value"] = "12";
+			_settings["Value"] = "12";
 
 			_options.ValueConverters = new List<IValueConverter>
 			{
@@ -128,7 +125,7 @@ namespace Stronk.Tests
 		public void When_a_converter_throws_and_policy_is_fallback_or_throw_and_there_is_no_fallback()
 		{
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
-			_source.AppSettings["Value"] = "12";
+			_settings["Value"] = "12";
 
 			_options.ValueConverters = new List<IValueConverter>
 			{
@@ -144,7 +141,7 @@ namespace Stronk.Tests
 		public void When_a_converter_throws_and_policy_is_fallback_or_throw_and_fallback_works()
 		{
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
-			_source.AppSettings["Value"] = "12";
+			_settings["Value"] = "12";
 
 			_options.ValueConverters = new List<IValueConverter>
 			{
@@ -161,7 +158,7 @@ namespace Stronk.Tests
 		public void When_a_converter_throws_and_policy_is_fallback_or_throw_and_fallback_fails()
 		{
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
-			_source.AppSettings["Value"] = "12";
+			_settings["Value"] = "12";
 
 			_options.ValueConverters = new List<IValueConverter>
 			{
@@ -180,7 +177,7 @@ namespace Stronk.Tests
 		public void When_a_converter_throws_and_policy_is_fallback_or_throw_and_multiple_fallbacks_fail()
 		{
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
-			_source.AppSettings["Value"] = "12";
+			_settings["Value"] = "12";
 
 			_options.ValueConverters = new List<IValueConverter>
 			{
@@ -200,7 +197,7 @@ namespace Stronk.Tests
 		public void When_a_converter_throws_and_policy_is_fallback_or_skip_and_there_is_no_fallback()
 		{
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrSkip);
-			_source.AppSettings["Value"] = "12";
+			_settings["Value"] = "12";
 
 			_options.ValueConverters = new List<IValueConverter>
 			{
@@ -216,7 +213,7 @@ namespace Stronk.Tests
 		public void When_a_converter_throws_and_policy_is_fallback_or_skip_and_fallback_works()
 		{
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrSkip);
-			_source.AppSettings["Value"] = "12";
+			_settings["Value"] = "12";
 
 			_options.ValueConverters = new List<IValueConverter>
 			{
@@ -233,7 +230,7 @@ namespace Stronk.Tests
 		public void When_a_converter_throws_and_policy_is_fallback_or_skip_and_fallback_fails()
 		{
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrSkip);
-			_source.AppSettings["Value"] = "12";
+			_settings["Value"] = "12";
 
 			_options.ValueConverters = new List<IValueConverter>
 			{

@@ -7,11 +7,8 @@ namespace Stronk.ConfigurationSourcing
 {
 	public class AppConfigSource : IConfigurationSource
 	{
-		public IDictionary<string, string> AppSettings => _settings.Value;
-		public IDictionary<string, ConnectionStringSettings> ConnectionStrings => _connections.Value;
-
 		private readonly Lazy<IDictionary<string, string>> _settings;
-		private readonly Lazy<IDictionary<string, ConnectionStringSettings>> _connections;
+		private readonly Lazy<IDictionary<string, string>> _connections;
 
 		public AppConfigSource()
 		{
@@ -22,12 +19,27 @@ namespace Stronk.ConfigurationSourcing
 					key => key,
 					key => ConfigurationManager.AppSettings[key]));
 
-			_connections = new Lazy<IDictionary<string, ConnectionStringSettings>>(() => ConfigurationManager
+			_connections = new Lazy<IDictionary<string, string>>(() => ConfigurationManager
 				.ConnectionStrings
 				.Cast<ConnectionStringSettings>()
 				.ToDictionary(
 					c => c.Name,
-					c => c));
+					c => c.ConnectionString));
 		}
+
+		public string GetValue(string key)
+		{
+			string value;
+
+			if (_settings.Value.TryGetValue(key, out value))
+				return value;
+
+			if (_connections.Value.TryGetValue(key, out value))
+				return value;
+
+			return null;
+		}
+
+		public IEnumerable<string> GetAvailableKeys() => _settings.Value.Keys.Concat(_connections.Value.Keys);
 	}
 }

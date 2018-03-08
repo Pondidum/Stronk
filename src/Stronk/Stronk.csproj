@@ -1,25 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <PackageId>Stronk</PackageId>
-        <PackageTags>configuration;app.config;web.config;config</PackageTags>
-        <PackageVersion>4.0.0</PackageVersion>
-        <Title>Stronk</Title>
-        <Description>Strong typed application configuration.</Description>
-        <Authors>Andy Dote</Authors>
-
-        <PackageProjectUrl>https://github.com/pondidum/Stronk/</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/pondidum/Stronk/blob/master/LICENSE.txt</PackageLicenseUrl>
-        <RepositoryType>git</RepositoryType>
-        <RepositoryUrl>git://github.com/pondidum/Stronk</RepositoryUrl>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <TargetFramework>net451</TargetFramework>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <Reference Include="System.Configuration"/>
-    </ItemGroup>
-
+  <PropertyGroup>
+    <PackageId>Stronk</PackageId>
+    <PackageTags>configuration;app.config;web.config;config</PackageTags>
+    <PackageVersion>4.0.0</PackageVersion>
+    <Title>Stronk</Title>
+    <Description>Strong typed application configuration.</Description>
+    <Authors>Andy Dote</Authors>
+    <PackageProjectUrl>https://github.com/pondidum/Stronk/</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/pondidum/Stronk/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>git://github.com/pondidum/Stronk</RepositoryUrl>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net451</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
 </Project>
