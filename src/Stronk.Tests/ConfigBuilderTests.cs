@@ -14,27 +14,22 @@ namespace Stronk.Tests
 		private readonly ConfigBuilder _builder;
 		private readonly ErrorPolicy _policy;
 		private readonly TargetConfig _target;
-		private readonly IConfigurationSource _source;
 		private readonly StronkOptions _options;
-		private IDictionary<string, string> _settings;
+		private readonly IDictionary<string, string> _settings;
 
 		public ConfigBuilderTests()
 		{
 			_target = new TargetConfig();
 			_policy = new ErrorPolicy();
+			_settings = new Dictionary<string, string>();
 
 			_options = new StronkOptions
 			{
 				ErrorPolicy = _policy,
-				ValueSelectors = Default.SourceValueSelectors.ToList(),
-				ValueConverters = Default.ValueConverters.ToList(),
-				PropertySelectors = Default.PropertySelectors.ToList()
+				ConfigSource = new DictionaryConfigurationSource(_settings)
 			};
 
 			_builder = new ConfigBuilder(_options);
-
-			_settings = new Dictionary<string, string>();
-			_source = new DictionaryConfigurationSource(_settings);
 		}
 
 		[Fact]
@@ -43,7 +38,7 @@ namespace Stronk.Tests
 			_policy.OnSourceValueNotFound = new SourceValueNotFoundPolicy(PolicyActions.ThrowException);
 
 			Should
-				.Throw<SourceValueNotFoundException>(() => _builder.Populate(_target, _source))
+				.Throw<SourceValueNotFoundException>(() => _builder.Populate(_target))
 				.Message.ShouldStartWith("Unable to find a value for 'Int32' property 'Value'");
 		}
 
@@ -52,7 +47,7 @@ namespace Stronk.Tests
 		{
 			_policy.OnSourceValueNotFound = new SourceValueNotFoundPolicy(PolicyActions.Skip);
 
-			_builder.Populate(_target, _source);
+			_builder.Populate(_target);
 
 			_target.Value.ShouldBe(0);
 		}
@@ -69,7 +64,7 @@ namespace Stronk.Tests
 			};
 
 			Should
-				.Throw<Exception>(() => _builder.Populate(_target, _source))
+				.Throw<Exception>(() => _builder.Populate(_target))
 				.Message.ShouldStartWith("None of the following converters were suitable to handle property 'Value' of type 'Int32':");
 		}
 
@@ -84,7 +79,7 @@ namespace Stronk.Tests
 				new LambdaValueConverter<Uri>(val => new Uri(val)),
 			};
 
-			_builder.Populate(_target, _source);
+			_builder.Populate(_target);
 
 			_target.Value.ShouldBe(0);
 		}
@@ -101,7 +96,7 @@ namespace Stronk.Tests
 			};
 
 			Should
-				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source))
+				.Throw<ValueConversionException>(() => _builder.Populate(_target))
 				.InnerException.ShouldBeOfType<NotFiniteNumberException>();
 		}
 
@@ -116,7 +111,7 @@ namespace Stronk.Tests
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
 			};
 
-			_builder.Populate(_target, _source);
+			_builder.Populate(_target);
 
 			_target.Value.ShouldBe(0);
 		}
@@ -133,7 +128,7 @@ namespace Stronk.Tests
 			};
 
 			Should
-				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source))
+				.Throw<ValueConversionException>(() => _builder.Populate(_target))
 				.InnerException.ShouldBeOfType<NotFiniteNumberException>();
 		}
 
@@ -149,7 +144,7 @@ namespace Stronk.Tests
 				new FallbackValueConverter()
 			};
 
-			_builder.Populate(_target, _source);
+			_builder.Populate(_target);
 
 			_target.Value.ShouldBe(12);
 		}
@@ -167,7 +162,7 @@ namespace Stronk.Tests
 			};
 
 			var ex = Should
-				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source));
+				.Throw<ValueConversionException>(() => _builder.Populate(_target));
 
 			ex.InnerExceptions.First().ShouldBeOfType<NotFiniteNumberException>();
 			ex.InnerExceptions.Last().ShouldBeOfType<IndexOutOfRangeException>();
@@ -188,7 +183,7 @@ namespace Stronk.Tests
 			};
 
 			var ex = Should
-				.Throw<ValueConversionException>(() => _builder.Populate(_target, _source));
+				.Throw<ValueConversionException>(() => _builder.Populate(_target));
 
 			ex.InnerExceptions.Count().ShouldBe(4);
 		}
@@ -204,7 +199,7 @@ namespace Stronk.Tests
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
 			};
 
-			_builder.Populate(_target, _source);
+			_builder.Populate(_target);
 
 			_target.Value.ShouldBe(0);
 		}
@@ -221,7 +216,7 @@ namespace Stronk.Tests
 				new FallbackValueConverter()
 			};
 
-			_builder.Populate(_target, _source);
+			_builder.Populate(_target);
 
 			_target.Value.ShouldBe(12);
 		}
@@ -238,7 +233,7 @@ namespace Stronk.Tests
 				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
 			};
 
-			_builder.Populate(_target, _source);
+			_builder.Populate(_target);
 
 			_target.Value.ShouldBe(0);
 		}

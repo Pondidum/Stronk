@@ -9,16 +9,20 @@ namespace Stronk
 	{
 		public static void FromAppConfig(this object target, StronkOptions options = null, IConfigurationSource configSource = null)
 		{
-			var builder = new ConfigBuilder(options ?? new StronkOptions());
+			options = options ?? new StronkOptions();
+			options.ConfigSource = configSource ?? options.ConfigSource;
 
-			builder.Populate(target, configSource ?? new AppConfigSource());
+			var builder = new ConfigBuilder(options);
+			builder.Populate(target);
 		}
 
 		public static void FromWebConfig(this object target, StronkOptions options = null, IConfigurationSource configSource = null)
 		{
-			var builder = new ConfigBuilder(options ?? new StronkOptions());
+			options = options ?? new StronkOptions();
+			options.ConfigSource = configSource ?? options.ConfigSource;
 
-			builder.Populate(target, configSource ?? new AppConfigSource());
+			var builder = new ConfigBuilder(options);
+			builder.Populate(target);
 		}
 
 		public static IEnumerable<string> SelectTypeNames(this IEnumerable<object> instances)

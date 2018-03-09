@@ -15,14 +15,14 @@ namespace Stronk
 			_options = options;
 		}
 
-		public void Populate(object target, IConfigurationSource configSource)
+		public void Populate(object target)
 		{
 			var propertySelectors = _options.PropertySelectors.ToArray();
 
 			_options.WriteLog(
 				"Populating '{typeName}', from {sourceTypeName} using\nPropertySelectors: {propertySelectors}\nSourceValueSelectors: {valueSelectors}\nValueConverters: {valueConverters}.",
 				target.GetType().Name,
-				configSource.GetType().Name,
+				_options.ConfigSource.GetType().Name,
 				propertySelectors.SelectTypeNames(),
 				_options.ValueSelectors.SelectTypeNames(),
 				_options.ValueConverters.SelectTypeNames());
@@ -43,7 +43,7 @@ namespace Stronk
 			var applicator = new Applicator(_options);
 
 			var values = properties
-				.Select(property => NewPropertyConversionUnit(configSource, property))
+				.Select(property => NewPropertyConversionUnit(_options.ConfigSource, property))
 				.Where(SelectedValueIsValid)
 				.Where(SelectedConvertersAreValid);
 

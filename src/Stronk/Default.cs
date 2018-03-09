@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Stronk.ConfigurationSourcing;
 using Stronk.PropertySelection;
 using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
@@ -26,6 +27,11 @@ namespace Stronk
 
 		public static ISourceValueSelector[] SourceValueSelectors { get; } = {
 			new PropertyNameSourceValueSelector(),
+		};
+
+		public static IConfigurationSource[] ConfigurationSources { get; } =
+		{
+			new AppConfigSource()
 		};
 	}
 }
