@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using NSubstitute;
+﻿using NSubstitute;
 using Shouldly;
 using Stronk.ConfigurationSourcing;
 using Stronk.PropertySelection;
@@ -38,7 +37,7 @@ namespace Stronk.Tests.PropertySelection
 				this.FromAppConfig(
 					options: new StronkOptions
 					{
-						PropertySelectors = new [] { selector }.ToList()
+						PropertySelectors = new [] { selector }
 					},
 					configSource: source
 				);

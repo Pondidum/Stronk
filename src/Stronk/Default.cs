@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Stronk.ConfigurationSourcing;
 using Stronk.PropertySelection;
@@ -10,7 +9,8 @@ namespace Stronk
 {
 	public class Default
 	{
-		public static IValueConverter[] ValueConverters { get; } = {
+		public static IValueConverter[] ValueConverters => new IValueConverter[]
+		{
 			new LambdaValueConverter<Uri>(val => new Uri(val)),
 			new LambdaValueConverter<Guid>(Guid.Parse),
 			new LambdaValueConverter<TimeSpan>(TimeSpan.Parse),
@@ -20,16 +20,18 @@ namespace Stronk
 			new FallbackValueConverter()
 		};
 
-		public static IPropertySelector[] PropertySelectors { get; } = {
+		public static IPropertySelector[] PropertySelectors => new IPropertySelector[]
+		{
 			new PrivateSetterPropertySelector(),
 			new BackingFieldPropertySelector(),
 		};
 
-		public static ISourceValueSelector[] SourceValueSelectors { get; } = {
+		public static ISourceValueSelector[] SourceValueSelectors => new ISourceValueSelector[]
+		{
 			new PropertyNameSourceValueSelector(),
 		};
 
-		public static IConfigurationSource[] ConfigurationSources { get; } =
+		public static IConfigurationSource[] ConfigurationSources => new IConfigurationSource[]
 		{
 			new AppConfigSource()
 		};

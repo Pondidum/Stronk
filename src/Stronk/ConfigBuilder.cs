@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
 using Stronk.PropertySelection;
@@ -88,7 +87,7 @@ namespace Stronk
 			return false;
 		}
 
-		private PropertyConversionUnit NewPropertyConversionUnit(List<IConfigurationSource> configSources, PropertyDescriptor property)
+		private PropertyConversionUnit NewPropertyConversionUnit(IConfigurationSource[] configSources, PropertyDescriptor property)
 		{
 			var selectionArgs = new ValueSelectorArgs(_options.Logger, configSources, property);
 

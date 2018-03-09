@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
 using Stronk.PropertySelection;
@@ -11,10 +9,10 @@ namespace Stronk
 {
 	public class StronkOptions
 	{
-		public List<IValueConverter> ValueConverters { get; set; }
-		public List<IPropertySelector> PropertySelectors { get; set; }
-		public List<ISourceValueSelector> ValueSelectors { get; set; }
-		public List<IConfigurationSource> ConfigSources { get; set; }
+		public IValueConverter[] ValueConverters { get; set; }
+		public IPropertySelector[] PropertySelectors { get; set; }
+		public ISourceValueSelector[] ValueSelectors { get; set; }
+		public IConfigurationSource[] ConfigSources { get; set; }
 
 		public ErrorPolicy ErrorPolicy { get; set; }
 		public Action<LogMessage> Logger { get; set; }
@@ -22,10 +20,10 @@ namespace Stronk
 
 		public StronkOptions()
 		{
-			ValueConverters = Default.ValueConverters.ToList();
-			PropertySelectors = Default.PropertySelectors.ToList();
-			ValueSelectors = Default.SourceValueSelectors.ToList();
-			ConfigSources = Default.ConfigurationSources.ToList();
+			ValueConverters = Default.ValueConverters;
+			PropertySelectors = Default.PropertySelectors;
+			ValueSelectors = Default.SourceValueSelectors;
+			ConfigSources = Default.ConfigurationSources;
 
 			ErrorPolicy = new ErrorPolicy();
 			Logger = message => { };

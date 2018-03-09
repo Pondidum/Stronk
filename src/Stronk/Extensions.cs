@@ -10,7 +10,7 @@ namespace Stronk
 		public static void FromAppConfig(this object target, StronkOptions options = null, params IConfigurationSource[] configSource)
 		{
 			options = options ?? new StronkOptions();
-			options.ConfigSources = configSource.Any() ? configSource.ToList() : options.ConfigSources;
+			options.ConfigSources = configSource.Any() ? configSource : options.ConfigSources;
 
 			var builder = new ConfigBuilder(options);
 			builder.Populate(target);
@@ -19,7 +19,7 @@ namespace Stronk
 		public static void FromWebConfig(this object target, StronkOptions options = null, params IConfigurationSource[] configSource)
 		{
 			options = options ?? new StronkOptions();
-			options.ConfigSources = configSource.Any() ? configSource.ToList() : options.ConfigSources;
+			options.ConfigSources = configSource.Any() ? configSource : options.ConfigSources;
 
 			var builder = new ConfigBuilder(options);
 			builder.Populate(target);

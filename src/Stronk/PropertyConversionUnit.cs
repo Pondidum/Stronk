@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Stronk.ConfigurationSourcing;
 using Stronk.PropertySelection;
 using Stronk.ValueConversion;
@@ -10,6 +9,6 @@ namespace Stronk
 		public PropertyDescriptor Property { get; set; }
 		public IValueConverter[] Converters { get; set; }
 		public string Value { get; set; }
-		public List<IConfigurationSource> Sources { get; set; }
+		public IConfigurationSource[] Sources { get; set; }
 	}
 }
