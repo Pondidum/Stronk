@@ -7,19 +7,19 @@ namespace Stronk
 {
 	public static class Extensions
 	{
-		public static void FromAppConfig(this object target, StronkOptions options = null, IConfigurationSource configSource = null)
+		public static void FromAppConfig(this object target, StronkOptions options = null, params IConfigurationSource[] configSource)
 		{
 			options = options ?? new StronkOptions();
-			options.ConfigSource = configSource ?? options.ConfigSource;
+			options.ConfigSources = configSource.Any() ? configSource.ToList() : options.ConfigSources;
 
 			var builder = new ConfigBuilder(options);
 			builder.Populate(target);
 		}
 
-		public static void FromWebConfig(this object target, StronkOptions options = null, IConfigurationSource configSource = null)
+		public static void FromWebConfig(this object target, StronkOptions options = null, params IConfigurationSource[] configSource)
 		{
 			options = options ?? new StronkOptions();
-			options.ConfigSource = configSource ?? options.ConfigSource;
+			options.ConfigSources = configSource.Any() ? configSource.ToList() : options.ConfigSources;
 
 			var builder = new ConfigBuilder(options);
 			builder.Populate(target);

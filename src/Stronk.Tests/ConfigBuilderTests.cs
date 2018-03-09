@@ -26,7 +26,7 @@ namespace Stronk.Tests
 			_options = new StronkOptions
 			{
 				ErrorPolicy = _policy,
-				ConfigSource = new DictionaryConfigurationSource(_settings)
+				ConfigSources = { new DictionaryConfigurationSource(_settings) }
 			};
 
 			_builder = new ConfigBuilder(_options);

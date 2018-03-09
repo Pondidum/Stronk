@@ -14,17 +14,18 @@ namespace Stronk
 		public List<IValueConverter> ValueConverters { get; set; }
 		public List<IPropertySelector> PropertySelectors { get; set; }
 		public List<ISourceValueSelector> ValueSelectors { get; set; }
+		public List<IConfigurationSource> ConfigSources { get; set; }
 
 		public ErrorPolicy ErrorPolicy { get; set; }
 		public Action<LogMessage> Logger { get; set; }
-		public IConfigurationSource ConfigSource { get; set; }
+
 
 		public StronkOptions()
 		{
 			ValueConverters = Default.ValueConverters.ToList();
 			PropertySelectors = Default.PropertySelectors.ToList();
 			ValueSelectors = Default.SourceValueSelectors.ToList();
-			ConfigSource = Default.ConfigurationSources.First();
+			ConfigSources = Default.ConfigurationSources.ToList();
 
 			ErrorPolicy = new ErrorPolicy();
 			Logger = message => { };

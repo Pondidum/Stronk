@@ -25,7 +25,11 @@ namespace Stronk.Policies
 
 			sb.AppendLine();
 
-			var allSettings = descriptor.Source.GetAvailableKeys().OrderBy(key => key).ToArray();
+			var allSettings = descriptor
+				.Sources
+				.SelectMany(source => source.GetAvailableKeys())
+				.OrderBy(key => key)
+				.ToArray();
 
 			if (allSettings.Any() == false)
 			{

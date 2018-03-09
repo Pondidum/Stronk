@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
 using Stronk.PropertySelection;
@@ -22,7 +23,7 @@ namespace Stronk
 			_options.WriteLog(
 				"Populating '{typeName}', from {sourceTypeName} using\nPropertySelectors: {propertySelectors}\nSourceValueSelectors: {valueSelectors}\nValueConverters: {valueConverters}.",
 				target.GetType().Name,
-				_options.ConfigSource.GetType().Name,
+				_options.ConfigSources.SelectTypeNames(),
 				propertySelectors.SelectTypeNames(),
 				_options.ValueSelectors.SelectTypeNames(),
 				_options.ValueConverters.SelectTypeNames());
@@ -43,7 +44,7 @@ namespace Stronk
 			var applicator = new Applicator(_options);
 
 			var values = properties
-				.Select(property => NewPropertyConversionUnit(_options.ConfigSource, property))
+				.Select(property => NewPropertyConversionUnit(_options.ConfigSources, property))
 				.Where(SelectedValueIsValid)
 				.Where(SelectedConvertersAreValid);
 
@@ -81,19 +82,19 @@ namespace Stronk
 				ValueSelectors = _options.ValueSelectors,
 				Property = descriptor.Property,
 				Converters = descriptor.Converters,
-				Source = descriptor.Source
+				Sources = descriptor.Sources
 			});
 
 			return false;
 		}
 
-		private PropertyConversionUnit NewPropertyConversionUnit(IConfigurationSource configSource, PropertyDescriptor property)
+		private PropertyConversionUnit NewPropertyConversionUnit(List<IConfigurationSource> configSources, PropertyDescriptor property)
 		{
-			var selectionArgs = new ValueSelectorArgs(_options.Logger, configSource, property);
-			
+			var selectionArgs = new ValueSelectorArgs(_options.Logger, configSources, property);
+
 			return new PropertyConversionUnit
 			{
-				Source = configSource,
+				Sources = configSources,
 				Property = property,
 				Converters = _options.ValueConverters.Where(c => c.CanMap(property.Type)).ToArray(),
 				Value = _options.ValueSelectors.Select(x => x.Select(selectionArgs)).FirstOrDefault(v => v != null)
