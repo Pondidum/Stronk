@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Shouldly;
-using Stronk.PropertySelection;
+using Stronk.PropertyWriters;
 using Xunit;
 
 namespace Stronk.Tests.PropertySelection
@@ -10,9 +10,9 @@ namespace Stronk.Tests.PropertySelection
 		[Fact]
 		public void When_selecing_fields_in_a_large_class()
 		{
-			var selector = new BackingFieldPropertySelector();
+			var selector = new BackingFieldPropertyWriter();
 			var properties = selector
-				.Select(new PropertySelectorArgs(message => { }, typeof(MassiveBackingFieldConfig)))
+				.Select(new PropertyWriterArgs(message => { }, typeof(MassiveBackingFieldConfig)))
 				.ToArray();
 
 			properties.Count().ShouldBe(200);

@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace Stronk.PropertySelection
+namespace Stronk.PropertyWriters
 {
-	public class BackingFieldPropertySelector : IPropertySelector
+	public class BackingFieldPropertyWriter : IPropertyWriter
 	{
 		private const BindingFlags PropertyBindingFlags = BindingFlags.Public | BindingFlags.Instance;
 		private const BindingFlags FieldBindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.IgnoreCase;
 
-		public IEnumerable<PropertyDescriptor> Select(PropertySelectorArgs args)
+		public IEnumerable<PropertyDescriptor> Select(PropertyWriterArgs args)
 		{
 			var targetType = args.TargetType;
 			var properties = targetType.GetProperties(PropertyBindingFlags);

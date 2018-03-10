@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Stronk.ConfigurationSourcing;
-using Stronk.PropertySelection;
+using Stronk.PropertyWriters;
 using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
 

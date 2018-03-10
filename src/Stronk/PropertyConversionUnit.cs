@@ -1,5 +1,5 @@
 using Stronk.ConfigurationSourcing;
-using Stronk.PropertySelection;
+using Stronk.PropertyWriters;
 using Stronk.ValueConversion;
 
 namespace Stronk

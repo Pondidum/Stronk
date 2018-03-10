@@ -1,13 +1,13 @@
 using System;
 
-namespace Stronk.PropertySelection
+namespace Stronk.PropertyWriters
 {
-	public class PropertySelectorArgs
+	public class PropertyWriterArgs
 	{
 		public Action<LogMessage> Logger { get; }
 		public Type TargetType { get; }
 
-		public PropertySelectorArgs(Action<LogMessage> logger, Type targetType)
+		public PropertyWriterArgs(Action<LogMessage> logger, Type targetType)
 		{
 			Logger = logger;
 			TargetType = targetType;

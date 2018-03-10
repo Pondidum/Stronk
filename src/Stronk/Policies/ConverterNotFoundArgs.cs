@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Stronk.PropertySelection;
+using Stronk.PropertyWriters;
 using Stronk.ValueConversion;
 
 namespace Stronk.Policies

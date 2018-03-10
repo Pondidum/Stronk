@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Stronk.ConfigurationSourcing;
-using Stronk.PropertySelection;
+using Stronk.PropertyWriters;
 using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
 
@@ -20,10 +20,10 @@ namespace Stronk
 			new FallbackValueConverter()
 		};
 
-		public static IPropertySelector[] PropertySelectors => new IPropertySelector[]
+		public static IPropertyWriter[] PropertyWriters => new IPropertyWriter[]
 		{
-			new PrivateSetterPropertySelector(),
-			new BackingFieldPropertySelector(),
+			new PrivateSetterPropertyWriter(),
+			new BackingFieldPropertyWriter(),
 		};
 
 		public static ISourceValueSelector[] SourceValueSelectors => new ISourceValueSelector[]

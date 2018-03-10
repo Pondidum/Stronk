@@ -1,5 +1,5 @@
 using System;
-using Stronk.PropertySelection;
+using Stronk.PropertyWriters;
 
 namespace Stronk.Policies
 {

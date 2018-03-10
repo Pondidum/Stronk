@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
-using Stronk.PropertySelection;
+using Stronk.PropertyWriters;
 using Stronk.SourceValueSelection;
 
 namespace Stronk
@@ -17,7 +17,7 @@ namespace Stronk
 
 		public void Populate(object target)
 		{
-			var propertySelectors = _options.PropertySelectors.ToArray();
+			var propertySelectors = _options.PropertyWriters.ToArray();
 
 			_options.WriteLog(
 				"Populating '{typeName}', from {sourceTypeName} using\nPropertySelectors: {propertySelectors}\nSourceValueSelectors: {valueSelectors}\nValueConverters: {valueConverters}.",
@@ -27,7 +27,7 @@ namespace Stronk
 				_options.ValueSelectors.SelectTypeNames(),
 				_options.ValueConverters.SelectTypeNames());
 
-			var propertySelectorArgs = new PropertySelectorArgs(
+			var propertySelectorArgs = new PropertyWriterArgs(
 				_options.Logger,
 				target.GetType());
 

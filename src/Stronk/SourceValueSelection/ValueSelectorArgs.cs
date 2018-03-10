@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Stronk.ConfigurationSourcing;
-using Stronk.PropertySelection;
+using Stronk.PropertyWriters;
 
 namespace Stronk.SourceValueSelection
 {

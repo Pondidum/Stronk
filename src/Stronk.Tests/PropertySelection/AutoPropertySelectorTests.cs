@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Shouldly;
-using Stronk.PropertySelection;
+using Stronk.PropertyWriters;
 using Xunit;
 
 namespace Stronk.Tests.PropertySelection
@@ -10,9 +10,9 @@ namespace Stronk.Tests.PropertySelection
 		[Fact]
 		public void When_selecting_properties_in_a_large_class()
 		{
-			var selector = new PrivateSetterPropertySelector();
+			var selector = new PrivateSetterPropertyWriter();
 			var properties = selector
-				.Select(new PropertySelectorArgs(message => {}, typeof(MassiveConfig)))
+				.Select(new PropertyWriterArgs(message => {}, typeof(MassiveConfig)))
 				.ToArray();
 
 			properties.Count().ShouldBe(200);

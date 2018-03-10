@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Stronk.PropertySelection;
+using Stronk.PropertyWriters;
 using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
 using Xunit;
@@ -13,13 +13,13 @@ namespace Stronk.Tests
 	{
 		private readonly List<IValueConverter> _valueConverters;
 		private readonly List<ISourceValueSelector> _valueSelectors;
-		private readonly List<IPropertySelector> _propertySelectors;
+		private readonly List<IPropertyWriter> _propertySelectors;
 
 		public ExtensionsTests()
 		{
 			_valueConverters = Default.ValueConverters.ToList();
 			_valueSelectors = Default.SourceValueSelectors.ToList();
-			_propertySelectors = Default.PropertySelectors.ToList();
+			_propertySelectors = Default.PropertyWriters.ToList();
 		}
 		
 		[Fact]
@@ -103,9 +103,9 @@ namespace Stronk.Tests
 			public string Select(ValueSelectorArgs args) => "dto";
 		}
 
-		private class DtoPropertySelector : IPropertySelector
+		private class DtoPropertyWriter : IPropertyWriter
 		{
-			public IEnumerable<PropertyDescriptor> Select(PropertySelectorArgs args) => Enumerable.Empty<PropertyDescriptor>();
+			public IEnumerable<PropertyDescriptor> Select(PropertyWriterArgs args) => Enumerable.Empty<PropertyDescriptor>();
 		}
 
 		private class UnusedSourceValueSelector : ISourceValueSelector
@@ -116,9 +116,9 @@ namespace Stronk.Tests
 			}
 		}
 
-		private class UnusedPropertySelector : IPropertySelector
+		private class UnusedPropertyWriter : IPropertyWriter
 		{
-			public IEnumerable<PropertyDescriptor> Select(PropertySelectorArgs args)
+			public IEnumerable<PropertyDescriptor> Select(PropertyWriterArgs args)
 			{
 				throw new NotSupportedException();
 			}

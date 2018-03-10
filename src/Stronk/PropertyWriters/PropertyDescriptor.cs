@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stronk.PropertySelection
+namespace Stronk.PropertyWriters
 {
 	public class PropertyDescriptor
 	{

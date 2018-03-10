@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Stronk.PropertySelection
+namespace Stronk.PropertyWriters
 {
-	public class PrivateSetterPropertySelector : IPropertySelector
+	public class PrivateSetterPropertyWriter : IPropertyWriter
 	{
-		public IEnumerable<PropertyDescriptor> Select(PropertySelectorArgs args)
+		public IEnumerable<PropertyDescriptor> Select(PropertyWriterArgs args)
 		{
 			return args
 				.TargetType

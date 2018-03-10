@@ -1,7 +1,7 @@
 ﻿using System;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
-using Stronk.PropertySelection;
+using Stronk.PropertyWriters;
 using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
 
@@ -10,7 +10,7 @@ namespace Stronk
 	public class StronkOptions
 	{
 		public IValueConverter[] ValueConverters { get; set; }
-		public IPropertySelector[] PropertySelectors { get; set; }
+		public IPropertyWriter[] PropertyWriters { get; set; }
 		public ISourceValueSelector[] ValueSelectors { get; set; }
 		public IConfigurationSource[] ConfigSources { get; set; }
 
@@ -21,7 +21,7 @@ namespace Stronk
 		public StronkOptions()
 		{
 			ValueConverters = Default.ValueConverters;
-			PropertySelectors = Default.PropertySelectors;
+			PropertyWriters = Default.PropertyWriters;
 			ValueSelectors = Default.SourceValueSelectors;
 			ConfigSources = Default.ConfigurationSources;
 
