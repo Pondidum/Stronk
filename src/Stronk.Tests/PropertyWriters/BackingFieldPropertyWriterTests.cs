@@ -3,9 +3,9 @@ using Shouldly;
 using Stronk.PropertyWriters;
 using Xunit;
 
-namespace Stronk.Tests.PropertySelection
+namespace Stronk.Tests.PropertyWriters
 {
-	public class BackingFieldPropertySelectorTests
+	public class BackingFieldPropertyWriterTests
 	{
 		[Fact]
 		public void When_selecing_fields_in_a_large_class()

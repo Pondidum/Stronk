@@ -3,9 +3,9 @@ using Shouldly;
 using Stronk.PropertyWriters;
 using Xunit;
 
-namespace Stronk.Tests.PropertySelection
+namespace Stronk.Tests.PropertyWriters
 {
-	public class AutoPropertySelectorTests
+	public class AutoPropertyWriterTests
 	{
 		[Fact]
 		public void When_selecting_properties_in_a_large_class()
