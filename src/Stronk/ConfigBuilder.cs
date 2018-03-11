@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
 using Stronk.PropertyWriters;
 using Stronk.SourceValueSelection;
@@ -17,22 +16,13 @@ namespace Stronk
 
 		public void Populate(object target)
 		{
-			var propertySelectors = _options.PropertyWriters.ToArray();
+			LogPopulationStart(target);
 
-			_options.WriteLog(
-				"Populating '{typeName}', from {sourceTypeName} using\nPropertySelectors: {propertySelectors}\nSourceValueSelectors: {valueSelectors}\nValueConverters: {valueConverters}.",
-				target.GetType().Name,
-				_options.ConfigSources.SelectTypeNames(),
-				propertySelectors.SelectTypeNames(),
-				_options.ValueSelectors.SelectTypeNames(),
-				_options.ValueConverters.SelectTypeNames());
+			var writerArgs = new PropertyWriterArgs(_options.Logger, target.GetType());
 
-			var propertySelectorArgs = new PropertyWriterArgs(
-				_options.Logger,
-				target.GetType());
-
-			var properties = propertySelectors
-				.SelectMany(selector => selector.Select(propertySelectorArgs))
+			var properties = _options
+				.PropertyWriters
+				.SelectMany(writer => writer.Select(writerArgs))
 				.ToArray();
 
 			_options.WriteLog(
@@ -43,7 +33,7 @@ namespace Stronk
 			var applicator = new Applicator(_options);
 
 			var values = properties
-				.Select(property => NewPropertyConversionUnit(_options.ConfigSources, property))
+				.Select(NewPropertyConversionUnit)
 				.Where(SelectedValueIsValid)
 				.Where(SelectedConvertersAreValid);
 
@@ -51,6 +41,23 @@ namespace Stronk
 			{
 				applicator.Apply(descriptor, target);
 			}
+		}
+
+		private void LogPopulationStart(object target)
+		{
+			var message = "Populating '{typeName}'...\n" +
+			              "Reading from {sourceTypeName}\n" +
+			              "Writing to: {propertyWriters}\n" +
+			              "Matching keys to properties with: {valueSelectors}\n" +
+			              "Converting values using: {valueConverters}.";
+
+			_options.WriteLog(
+				message,
+				target.GetType().Name,
+				_options.ConfigSources.SelectTypeNames(),
+				_options.PropertyWriters.SelectTypeNames(),
+				_options.ValueSelectors.SelectTypeNames(),
+				_options.ValueConverters.SelectTypeNames());
 		}
 
 		private bool SelectedConvertersAreValid(PropertyConversionUnit descriptor)
@@ -87,13 +94,13 @@ namespace Stronk
 			return false;
 		}
 
-		private PropertyConversionUnit NewPropertyConversionUnit(IConfigurationSource[] configSources, PropertyDescriptor property)
+		private PropertyConversionUnit NewPropertyConversionUnit(PropertyDescriptor property)
 		{
-			var selectionArgs = new ValueSelectorArgs(_options.Logger, configSources, property);
+			var selectionArgs = new ValueSelectorArgs(_options.Logger, _options.ConfigSources, property);
 
 			return new PropertyConversionUnit
 			{
-				Sources = configSources,
+				Sources = _options.ConfigSources,
 				Property = property,
 				Converters = _options.ValueConverters.Where(c => c.CanMap(property.Type)).ToArray(),
 				Value = _options.ValueSelectors.Select(x => x.Select(selectionArgs)).FirstOrDefault(v => v != null)
