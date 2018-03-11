@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
 using Stronk.PropertyWriters;
@@ -9,10 +10,10 @@ namespace Stronk
 {
 	public interface IStronkConfig
 	{
-		IValueConverter[] ValueConverters { get; }
-		IPropertyWriter[] PropertyWriters { get; }
-		ISourceValueSelector[] ValueSelectors { get; }
-		IConfigurationSource[] ConfigSources { get; }
+		IEnumerable<IValueConverter> ValueConverters { get; }
+		IEnumerable<IPropertyWriter> PropertyWriters { get; }
+		IEnumerable<ISourceValueSelector> ValueSelectors { get; }
+		IEnumerable<IConfigurationSource> ConfigSources { get; }
 
 		ErrorPolicy ErrorPolicy { get; }
 		Action<LogMessage> Logger { get; }
@@ -22,10 +23,10 @@ namespace Stronk
 
 	public class StronkOptions : IStronkConfig
 	{
-		public IValueConverter[] ValueConverters { get; set; }
-		public IPropertyWriter[] PropertyWriters { get; set; }
-		public ISourceValueSelector[] ValueSelectors { get; set; }
-		public IConfigurationSource[] ConfigSources { get; set; }
+		public IEnumerable<IValueConverter> ValueConverters { get; set; }
+		public IEnumerable<IPropertyWriter> PropertyWriters { get; set; }
+		public IEnumerable<ISourceValueSelector> ValueSelectors { get; set; }
+		public IEnumerable<IConfigurationSource> ConfigSources { get; set; }
 
 		public ErrorPolicy ErrorPolicy { get; set; }
 		public Action<LogMessage> Logger { get; set; }

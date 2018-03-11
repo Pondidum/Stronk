@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Stronk.ConfigurationSourcing;
 using Stronk.PropertyWriters;
@@ -7,9 +8,9 @@ namespace Stronk.SourceValueSelection
 {
 	public class ValueSelectorArgs
 	{
-		private readonly IConfigurationSource[] _sources;
+		private readonly IEnumerable<IConfigurationSource> _sources;
 
-		internal ValueSelectorArgs(Action<LogMessage> logger, IConfigurationSource[] sources, PropertyDescriptor property)
+		internal ValueSelectorArgs(Action<LogMessage> logger, IEnumerable<IConfigurationSource> sources, PropertyDescriptor property)
 		{
 			_sources = sources;
 			Logger = logger;
