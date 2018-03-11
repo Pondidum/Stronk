@@ -7,9 +7,9 @@ namespace Stronk
 {
 	public class Applicator
 	{
-		private readonly StronkOptions _options;
+		private readonly IStronkConfig _options;
 
-		public Applicator(StronkOptions options)
+		public Applicator(IStronkConfig options)
 		{
 			_options = options;
 		}

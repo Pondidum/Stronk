@@ -7,7 +7,20 @@ using Stronk.ValueConversion;
 
 namespace Stronk
 {
-	public class StronkOptions
+	public interface IStronkConfig
+	{
+		IValueConverter[] ValueConverters { get; }
+		IPropertyWriter[] PropertyWriters { get; }
+		ISourceValueSelector[] ValueSelectors { get; }
+		IConfigurationSource[] ConfigSources { get; }
+
+		ErrorPolicy ErrorPolicy { get; }
+		Action<LogMessage> Logger { get; }
+
+		void WriteLog(string template, params object[] args);
+	}
+
+	public class StronkOptions : IStronkConfig
 	{
 		public IValueConverter[] ValueConverters { get; set; }
 		public IPropertyWriter[] PropertyWriters { get; set; }

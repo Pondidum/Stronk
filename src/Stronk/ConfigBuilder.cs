@@ -7,9 +7,9 @@ namespace Stronk
 {
 	public class ConfigBuilder
 	{
-		private readonly StronkOptions _options;
+		private readonly IStronkConfig _options;
 
-		public ConfigBuilder(StronkOptions options)
+		public ConfigBuilder(IStronkConfig options)
 		{
 			_options = options;
 		}
