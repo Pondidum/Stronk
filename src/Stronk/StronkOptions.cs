@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
 using Stronk.PropertyWriters;
@@ -16,7 +17,7 @@ namespace Stronk
 		IEnumerable<IConfigurationSource> ConfigSources { get; }
 
 		ErrorPolicy ErrorPolicy { get; }
-		Action<LogMessage> Logger { get; }
+		IEnumerable<Action<LogMessage>> Loggers { get; }
 
 		void WriteLog(string template, params object[] args);
 	}
@@ -29,8 +30,7 @@ namespace Stronk
 		public IEnumerable<IConfigurationSource> ConfigSources { get; set; }
 
 		public ErrorPolicy ErrorPolicy { get; set; }
-		public Action<LogMessage> Logger { get; set; }
-
+		public IEnumerable<Action<LogMessage>> Loggers { get; set; }
 
 		public StronkOptions()
 		{
@@ -38,11 +38,12 @@ namespace Stronk
 			PropertyWriters = Default.PropertyWriters;
 			ValueSelectors = Default.SourceValueSelectors;
 			ConfigSources = Default.ConfigurationSources;
+			Loggers = Enumerable.Empty<Action<LogMessage>>();
 
 			ErrorPolicy = new ErrorPolicy();
-			Logger = message => { };
 		}
 
-		public void WriteLog(string template, params object[] args) => Logger(new LogMessage(template, args));
+		public void WriteLog(string template, params object[] args) => Loggers.ForEach(
+			logger => logger(new LogMessage(template, args)));
 	}
 }

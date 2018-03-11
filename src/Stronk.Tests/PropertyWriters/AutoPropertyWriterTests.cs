@@ -12,7 +12,7 @@ namespace Stronk.Tests.PropertyWriters
 		{
 			var selector = new PrivateSetterPropertyWriter();
 			var properties = selector
-				.Select(new PropertyWriterArgs(message => {}, typeof(MassiveConfig)))
+				.Select(new PropertyWriterArgs((message, args) => {}, typeof(MassiveConfig)))
 				.ToArray();
 
 			properties.Count().ShouldBe(200);

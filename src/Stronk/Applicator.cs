@@ -19,13 +19,13 @@ namespace Stronk
 			var conversionPolicy = _options.ErrorPolicy.ConversionExceptionPolicy;
 			conversionPolicy.BeforeConversion(new ConversionExceptionBeforeArgs
 			{
-				Logger = _options.Logger
+				Logger = _options.WriteLog
 			});
 
 			foreach (var converter in unit.Converters)
 			{
 				var vca = new ValueConverterArgs(
-					_options.Logger,
+					_options.WriteLog,
 					_options.ValueConverters.Where(x => x != converter),
 					unit.Property.Type,
 					unit.Value
@@ -46,7 +46,7 @@ namespace Stronk
 					{
 						Property = unit.Property,
 						Value = unit.Value,
-						Logger = _options.Logger,
+						Logger = _options.WriteLog,
 						Exception = ex
 					});
 				}
@@ -54,7 +54,7 @@ namespace Stronk
 
 			conversionPolicy.AfterConversion(new ConversionExceptionAfterArgs
 			{
-				Logger = _options.Logger
+				Logger = _options.WriteLog
 			});
 		}
 	}

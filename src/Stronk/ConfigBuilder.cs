@@ -18,7 +18,7 @@ namespace Stronk
 		{
 			LogPopulationStart(target);
 
-			var writerArgs = new PropertyWriterArgs(_options.Logger, target.GetType());
+			var writerArgs = new PropertyWriterArgs(_options.WriteLog, target.GetType());
 
 			var properties = _options
 				.PropertyWriters
@@ -96,7 +96,7 @@ namespace Stronk
 
 		private PropertyConversionUnit NewPropertyConversionUnit(PropertyDescriptor property)
 		{
-			var selectionArgs = new ValueSelectorArgs(_options.Logger, _options.ConfigSources, property);
+			var selectionArgs = new ValueSelectorArgs(_options.WriteLog, _options.ConfigSources, property);
 
 			return new PropertyConversionUnit
 			{

@@ -4,6 +4,6 @@ namespace Stronk.Policies
 {
 	public class ConversionExceptionAfterArgs
 	{
-		public Action<LogMessage> Logger { get; set; }
+		public Action<string, object[]> Logger { get; set; }
 	}
 }

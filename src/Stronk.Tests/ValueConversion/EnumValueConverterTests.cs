@@ -83,7 +83,7 @@ namespace Stronk.Tests.ValueConversion
 		private ValueConverterArgs Create(string value)
 		{
 			return new ValueConverterArgs(
-				message => { },
+				(message, args) => { },
 				Enumerable.Empty<IValueConverter>(),
 				typeof(TestEnum),
 				value);

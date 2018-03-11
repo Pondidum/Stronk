@@ -12,7 +12,7 @@ namespace Stronk.Tests.PropertyWriters
 		{
 			var selector = new BackingFieldPropertyWriter();
 			var properties = selector
-				.Select(new PropertyWriterArgs(message => { }, typeof(MassiveBackingFieldConfig)))
+				.Select(new PropertyWriterArgs((message, args) => { }, typeof(MassiveBackingFieldConfig)))
 				.ToArray();
 
 			properties.Count().ShouldBe(200);

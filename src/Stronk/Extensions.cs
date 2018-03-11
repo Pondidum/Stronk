@@ -25,6 +25,12 @@ namespace Stronk
 			builder.Populate(target);
 		}
 
+		internal static void ForEach<T>(this IEnumerable<T> self, Action<T> action)
+		{
+			foreach (var item in self)
+				action(item);
+		}
+
 		public static IEnumerable<string> SelectTypeNames(this IEnumerable<object> instances)
 		{
 			return instances.Select(instance => RecurseTypeName(instance is Type ? (Type)instance : instance.GetType()));
