@@ -46,7 +46,7 @@ namespace Stronk
 		private void LogPopulationStart(object target)
 		{
 			var message = "Populating '{typeName}'...\n" +
-			              "Reading from {sourceTypeName}\n" +
+			              "Reading from: {sourceTypeName}\n" +
 			              "Writing to: {propertyWriters}\n" +
 			              "Matching keys to properties with: {valueSelectors}\n" +
 			              "Converting values using: {valueConverters}.";
