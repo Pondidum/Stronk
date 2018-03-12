@@ -9,19 +9,6 @@ using Stronk.ValueConversion;
 
 namespace Stronk
 {
-	public interface IStronkConfig
-	{
-		IEnumerable<IValueConverter> ValueConverters { get; }
-		IEnumerable<IPropertyWriter> PropertyWriters { get; }
-		IEnumerable<ISourceValueSelector> ValueSelectors { get; }
-		IEnumerable<IConfigurationSource> ConfigSources { get; }
-
-		ErrorPolicy ErrorPolicy { get; }
-		IEnumerable<Action<LogMessage>> Loggers { get; }
-
-		void WriteLog(string template, params object[] args);
-	}
-
 	public class StronkOptions : IStronkConfig
 	{
 		public IEnumerable<IValueConverter> ValueConverters { get; set; }
