@@ -16,7 +16,6 @@ namespace Stronk
 		IEnumerable<IConfigurationSource> ConfigSources { get; }
 
 		ErrorPolicy ErrorPolicy { get; }
-		IEnumerable<Action<LogMessage>> Loggers { get; }
 
 		void WriteLog(string template, params object[] args);
 	}

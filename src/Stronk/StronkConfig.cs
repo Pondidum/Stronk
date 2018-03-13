@@ -10,7 +10,7 @@ using Stronk.ValueConversion;
 
 namespace Stronk
 {
-	public class StronkConfig : ISourceExpression, IMapExpression, IWriterExpression, ILogExpression, IConversionExpression, IErrorPolicyExpression
+	public class StronkConfig : ISourceExpression, IMapExpression, IWriterExpression, ILogExpression, IConversionExpression, IErrorPolicyExpression, IStronkConfig
 	{
 		private readonly List<IConfigurationSource> _sources;
 		private readonly List<ISourceValueSelector> _selectors;
@@ -39,21 +39,11 @@ namespace Stronk
 
 		public T Build<T>() where T : new()
 		{
-			var options = new StronkOptions
-			{
-				ConfigSources = _sources,
-				ValueSelectors = _selectors,
-				PropertyWriters = _writers,
-				ValueConverters = _onlySpecifiedConverters
-					? _converters
-					: _converters.Concat(Default.ValueConverters),
-				Loggers = _loggers,
-			};
+			var target = new T();
+			var builder = new ConfigBuilder(this);
 
-			var config = new T();
-			new ConfigBuilder(options).Populate(config);
-
-			return config;
+			builder.Populate(target);
+			return target;
 		}
 
 		StronkConfig ISourceExpression.Source(IConfigurationSource source)
@@ -97,6 +87,18 @@ namespace Stronk
 		{
 			_errorPolicy = errorPolicy;
 			return this;
+		}
+
+		IEnumerable<IValueConverter> IStronkConfig.ValueConverters => _onlySpecifiedConverters ? _converters : _converters.Concat(Default.ValueConverters);
+		IEnumerable<IPropertyWriter> IStronkConfig.PropertyWriters => _writers.Any() ? _writers : Default.PropertyWriters;
+		IEnumerable<ISourceValueSelector> IStronkConfig.ValueSelectors => _selectors.Any() ? _selectors : Default.SourceValueSelectors;
+		IEnumerable<IConfigurationSource> IStronkConfig.ConfigSources => _sources.Any() ? _sources : Default.ConfigurationSources;
+
+		ErrorPolicy IStronkConfig.ErrorPolicy => _errorPolicy ?? Default.ErrorPolicy;
+
+		void IStronkConfig.WriteLog(string template, params object[] args)
+		{
+			_loggers.ForEach(logger => logger(new LogMessage(template, args)));
 		}
 	}
 }
