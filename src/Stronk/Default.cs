@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Stronk.ConfigurationSourcing;
+using Stronk.Policies;
 using Stronk.PropertyWriters;
 using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
@@ -9,7 +11,7 @@ namespace Stronk
 {
 	public class Default
 	{
-		public static IValueConverter[] ValueConverters => new IValueConverter[]
+		public static IEnumerable<IValueConverter> ValueConverters { get; } = new IValueConverter[]
 		{
 			new LambdaValueConverter<Uri>(val => new Uri(val)),
 			new LambdaValueConverter<Guid>(Guid.Parse),
@@ -20,20 +22,22 @@ namespace Stronk
 			new FallbackValueConverter()
 		};
 
-		public static IPropertyWriter[] PropertyWriters => new IPropertyWriter[]
+		public static IEnumerable<IPropertyWriter> PropertyWriters { get; } = new IPropertyWriter[]
 		{
 			new PrivateSetterPropertyWriter(),
 			new BackingFieldPropertyWriter(),
 		};
 
-		public static ISourceValueSelector[] SourceValueSelectors => new ISourceValueSelector[]
+		public static IEnumerable<ISourceValueSelector> SourceValueSelectors { get; } = new ISourceValueSelector[]
 		{
 			new PropertyNameSourceValueSelector(),
 		};
 
-		public static IConfigurationSource[] ConfigurationSources => new IConfigurationSource[]
+		public static IEnumerable<IConfigurationSource> ConfigurationSources { get; } = new IConfigurationSource[]
 		{
 			new AppConfigSource()
 		};
+
+		public static ErrorPolicy ErrorPolicy { get; } = new ErrorPolicy();
 	}
 }

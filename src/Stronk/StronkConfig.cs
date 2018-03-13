@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Stronk.ConfigurationSourcing;
 using Stronk.Dsl;
+using Stronk.Policies;
 using Stronk.PropertyWriters;
 using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
 
 namespace Stronk
 {
-	public class StronkConfig : ISourceExpression, IMapExpression, IWriterExpression, ILogExpression, IConversionExpression
+	public class StronkConfig : ISourceExpression, IMapExpression, IWriterExpression, ILogExpression, IConversionExpression, IErrorPolicyExpression
 	{
 		private readonly List<IConfigurationSource> _sources;
 		private readonly List<ISourceValueSelector> _selectors;
@@ -17,6 +18,7 @@ namespace Stronk
 		private readonly List<Action<LogMessage>> _loggers;
 		private readonly List<IValueConverter> _converters;
 		private bool _onlySpecifiedConverters;
+		private ErrorPolicy _errorPolicy;
 
 		public StronkConfig()
 		{
@@ -33,6 +35,7 @@ namespace Stronk
 		public IWriterExpression Write => this;
 		public ILogExpression Log => this;
 		public IConversionExpression Convert => this;
+		public IErrorPolicyExpression HandleErrors => this;
 
 		public T Build<T>() where T : new()
 		{
@@ -87,6 +90,12 @@ namespace Stronk
 		{
 			_converters.AddRange(converters);
 			_onlySpecifiedConverters = true;
+			return this;
+		}
+
+		StronkConfig IErrorPolicyExpression.Using(ErrorPolicy errorPolicy)
+		{
+			_errorPolicy = errorPolicy;
 			return this;
 		}
 	}
