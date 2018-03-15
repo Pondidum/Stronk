@@ -2,6 +2,7 @@
 using Shouldly;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
+using Stronk.PropertyWriters;
 using Xunit;
 
 namespace Stronk.Tests
@@ -44,6 +45,28 @@ namespace Stronk.Tests
 				.From.Source(two);
 
 			_config.ConfigSources.ShouldBe(new IConfigurationSource[] { one, two });
+		}
+
+		[Fact]
+		public void When_one_property_writer_is_specified()
+		{
+			var setters = new PrivateSetterPropertyWriter();
+			_config = new StronkConfig().Write.To(setters);
+
+			_config.PropertyWriters.ShouldBe(new[] { setters });
+		}
+
+		[Fact]
+		public void When_multiple_property_writers_are_specified()
+		{
+			var one = new PrivateSetterPropertyWriter();
+			var two = new BackingFieldPropertyWriter();
+
+			_config = new StronkConfig()
+				.Write.To(one)
+				.Write.To(two);
+
+			_config.PropertyWriters.ShouldBe(new IPropertyWriter[] { one, two });
 		}
 	}
 }
