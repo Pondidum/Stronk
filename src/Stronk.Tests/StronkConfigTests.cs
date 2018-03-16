@@ -3,6 +3,7 @@ using Shouldly;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
 using Stronk.PropertyWriters;
+using Stronk.SourceValueSelection;
 using Xunit;
 
 namespace Stronk.Tests
@@ -67,6 +68,28 @@ namespace Stronk.Tests
 				.Write.To(two);
 
 			_config.PropertyWriters.ShouldBe(new IPropertyWriter[] { one, two });
+		}
+
+		[Fact]
+		public void When_one_value_selector_is_specified()
+		{
+			var one = new PropertyNameSourceValueSelector();
+			_config = new StronkConfig().Map.With(one);
+
+			_config.ValueSelectors.ShouldBe(new[] { one });
+		}
+
+		[Fact]
+		public void When_two_value_selectors_are_specified()
+		{
+			var one = new PropertyNameSourceValueSelector();
+			var two = new PropertyNameSourceValueSelector();
+
+			_config = new StronkConfig()
+				.Map.With(one)
+				.Map.With(two);
+
+			_config.ValueSelectors.ShouldBe(new[] { one, two });
 		}
 	}
 }
