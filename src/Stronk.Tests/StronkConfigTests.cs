@@ -140,7 +140,54 @@ namespace Stronk.Tests
 				.Convert.Using(one, two)
 				.Convert.UsingOnly(three);
 
-			_config.ValueConverters.ShouldBe(new IValueConverter[] { one, two, three});
+			_config.ValueConverters.ShouldBe(new IValueConverter[] { one, two, three });
+		}
+
+		[Fact]
+		public void When_specifying_the_error_policy()
+		{
+			var policy = new ErrorPolicy();
+
+			_config = new StronkConfig()
+				.HandleErrors.Using(policy);
+
+			_config.ErrorPolicy.ShouldBe(policy);
+		}
+
+		[Fact]
+		public void When_specifying_one_logger()
+		{
+			LogMessage message = null;
+
+			_config = new StronkConfig()
+				.Log.Using(m => message = m);
+
+			_config.WriteLog("wat", 5, "values", "appear", "after", "it");
+
+			message.ShouldSatisfyAllConditions(
+				() => message.Template.ShouldBe("wat"),
+				() => message.Args.ShouldBe(new object[] { 5, "values", "appear", "after", "it" })
+			);
+		}
+
+		[Fact]
+		public void When_two_loggers_are_specified()
+		{
+			LogMessage one = null;
+			LogMessage two = null;
+
+			_config = new StronkConfig()
+				.Log.Using(message => one = message)
+				.Log.Using(message => two = message);
+
+			_config.WriteLog("test", "value");
+
+			_config.ShouldSatisfyAllConditions(
+				() => one.Template.ShouldBe("test"),
+				() => one.Args.ShouldBe(new[] { "value" }),
+				() => two.Template.ShouldBe("test"),
+				() => two.Args.ShouldBe(new[] { "value" })
+			);
 		}
 	}
 }
