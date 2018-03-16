@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Shouldly;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
 using Stronk.PropertyWriters;
 using Stronk.SourceValueSelection;
+using Stronk.ValueConversion;
 using Xunit;
 
 namespace Stronk.Tests
@@ -90,6 +92,55 @@ namespace Stronk.Tests
 				.Map.With(two);
 
 			_config.ValueSelectors.ShouldBe(new[] { one, two });
+		}
+
+
+		[Fact]
+		public void When_one_value_converter_only_is_specified()
+		{
+			var one = new EnumValueConverter();
+
+			_config = new StronkConfig()
+				.Convert.UsingOnly(one);
+
+			_config.ValueConverters.ShouldBe(new IValueConverter[] { one });
+		}
+
+		[Fact]
+		public void When_one_value_converter_is_specified()
+		{
+			var one = new EnumValueConverter();
+
+			_config = new StronkConfig()
+				.Convert.Using(one);
+
+			_config.ValueConverters.ShouldBe(new IValueConverter[] { one }.Concat(Default.ValueConverters));
+		}
+
+		[Fact]
+		public void When_two_value_converters_are_specified()
+		{
+			var one = new EnumValueConverter();
+			var two = new CsvValueConverter();
+
+			_config = new StronkConfig()
+				.Convert.Using(one, two);
+
+			_config.ValueConverters.ShouldBe(new IValueConverter[] { one, two }.Concat(Default.ValueConverters));
+		}
+
+		[Fact]
+		public void When_two_value_converters_are_specified_and_one_only_specified()
+		{
+			var one = new EnumValueConverter();
+			var two = new CsvValueConverter();
+			var three = new FallbackValueConverter();
+
+			_config = new StronkConfig()
+				.Convert.Using(one, two)
+				.Convert.UsingOnly(three);
+
+			_config.ValueConverters.ShouldBe(new IValueConverter[] { one, two, three});
 		}
 	}
 }
