@@ -10,9 +10,8 @@ using Stronk.ValueConversion;
 
 namespace Stronk
 {
-	public class StronkConfig : IMapExpression, ILogExpression, IConversionExpression, IErrorPolicyExpression, IStronkConfig
+	public class StronkConfig : ILogExpression, IConversionExpression, IErrorPolicyExpression, IStronkConfig
 	{
-		private readonly List<ISourceValueSelector> _selectors;
 
 		private readonly List<Action<LogMessage>> _loggers;
 		private readonly List<IValueConverter> _converters;
@@ -23,8 +22,8 @@ namespace Stronk
 		{
 			From = new SourceExpression(this);
 			Write = new WriterExpression(this);
+			Map = new MapExpression(this);
 
-			_selectors = new List<ISourceValueSelector>();
 			_loggers = new List<Action<LogMessage>>();
 			_converters = new List<IValueConverter>();
 			_onlySpecifiedConverters = false;
@@ -32,8 +31,8 @@ namespace Stronk
 
 		public SourceExpression From { get; }
 		public WriterExpression Write { get; }
-
-		public IMapExpression Map => this;
+		public MapExpression Map { get; }
+		
 		public ILogExpression Log => this;
 		public IConversionExpression Convert => this;
 		public IErrorPolicyExpression HandleErrors => this;
@@ -47,12 +46,6 @@ namespace Stronk
 			return target;
 		}
 
-
-		StronkConfig IMapExpression.With(ISourceValueSelector selector)
-		{
-			_selectors.Add(selector);
-			return this;
-		}
 
 		StronkConfig ILogExpression.Using(Action<LogMessage> logger)
 		{
@@ -81,7 +74,7 @@ namespace Stronk
 
 		IEnumerable<IValueConverter> IStronkConfig.ValueConverters => _onlySpecifiedConverters ? _converters : _converters.Concat(Default.ValueConverters);
 		IEnumerable<IPropertyWriter> IStronkConfig.PropertyWriters => Write.Writers;
-		IEnumerable<ISourceValueSelector> IStronkConfig.ValueSelectors => _selectors.Any() ? _selectors : Default.SourceValueSelectors;
+		IEnumerable<ISourceValueSelector> IStronkConfig.ValueSelectors => Map.Selectors;
 		IEnumerable<IConfigurationSource> IStronkConfig.ConfigSources => From.Sources;
 
 		ErrorPolicy IStronkConfig.ErrorPolicy => _errorPolicy ?? Default.ErrorPolicy;
