@@ -10,9 +10,8 @@ using Stronk.ValueConversion;
 
 namespace Stronk
 {
-	public class StronkConfig : ILogExpression, IErrorPolicyExpression, IStronkConfig
+	public class StronkConfig : IErrorPolicyExpression, IStronkConfig
 	{
-		private readonly List<Action<LogMessage>> _loggers;
 		private ErrorPolicy _errorPolicy;
 
 		public StronkConfig()
@@ -21,8 +20,7 @@ namespace Stronk
 			Write = new WriterExpression(this);
 			Map = new MapExpression(this);
 			Convert = new ConversionExpression(this);
-
-			_loggers = new List<Action<LogMessage>>();
+			Log = new LogExpression(this);
 		}
 
 		public SourceExpression From { get; }
@@ -30,7 +28,7 @@ namespace Stronk
 		public MapExpression Map { get; }
 		public ConversionExpression Convert { get; }
 
-		public ILogExpression Log => this;
+		public LogExpression Log { get; }
 		public IErrorPolicyExpression HandleErrors => this;
 
 		public T Build<T>() where T : new()
@@ -40,13 +38,6 @@ namespace Stronk
 
 			builder.Populate(target);
 			return target;
-		}
-
-
-		StronkConfig ILogExpression.Using(Action<LogMessage> logger)
-		{
-			_loggers.Add(logger);
-			return this;
 		}
 
 		StronkConfig IErrorPolicyExpression.Using(ErrorPolicy errorPolicy)
@@ -61,10 +52,6 @@ namespace Stronk
 		IEnumerable<IConfigurationSource> IStronkConfig.ConfigSources => From.Sources;
 
 		ErrorPolicy IStronkConfig.ErrorPolicy => _errorPolicy ?? Default.ErrorPolicy;
-
-		void IStronkConfig.WriteLog(string template, params object[] args)
-		{
-			_loggers.ForEach(logger => logger(new LogMessage(template, args)));
-		}
+		void IStronkConfig.WriteLog(string template, params object[] args) => Log.Write(template, args);
 	}
 }
