@@ -10,12 +10,9 @@ using Stronk.ValueConversion;
 
 namespace Stronk
 {
-	public class StronkConfig : ILogExpression, IConversionExpression, IErrorPolicyExpression, IStronkConfig
+	public class StronkConfig : ILogExpression, IErrorPolicyExpression, IStronkConfig
 	{
-
 		private readonly List<Action<LogMessage>> _loggers;
-		private readonly List<IValueConverter> _converters;
-		private bool _onlySpecifiedConverters;
 		private ErrorPolicy _errorPolicy;
 
 		public StronkConfig()
@@ -23,18 +20,17 @@ namespace Stronk
 			From = new SourceExpression(this);
 			Write = new WriterExpression(this);
 			Map = new MapExpression(this);
+			Convert = new ConversionExpression(this);
 
 			_loggers = new List<Action<LogMessage>>();
-			_converters = new List<IValueConverter>();
-			_onlySpecifiedConverters = false;
 		}
 
 		public SourceExpression From { get; }
 		public WriterExpression Write { get; }
 		public MapExpression Map { get; }
-		
+		public ConversionExpression Convert { get; }
+
 		public ILogExpression Log => this;
-		public IConversionExpression Convert => this;
 		public IErrorPolicyExpression HandleErrors => this;
 
 		public T Build<T>() where T : new()
@@ -53,26 +49,13 @@ namespace Stronk
 			return this;
 		}
 
-		StronkConfig IConversionExpression.Using(params IValueConverter[] converters)
-		{
-			_converters.AddRange(converters);
-			return this;
-		}
-
-		StronkConfig IConversionExpression.UsingOnly(params IValueConverter[] converters)
-		{
-			_converters.AddRange(converters);
-			_onlySpecifiedConverters = true;
-			return this;
-		}
-
 		StronkConfig IErrorPolicyExpression.Using(ErrorPolicy errorPolicy)
 		{
 			_errorPolicy = errorPolicy;
 			return this;
 		}
 
-		IEnumerable<IValueConverter> IStronkConfig.ValueConverters => _onlySpecifiedConverters ? _converters : _converters.Concat(Default.ValueConverters);
+		IEnumerable<IValueConverter> IStronkConfig.ValueConverters => Convert.Converters;
 		IEnumerable<IPropertyWriter> IStronkConfig.PropertyWriters => Write.Writers;
 		IEnumerable<ISourceValueSelector> IStronkConfig.ValueSelectors => Map.Selectors;
 		IEnumerable<IConfigurationSource> IStronkConfig.ConfigSources => From.Sources;
