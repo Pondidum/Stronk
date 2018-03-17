@@ -20,7 +20,7 @@ namespace Stronk.Tests.Scenarios
 		[Fact]
 		public void When_there_are_no_settings()
 		{
-			var ex = Should.Throw<SourceValueNotFoundException>(() => new Config().FromAppConfig(configSource: _source));
+			var ex = Should.Throw<SourceValueNotFoundException>(() => new StronkConfig().From.Source(_source).Build<Config>());
 
 			ex.ShouldSatisfyAllConditions(
 				() => ex.Message.ShouldContain("TestInt"),
@@ -35,7 +35,7 @@ namespace Stronk.Tests.Scenarios
 		{
 			_settings["SomethingElse"] = "omg";
 
-			var ex = Should.Throw<SourceValueNotFoundException>(() => new Config().FromAppConfig(configSource: _source));
+			var ex = Should.Throw<SourceValueNotFoundException>(() => new StronkConfig().From.Source(_source).Build<Config>());
 
 			ex.ShouldSatisfyAllConditions(
 				() => ex.Message.ShouldContain("TestInt"),

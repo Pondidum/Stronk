@@ -37,10 +37,14 @@ namespace Stronk
 		public T Build<T>() where T : new()
 		{
 			var target = new T();
-			var builder = new ConfigBuilder(this);
-
-			builder.Populate(target);
+			ApplyTo(target);
 			return target;
+		}
+
+		public void ApplyTo(object target)
+		{
+			var builder = new ConfigBuilder(this);
+			builder.Populate(target);
 		}
 	}
 }

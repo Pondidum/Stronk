@@ -50,7 +50,7 @@ namespace Stronk.Tests
 		public void When_loading_the_configuration_and_a_property_throws()
 		{
 			var config = new ThrowingSetter();
-			Should.Throw<ValueConversionException>(() => config.FromWebConfig());
+			Should.Throw<ValueConversionException>(() => config.FromAppConfig());
 		}
 
 		public class ThrowingSetter

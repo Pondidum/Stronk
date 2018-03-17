@@ -20,7 +20,7 @@ namespace Stronk.Tests.Scenarios
 		{
 			_source.GetValue("TestInt").Returns("am no an integer");
 
-			var ex = Should.Throw<ValueConversionException>(() => new Config().FromAppConfig(configSource: _source));
+			var ex = Should.Throw<ValueConversionException>(() => new StronkConfig().From.Source(_source).Build<Config>());
 
 			ex.ShouldSatisfyAllConditions(
 				() => ex.Message.ShouldContain("TestInt"),

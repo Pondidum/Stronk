@@ -14,7 +14,7 @@ namespace Stronk.Tests
 		private readonly ConfigBuilder _builder;
 		private readonly ErrorPolicy _policy;
 		private readonly TargetConfig _target;
-		private readonly StronkOptions _options;
+		private readonly StronkConfig _options;
 		private readonly IDictionary<string, string> _settings;
 
 		public ConfigBuilderTests()
@@ -23,11 +23,9 @@ namespace Stronk.Tests
 			_policy = new ErrorPolicy();
 			_settings = new Dictionary<string, string>();
 
-			_options = new StronkOptions
-			{
-				ErrorPolicy = _policy,
-				ConfigSources = new IConfigurationSource[] { new DictionaryConfigurationSource(_settings) }
-			};
+			_options = new StronkConfig()
+				.From.Source(new DictionaryConfigurationSource(_settings))
+				.HandleErrors.Using(_policy);
 
 			_builder = new ConfigBuilder(_options);
 		}
@@ -58,10 +56,7 @@ namespace Stronk.Tests
 			_policy.OnConverterNotFound = new ConverterNotFoundPolicy(PolicyActions.ThrowException);
 			_settings["Value"] = "12";
 
-			_options.ValueConverters = new IValueConverter[]
-			{
-				new LambdaValueConverter<Uri>(val => new Uri(val)),
-			};
+			_options.Convert.UsingOnly(new LambdaValueConverter<Uri>(val => new Uri(val)));
 
 			Should
 				.Throw<Exception>(() => _builder.Populate(_target))
@@ -74,10 +69,7 @@ namespace Stronk.Tests
 			_policy.OnConverterNotFound = new ConverterNotFoundPolicy(PolicyActions.Skip);
 			_settings["Value"] = "12";
 
-			_options.ValueConverters = new IValueConverter[]
-			{
-				new LambdaValueConverter<Uri>(val => new Uri(val)),
-			};
+			_options.Convert.UsingOnly(new LambdaValueConverter<Uri>(val => new Uri(val)));
 
 			_builder.Populate(_target);
 
@@ -90,10 +82,7 @@ namespace Stronk.Tests
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.ThrowException);
 			_settings["Value"] = "12";
 
-			_options.ValueConverters = new IValueConverter[]
-			{
-				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-			};
+			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }));
 
 			Should
 				.Throw<ValueConversionException>(() => _builder.Populate(_target))
@@ -106,10 +95,7 @@ namespace Stronk.Tests
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.Skip);
 			_settings["Value"] = "12";
 
-			_options.ValueConverters = new IValueConverter[]
-			{
-				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-			};
+			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }));
 
 			_builder.Populate(_target);
 
@@ -122,10 +108,7 @@ namespace Stronk.Tests
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 			_settings["Value"] = "12";
 
-			_options.ValueConverters = new IValueConverter[]
-			{
-				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-			};
+			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }));
 
 			Should
 				.Throw<ValueConversionException>(() => _builder.Populate(_target))
@@ -138,11 +121,9 @@ namespace Stronk.Tests
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 			_settings["Value"] = "12";
 
-			_options.ValueConverters = new IValueConverter[]
-			{
+			_options.Convert.UsingOnly(
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-				new FallbackValueConverter()
-			};
+				new FallbackValueConverter());
 
 			_builder.Populate(_target);
 
@@ -155,11 +136,8 @@ namespace Stronk.Tests
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 			_settings["Value"] = "12";
 
-			_options.ValueConverters = new IValueConverter[]
-			{
-				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
-			};
+			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
+				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }));
 
 			var ex = Should
 				.Throw<ValueConversionException>(() => _builder.Populate(_target));
@@ -174,13 +152,10 @@ namespace Stronk.Tests
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 			_settings["Value"] = "12";
 
-			_options.ValueConverters = new IValueConverter[]
-			{
-				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
+			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
 				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
-			};
+				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }));
 
 			var ex = Should
 				.Throw<ValueConversionException>(() => _builder.Populate(_target));
@@ -194,10 +169,7 @@ namespace Stronk.Tests
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrSkip);
 			_settings["Value"] = "12";
 
-			_options.ValueConverters = new IValueConverter[]
-			{
-				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-			};
+			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }));
 
 			_builder.Populate(_target);
 
@@ -210,11 +182,9 @@ namespace Stronk.Tests
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrSkip);
 			_settings["Value"] = "12";
 
-			_options.ValueConverters = new IValueConverter[]
-			{
+			_options.Convert.UsingOnly(
 				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-				new FallbackValueConverter()
-			};
+				new FallbackValueConverter());
 
 			_builder.Populate(_target);
 
@@ -227,11 +197,8 @@ namespace Stronk.Tests
 			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrSkip);
 			_settings["Value"] = "12";
 
-			_options.ValueConverters = new IValueConverter[]
-			{
-				new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }),
-			};
+			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
+				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }));
 
 			_builder.Populate(_target);
 
