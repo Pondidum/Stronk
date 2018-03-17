@@ -4,7 +4,7 @@ namespace Stronk.ConfigurationSourcing
 {
 	public static class Extensions
 	{
-		public static StronkConfig AppSettings(this ISourceExpression self)
+		public static StronkConfig AppSettings(this SourceExpression self)
 		{
 			return self.Source(new AppConfigSource());
 		}

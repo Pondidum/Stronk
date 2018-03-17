@@ -10,9 +10,8 @@ using Stronk.ValueConversion;
 
 namespace Stronk
 {
-	public class StronkConfig : ISourceExpression, IMapExpression, IWriterExpression, ILogExpression, IConversionExpression, IErrorPolicyExpression, IStronkConfig
+	public class StronkConfig : IMapExpression, IWriterExpression, ILogExpression, IConversionExpression, IErrorPolicyExpression, IStronkConfig
 	{
-		private readonly List<IConfigurationSource> _sources;
 		private readonly List<ISourceValueSelector> _selectors;
 		private readonly List<IPropertyWriter> _writers;
 		private readonly List<Action<LogMessage>> _loggers;
@@ -23,14 +22,15 @@ namespace Stronk
 		public StronkConfig()
 		{
 			_writers = new List<IPropertyWriter>();
-			_sources = new List<IConfigurationSource>();
+			From = new SourceExpression(this);
 			_selectors = new List<ISourceValueSelector>();
 			_loggers = new List<Action<LogMessage>>();
 			_converters = new List<IValueConverter>();
 			_onlySpecifiedConverters = false;
 		}
 
-		public ISourceExpression From => this;
+		public SourceExpression From { get; }
+
 		public IMapExpression Map => this;
 		public IWriterExpression Write => this;
 		public ILogExpression Log => this;
@@ -46,11 +46,7 @@ namespace Stronk
 			return target;
 		}
 
-		StronkConfig ISourceExpression.Source(IConfigurationSource source)
-		{
-			_sources.Add(source);
-			return this;
-		}
+
 
 		StronkConfig IMapExpression.With(ISourceValueSelector selector)
 		{
@@ -92,7 +88,7 @@ namespace Stronk
 		IEnumerable<IValueConverter> IStronkConfig.ValueConverters => _onlySpecifiedConverters ? _converters : _converters.Concat(Default.ValueConverters);
 		IEnumerable<IPropertyWriter> IStronkConfig.PropertyWriters => _writers.Any() ? _writers : Default.PropertyWriters;
 		IEnumerable<ISourceValueSelector> IStronkConfig.ValueSelectors => _selectors.Any() ? _selectors : Default.SourceValueSelectors;
-		IEnumerable<IConfigurationSource> IStronkConfig.ConfigSources => _sources.Any() ? _sources : Default.ConfigurationSources;
+		IEnumerable<IConfigurationSource> IStronkConfig.ConfigSources => From.Sources;
 
 		ErrorPolicy IStronkConfig.ErrorPolicy => _errorPolicy ?? Default.ErrorPolicy;
 
