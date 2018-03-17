@@ -4,12 +4,12 @@ namespace Stronk.PropertyWriters
 {
 	public static class Extensions
 	{
-		public static StronkConfig ToPrivateSetters(this IWriterExpression self)
+		public static StronkConfig ToPrivateSetters(this WriterExpression self)
 		{
 			return self.To(new PrivateSetterPropertyWriter());
 		}
 
-		public static StronkConfig ToBackingFields(this IWriterExpression self)
+		public static StronkConfig ToBackingFields(this WriterExpression self)
 		{
 			return self.To(new BackingFieldPropertyWriter());
 		}

@@ -10,10 +10,10 @@ using Stronk.ValueConversion;
 
 namespace Stronk
 {
-	public class StronkConfig : IMapExpression, IWriterExpression, ILogExpression, IConversionExpression, IErrorPolicyExpression, IStronkConfig
+	public class StronkConfig : IMapExpression, ILogExpression, IConversionExpression, IErrorPolicyExpression, IStronkConfig
 	{
 		private readonly List<ISourceValueSelector> _selectors;
-		private readonly List<IPropertyWriter> _writers;
+
 		private readonly List<Action<LogMessage>> _loggers;
 		private readonly List<IValueConverter> _converters;
 		private bool _onlySpecifiedConverters;
@@ -21,8 +21,9 @@ namespace Stronk
 
 		public StronkConfig()
 		{
-			_writers = new List<IPropertyWriter>();
 			From = new SourceExpression(this);
+			Write = new WriterExpression(this);
+
 			_selectors = new List<ISourceValueSelector>();
 			_loggers = new List<Action<LogMessage>>();
 			_converters = new List<IValueConverter>();
@@ -30,9 +31,9 @@ namespace Stronk
 		}
 
 		public SourceExpression From { get; }
+		public WriterExpression Write { get; }
 
 		public IMapExpression Map => this;
-		public IWriterExpression Write => this;
 		public ILogExpression Log => this;
 		public IConversionExpression Convert => this;
 		public IErrorPolicyExpression HandleErrors => this;
@@ -47,16 +48,9 @@ namespace Stronk
 		}
 
 
-
 		StronkConfig IMapExpression.With(ISourceValueSelector selector)
 		{
 			_selectors.Add(selector);
-			return this;
-		}
-
-		StronkConfig IWriterExpression.To(IPropertyWriter writer)
-		{
-			_writers.Add(writer);
 			return this;
 		}
 
@@ -86,7 +80,7 @@ namespace Stronk
 		}
 
 		IEnumerable<IValueConverter> IStronkConfig.ValueConverters => _onlySpecifiedConverters ? _converters : _converters.Concat(Default.ValueConverters);
-		IEnumerable<IPropertyWriter> IStronkConfig.PropertyWriters => _writers.Any() ? _writers : Default.PropertyWriters;
+		IEnumerable<IPropertyWriter> IStronkConfig.PropertyWriters => Write.Writers;
 		IEnumerable<ISourceValueSelector> IStronkConfig.ValueSelectors => _selectors.Any() ? _selectors : Default.SourceValueSelectors;
 		IEnumerable<IConfigurationSource> IStronkConfig.ConfigSources => From.Sources;
 
