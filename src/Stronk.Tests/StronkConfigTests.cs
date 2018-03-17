@@ -17,7 +17,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_nothing_is_specified()
 		{
-			_config = new StronkConfig() as IStronkConfig;
+			_config = new StronkConfig();
 
 			_config.ShouldSatisfyAllConditions(
 				() => _config.ConfigSources.ShouldBe(Default.ConfigurationSources),
@@ -32,7 +32,7 @@ namespace Stronk.Tests
 		public void When_you_specify_a_config_source_it_is_the_only_one_used()
 		{
 			var source = new DictionaryConfigurationSource(new Dictionary<string, string>());
-			_config = new StronkConfig().From.Source(source) as IStronkConfig;
+			_config = new StronkConfig().From.Source(source);
 
 			_config.ConfigSources.ShouldBe(new[] { source });
 		}
