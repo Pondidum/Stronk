@@ -2,8 +2,8 @@
 using Stronk.ConfigurationSourcing;
 using Stronk.Dsl;
 using Stronk.Policies;
+using Stronk.PropertyMappers;
 using Stronk.PropertyWriters;
-using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
 
 namespace Stronk
@@ -29,7 +29,7 @@ namespace Stronk
 
 		IEnumerable<IValueConverter> IStronkConfig.ValueConverters => Convert.Converters;
 		IEnumerable<IPropertyWriter> IStronkConfig.PropertyWriters => Write.Writers;
-		IEnumerable<ISourceValueSelector> IStronkConfig.ValueSelectors => Map.Selectors;
+		IEnumerable<IPropertyMapper> IStronkConfig.ValueSelectors => Map.Selectors;
 		IEnumerable<IConfigurationSource> IStronkConfig.ConfigSources => From.Sources;
 		ErrorPolicy IStronkConfig.ErrorPolicy => HandleErrors.Policy;
 		void IStronkConfig.WriteLog(string template, params object[] args) => Log.Write(template, args);

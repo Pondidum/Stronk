@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
+using Stronk.PropertyMappers;
 using Stronk.PropertyWriters;
-using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
 
 namespace Stronk
@@ -28,9 +28,9 @@ namespace Stronk
 			new BackingFieldPropertyWriter(),
 		};
 
-		public static IEnumerable<ISourceValueSelector> SourceValueSelectors { get; } = new ISourceValueSelector[]
+		public static IEnumerable<IPropertyMapper> SourceValueSelectors { get; } = new IPropertyMapper[]
 		{
-			new PropertyNameSourceValueSelector(),
+			new PropertyNamePropertyMapper(),
 		};
 
 		public static IEnumerable<IConfigurationSource> ConfigurationSources { get; } = new IConfigurationSource[]

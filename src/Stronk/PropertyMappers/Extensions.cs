@@ -1,12 +1,12 @@
 ﻿using Stronk.Dsl;
 
-namespace Stronk.SourceValueSelection
+namespace Stronk.PropertyMappers
 {
 	public static class Extensions
 	{
 		public static StronkConfig PropertyNames(this MapExpression self)
 		{
-			return self.With(new PropertyNameSourceValueSelector());
+			return self.With(new PropertyNamePropertyMapper());
 		}
 	}
 }

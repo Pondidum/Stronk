@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
+using Stronk.PropertyMappers;
 using Stronk.PropertyWriters;
-using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
 
 namespace Stronk
@@ -12,7 +12,7 @@ namespace Stronk
 	{
 		IEnumerable<IValueConverter> ValueConverters { get; }
 		IEnumerable<IPropertyWriter> PropertyWriters { get; }
-		IEnumerable<ISourceValueSelector> ValueSelectors { get; }
+		IEnumerable<IPropertyMapper> ValueSelectors { get; }
 		IEnumerable<IConfigurationSource> ConfigSources { get; }
 
 		ErrorPolicy ErrorPolicy { get; }

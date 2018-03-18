@@ -3,8 +3,8 @@ using System.Linq;
 using Shouldly;
 using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
+using Stronk.PropertyMappers;
 using Stronk.PropertyWriters;
-using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
 using Xunit;
 
@@ -75,7 +75,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_one_value_selector_is_specified()
 		{
-			var one = new PropertyNameSourceValueSelector();
+			var one = new PropertyNamePropertyMapper();
 			_config = new StronkConfig().Map.With(one);
 
 			_config.ValueSelectors.ShouldBe(new[] { one });
@@ -84,8 +84,8 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_two_value_selectors_are_specified()
 		{
-			var one = new PropertyNameSourceValueSelector();
-			var two = new PropertyNameSourceValueSelector();
+			var one = new PropertyNamePropertyMapper();
+			var two = new PropertyNamePropertyMapper();
 
 			_config = new StronkConfig()
 				.Map.With(one)

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Stronk.Policies;
+using Stronk.PropertyMappers;
 using Stronk.PropertyWriters;
-using Stronk.SourceValueSelection;
 
 namespace Stronk
 {
@@ -96,7 +96,7 @@ namespace Stronk
 
 		private PropertyConversionUnit NewPropertyConversionUnit(PropertyDescriptor property)
 		{
-			var selectionArgs = new ValueSelectorArgs(_options.WriteLog, _options.ConfigSources, property);
+			var selectionArgs = new PropertyMapperArgs(_options.WriteLog, _options.ConfigSources, property);
 
 			return new PropertyConversionUnit
 			{

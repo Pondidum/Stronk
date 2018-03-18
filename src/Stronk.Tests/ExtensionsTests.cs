@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Stronk.PropertyMappers;
 using Stronk.PropertyWriters;
-using Stronk.SourceValueSelection;
 using Stronk.ValueConversion;
 using Xunit;
 
@@ -12,14 +12,10 @@ namespace Stronk.Tests
 	public class ExtensionsTests
 	{
 		private readonly List<IValueConverter> _valueConverters;
-		private readonly List<ISourceValueSelector> _valueSelectors;
-		private readonly List<IPropertyWriter> _propertySelectors;
 
 		public ExtensionsTests()
 		{
 			_valueConverters = Default.ValueConverters.ToList();
-			_valueSelectors = Default.SourceValueSelectors.ToList();
-			_propertySelectors = Default.PropertyWriters.ToList();
 		}
 		
 		[Fact]
@@ -98,9 +94,9 @@ namespace Stronk.Tests
 			public object Map(ValueConverterArgs e) => new Dto();
 		}
 
-		private class DtoSourceValueSelector : ISourceValueSelector
+		private class DtoPropertyMapper : IPropertyMapper
 		{
-			public string Select(ValueSelectorArgs args) => "dto";
+			public string Select(PropertyMapperArgs args) => "dto";
 		}
 
 		private class DtoPropertyWriter : IPropertyWriter
@@ -108,9 +104,9 @@ namespace Stronk.Tests
 			public IEnumerable<PropertyDescriptor> Select(PropertyWriterArgs args) => Enumerable.Empty<PropertyDescriptor>();
 		}
 
-		private class UnusedSourceValueSelector : ISourceValueSelector
+		private class UnusedPropertyMapper : IPropertyMapper
 		{
-			public string Select(ValueSelectorArgs args)
+			public string Select(PropertyMapperArgs args)
 			{
 				throw new NotSupportedException();
 			}

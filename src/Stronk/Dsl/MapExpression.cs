@@ -1,27 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Stronk.SourceValueSelection;
+using Stronk.PropertyMappers;
 
 namespace Stronk.Dsl
 {
 	public class MapExpression
 	{
 		private readonly StronkConfig _configRoot;
-		private readonly List<ISourceValueSelector> _selectors;
+		private readonly List<IPropertyMapper> _selectors;
 
 		public MapExpression(StronkConfig configRoot)
 		{
 			_configRoot = configRoot;
-			_selectors = new List<ISourceValueSelector>();
+			_selectors = new List<IPropertyMapper>();
 		}
 		
-		public StronkConfig With(ISourceValueSelector selector)
+		public StronkConfig With(IPropertyMapper selector)
 		{
 			_selectors.Add(selector);
 			return _configRoot;
 		}
 
-		internal IEnumerable<ISourceValueSelector> Selectors => _selectors.Any()
+		internal IEnumerable<IPropertyMapper> Selectors => _selectors.Any()
 			? _selectors
 			: Default.SourceValueSelectors;
 	}
