@@ -21,7 +21,7 @@ namespace Stronk.Tests
 
 			_config.ShouldSatisfyAllConditions(
 				() => _config.ConfigSources.ShouldBe(Default.ConfigurationSources),
-				() => _config.ValueSelectors.ShouldBe(Default.SourceValueSelectors),
+				() => _config.Mappers.ShouldBe(Default.SourceValueSelectors),
 				() => _config.ValueConverters.ShouldBe(Default.ValueConverters),
 				() => _config.PropertyWriters.ShouldBe(Default.PropertyWriters),
 				() => _config.ErrorPolicy.ShouldBeOfType<ErrorPolicy>()
@@ -78,7 +78,7 @@ namespace Stronk.Tests
 			var one = new PropertyNamePropertyMapper();
 			_config = new StronkConfig().Map.With(one);
 
-			_config.ValueSelectors.ShouldBe(new[] { one });
+			_config.Mappers.ShouldBe(new[] { one });
 		}
 
 		[Fact]
@@ -91,7 +91,7 @@ namespace Stronk.Tests
 				.Map.With(one)
 				.Map.With(two);
 
-			_config.ValueSelectors.ShouldBe(new[] { one, two });
+			_config.Mappers.ShouldBe(new[] { one, two });
 		}
 
 

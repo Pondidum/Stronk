@@ -56,7 +56,7 @@ namespace Stronk
 				target.GetType().Name,
 				_options.ConfigSources.SelectTypeNames(),
 				_options.PropertyWriters.SelectTypeNames(),
-				_options.ValueSelectors.SelectTypeNames(),
+				_options.Mappers.SelectTypeNames(),
 				_options.ValueConverters.SelectTypeNames());
 		}
 
@@ -85,7 +85,7 @@ namespace Stronk
 
 			_options.ErrorPolicy.OnSourceValueNotFound.Handle(new SourceValueNotFoundArgs
 			{
-				ValueSelectors = _options.ValueSelectors,
+				ValueSelectors = _options.Mappers,
 				Property = descriptor.Property,
 				Converters = descriptor.Converters,
 				Sources = descriptor.Sources
@@ -103,7 +103,7 @@ namespace Stronk
 				Sources = _options.ConfigSources,
 				Property = property,
 				Converters = _options.ValueConverters.Where(c => c.CanMap(property.Type)).ToArray(),
-				Value = _options.ValueSelectors.Select(x => x.Select(selectionArgs)).FirstOrDefault(v => v != null)
+				Value = _options.Mappers.Select(x => x.Select(selectionArgs)).FirstOrDefault(v => v != null)
 			};
 		}
 	}

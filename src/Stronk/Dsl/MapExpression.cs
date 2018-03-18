@@ -21,7 +21,7 @@ namespace Stronk.Dsl
 			return _configRoot;
 		}
 
-		internal IEnumerable<IPropertyMapper> Selectors => _selectors.Any()
+		internal IEnumerable<IPropertyMapper> Mappers => _selectors.Any()
 			? _selectors
 			: Default.SourceValueSelectors;
 	}

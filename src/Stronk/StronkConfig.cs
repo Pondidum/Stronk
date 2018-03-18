@@ -29,7 +29,7 @@ namespace Stronk
 
 		IEnumerable<IValueConverter> IStronkConfig.ValueConverters => Convert.Converters;
 		IEnumerable<IPropertyWriter> IStronkConfig.PropertyWriters => Write.Writers;
-		IEnumerable<IPropertyMapper> IStronkConfig.ValueSelectors => Map.Selectors;
+		IEnumerable<IPropertyMapper> IStronkConfig.Mappers => Map.Mappers;
 		IEnumerable<IConfigurationSource> IStronkConfig.ConfigSources => From.Sources;
 		ErrorPolicy IStronkConfig.ErrorPolicy => HandleErrors.Policy;
 		void IStronkConfig.WriteLog(string template, params object[] args) => Log.Write(template, args);
