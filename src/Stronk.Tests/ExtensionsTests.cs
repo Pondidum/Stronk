@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Stronk.PropertyMappers;
-using Stronk.PropertyWriters;
 using Stronk.ValueConversion;
 using Xunit;
 
@@ -66,58 +64,12 @@ namespace Stronk.Tests
 			});
 		}
 
-
-
-		private static void InsertIndexShouldBeBefore<T>(IEnumerable<T> collection, Type search, Type inserted)
-		{
-			var converters = collection.Select(c => c.GetType()).ToList();
-			var searchIndex = converters.IndexOf(search);
-			var insertIndex = converters.IndexOf(inserted);
-
-			insertIndex.ShouldBe(searchIndex - 1);
-		}
-
-		private static void InsertIndexShouldBeAfter<T>(IEnumerable<T> collection, Type search, Type inserted)
-		{
-			var converters = collection.Select(c => c.GetType()).ToList();
-			var searchIndex = converters.IndexOf(search);
-			var insertIndex = converters.IndexOf(inserted);
-
-			insertIndex.ShouldBe(searchIndex + 1);
-		}
-
 		private class Dto { }
 
 		private class DtoValueConverter : IValueConverter
 		{
 			public bool CanMap(Type target) => target == typeof(Dto);
 			public object Map(ValueConverterArgs e) => new Dto();
-		}
-
-		private class DtoPropertyMapper : IPropertyMapper
-		{
-			public string Select(PropertyMapperArgs args) => "dto";
-		}
-
-		private class DtoPropertyWriter : IPropertyWriter
-		{
-			public IEnumerable<PropertyDescriptor> Select(PropertyWriterArgs args) => Enumerable.Empty<PropertyDescriptor>();
-		}
-
-		private class UnusedPropertyMapper : IPropertyMapper
-		{
-			public string Select(PropertyMapperArgs args)
-			{
-				throw new NotSupportedException();
-			}
-		}
-
-		private class UnusedPropertyWriter : IPropertyWriter
-		{
-			public IEnumerable<PropertyDescriptor> Select(PropertyWriterArgs args)
-			{
-				throw new NotSupportedException();
-			}
 		}
 	}
 }
