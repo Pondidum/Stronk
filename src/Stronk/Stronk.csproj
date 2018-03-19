@@ -2,7 +2,7 @@
   <PropertyGroup>
     <PackageId>Stronk</PackageId>
     <PackageTags>configuration;app.config;web.config;config</PackageTags>
-    <PackageVersion>4.0.0</PackageVersion>
+    <PackageVersion>5.0.0</PackageVersion>
     <Title>Stronk</Title>
     <Description>Strong typed application configuration.</Description>
     <Authors>Andy Dote</Authors>
