@@ -31,7 +31,7 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_you_specify_a_config_source_it_is_the_only_one_used()
 		{
-			var source = new DictionaryConfigurationSource(new Dictionary<string, string>());
+			var source = new DictionarySource(new Dictionary<string, string>());
 			_config = new StronkConfig().From.Source(source);
 
 			_config.ConfigSources.ShouldBe(new[] { source });
@@ -41,7 +41,7 @@ namespace Stronk.Tests
 		public void When_multiple_config_sources_are_selected()
 		{
 			var one = new AppConfigSource();
-			var two = new DictionaryConfigurationSource(new Dictionary<string, string>());
+			var two = new DictionarySource(new Dictionary<string, string>());
 
 			_config = new StronkConfig()
 				.From.Source(one)

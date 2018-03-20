@@ -14,7 +14,7 @@ namespace Stronk.Tests.Scenarios
 		public MissingValuesTests()
 		{
 			_settings = new Dictionary<string, string>();
-			_source = new DictionaryConfigurationSource(_settings);
+			_source = new DictionarySource(_settings);
 		}
 
 		[Fact]

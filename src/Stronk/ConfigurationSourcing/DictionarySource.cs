@@ -2,11 +2,11 @@
 
 namespace Stronk.ConfigurationSourcing
 {
-	public class DictionaryConfigurationSource : IConfigurationSource
+	public class DictionarySource : IConfigurationSource
 	{
 		private readonly IDictionary<string, string> _settings;
 
-		public DictionaryConfigurationSource(IDictionary<string, string> settings)
+		public DictionarySource(IDictionary<string, string> settings)
 		{
 			_settings = settings;
 		}

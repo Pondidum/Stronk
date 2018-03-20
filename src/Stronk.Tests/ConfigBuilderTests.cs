@@ -24,7 +24,7 @@ namespace Stronk.Tests
 			_settings = new Dictionary<string, string>();
 
 			_options = new StronkConfig()
-				.From.Source(new DictionaryConfigurationSource(_settings))
+				.From.Source(new DictionarySource(_settings))
 				.HandleErrors.Using(_policy);
 
 			_builder = new ConfigBuilder(_options);
