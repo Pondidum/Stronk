@@ -9,13 +9,16 @@ namespace Stronk.ConfigurationSourcing
 	{
 		private readonly Lazy<Dictionary<string, string>> _variables;
 
-		public EnvironmentVariableSource()
+		public EnvironmentVariableSource(string prefix = "", IDictionary source = null)
 		{
-			_variables = new Lazy<Dictionary<string, string>>(() => Environment
-				.GetEnvironmentVariables()
+			prefix = prefix ?? string.Empty;
+
+			_variables = new Lazy<Dictionary<string, string>>(() =>
+				(source ?? Environment.GetEnvironmentVariables())
 				.Cast<DictionaryEntry>()
+				.Where(e => ((string)e.Key).StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
 				.ToDictionary(
-					e => (string)e.Key,
+					e => ((string)e.Key).Substring(prefix.Length),
 					e => (string)e.Value,
 					StringComparer.OrdinalIgnoreCase));
 		}

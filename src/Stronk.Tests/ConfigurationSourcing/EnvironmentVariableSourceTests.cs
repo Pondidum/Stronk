@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Shouldly;
 using Stronk.ConfigurationSourcing;
 using Xunit;
@@ -7,35 +8,51 @@ namespace Stronk.Tests.ConfigurationSourcing
 {
 	public class EnvironmentVariableSourceTests
 	{
-		private readonly EnvironmentVariableSource _source;
-
-		public EnvironmentVariableSourceTests()
+		private static EnvironmentVariableSource Source(string prefix = "", Hashtable values = null)
 		{
-			_source = new EnvironmentVariableSource();
+			return new EnvironmentVariableSource(prefix: prefix, source: values ?? new Hashtable
+			{
+				["PATH"] = "/d/dev"
+			});
 		}
 
 		[Fact]
 		public void When_fetching_all_available_variables()
 		{
-			_source.GetAvailableKeys().ShouldNotBeEmpty();
+			Source().GetAvailableKeys().ShouldNotBeEmpty();
 		}
 
 		[Fact]
 		public void When_getting_an_existing_key()
 		{
-			_source.GetValue("PATH").ShouldNotBeNullOrWhiteSpace();
+			Source().GetValue("PATH").ShouldNotBeNullOrWhiteSpace();
 		}
 
 		[Fact]
 		public void When_getting_an_existing_value_with_different_casting()
 		{
-			_source.GetValue("PAth").ShouldNotBeNullOrWhiteSpace();
+			Source().GetValue("PAth").ShouldNotBeNullOrWhiteSpace();
 		}
 
 		[Fact]
 		public void When_getting_a_non_existing_key()
 		{
-			_source.GetValue(Guid.NewGuid().ToString()).ShouldBeNull();
+			Source().GetValue(Guid.NewGuid().ToString()).ShouldBeNull();
+		}
+
+		[Fact]
+		public void When_a_prefix_is_specified_and_all_keys_are_listed()
+		{
+			var source = Source("wat:", new Hashtable
+			{
+				["Path"] = "/d/dev/projects",
+				["wat:again"] = "very",
+				["WAT:this"] = "yes"
+			});
+
+			source
+				.GetAvailableKeys()
+				.ShouldBe(new[] { "again", "this" }, ignoreOrder: true);
 		}
 	}
 }
