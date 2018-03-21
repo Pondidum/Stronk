@@ -8,5 +8,10 @@ namespace Stronk.ConfigurationSourcing
 		{
 			return self.Source(new AppConfigSource());
 		}
+
+		public static StronkConfig EnvironmentVariables(this SourceExpression self, string prefix = null)
+		{
+			return self.Source(new EnvironmentVariableSource(prefix));
+		}
 	}
 }
