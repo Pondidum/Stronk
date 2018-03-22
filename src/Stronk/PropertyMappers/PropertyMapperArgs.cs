@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Stronk.ConfigurationSourcing;
+using Stronk.ConfigurationSources;
 using Stronk.PropertyWriters;
 
 namespace Stronk.PropertyMappers

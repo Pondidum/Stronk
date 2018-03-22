@@ -1,6 +1,6 @@
 ﻿using NSubstitute;
 using Shouldly;
-using Stronk.ConfigurationSourcing;
+using Stronk.ConfigurationSources;
 using Stronk.Policies;
 using Xunit;
 

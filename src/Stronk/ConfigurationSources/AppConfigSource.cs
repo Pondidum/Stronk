@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 
-namespace Stronk.ConfigurationSourcing
+namespace Stronk.ConfigurationSources
 {
 	public class AppConfigSource : IConfigurationSource
 	{

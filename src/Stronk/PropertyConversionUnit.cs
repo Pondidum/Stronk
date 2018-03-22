@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Stronk.ConfigurationSourcing;
+using Stronk.ConfigurationSources;
 using Stronk.PropertyWriters;
 using Stronk.ValueConverters;
 

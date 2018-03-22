@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Stronk.ConfigurationSourcing
+namespace Stronk.ConfigurationSources
 {
 	public interface IConfigurationSource
 	{

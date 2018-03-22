@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Stronk.ConfigurationSourcing;
+using Stronk.ConfigurationSources;
 
 namespace Stronk.Dsl
 {

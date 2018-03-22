@@ -1,6 +1,6 @@
 ﻿using Stronk.Dsl;
 
-namespace Stronk.ConfigurationSourcing
+namespace Stronk.ConfigurationSources
 {
 	public static class Extensions
 	{

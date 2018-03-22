@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
-using Stronk.ConfigurationSourcing;
+using Stronk.ConfigurationSources;
 using Stronk.Policies;
 using Stronk.ValueConverters;
 using Xunit;

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using Shouldly;
-using Stronk.ConfigurationSourcing;
+using Stronk.ConfigurationSources;
 using Xunit;
 
-namespace Stronk.Tests.ConfigurationSourcing
+namespace Stronk.Tests.ConfigurationSources
 {
 	public class EnvironmentVariableSourceTests
 	{
