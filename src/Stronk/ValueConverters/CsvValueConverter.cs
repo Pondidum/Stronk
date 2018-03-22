@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Stronk.ValueConversion
+namespace Stronk.ValueConverters
 {
 	public class CsvValueConverter : IValueConverter
 	{

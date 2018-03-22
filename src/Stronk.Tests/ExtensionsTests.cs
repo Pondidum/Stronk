@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Stronk.ValueConversion;
+using Stronk.ValueConverters;
 using Xunit;
 
 namespace Stronk.Tests

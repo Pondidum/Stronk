@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Net.Mail;
 using Shouldly;
+using Stronk.ValueConverters;
 using Xunit;
-using Stronk.ValueConversion;
 
-namespace Stronk.Tests.ValueConversion
+namespace Stronk.Tests.ValueConverters
 {
 	public class EnumValueConverterTests
 	{

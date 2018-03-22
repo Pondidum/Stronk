@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Stronk.Policies;
-using Stronk.ValueConversion;
+using Stronk.ValueConverters;
 
 namespace Stronk
 {

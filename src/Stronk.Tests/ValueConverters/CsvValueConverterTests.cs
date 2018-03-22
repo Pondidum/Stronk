@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Shouldly;
-using Stronk.ValueConversion;
+using Stronk.ValueConverters;
 using Xunit;
 
-namespace Stronk.Tests.ValueConversion
+namespace Stronk.Tests.ValueConverters
 {
 	public class CsvValueConverterTests
 	{

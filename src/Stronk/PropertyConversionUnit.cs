@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Stronk.ConfigurationSourcing;
 using Stronk.PropertyWriters;
-using Stronk.ValueConversion;
+using Stronk.ValueConverters;
 
 namespace Stronk
 {

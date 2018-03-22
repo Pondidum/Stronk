@@ -5,7 +5,7 @@ using Stronk.ConfigurationSourcing;
 using Stronk.Policies;
 using Stronk.PropertyMappers;
 using Stronk.PropertyWriters;
-using Stronk.ValueConversion;
+using Stronk.ValueConverters;
 using Xunit;
 
 namespace Stronk.Tests

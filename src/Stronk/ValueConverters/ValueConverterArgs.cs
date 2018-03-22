@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Stronk.ValueConversion
+namespace Stronk.ValueConverters
 {
 	public class ValueConverterArgs
 	{

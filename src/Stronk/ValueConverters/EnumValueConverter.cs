@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stronk.ValueConversion
+namespace Stronk.ValueConverters
 {
 	public class EnumValueConverter : IValueConverter
 	{

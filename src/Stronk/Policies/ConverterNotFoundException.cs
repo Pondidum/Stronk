@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Stronk.PropertyWriters;
-using Stronk.ValueConversion;
+using Stronk.ValueConverters;
 
 namespace Stronk.Policies
 {

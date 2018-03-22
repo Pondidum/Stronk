@@ -4,7 +4,7 @@ using Stronk.Dsl;
 using Stronk.Policies;
 using Stronk.PropertyMappers;
 using Stronk.PropertyWriters;
-using Stronk.ValueConversion;
+using Stronk.ValueConverters;
 
 namespace Stronk
 {
