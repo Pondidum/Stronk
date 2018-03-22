@@ -17,14 +17,16 @@ namespace Stronk.ConfigurationSourcing
 				.AllKeys
 				.ToDictionary(
 					key => key,
-					key => ConfigurationManager.AppSettings[key]));
+					key => ConfigurationManager.AppSettings[key],
+					StringComparer.OrdinalIgnoreCase));
 
 			_connections = new Lazy<IDictionary<string, string>>(() => ConfigurationManager
 				.ConnectionStrings
 				.Cast<ConnectionStringSettings>()
 				.ToDictionary(
 					c => c.Name,
-					c => c.ConnectionString));
+					c => c.ConnectionString,
+					StringComparer.OrdinalIgnoreCase));
 		}
 
 		public string GetValue(string key)
