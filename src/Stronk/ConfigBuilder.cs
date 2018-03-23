@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Reflection;
 using Stronk.Policies;
 using Stronk.PropertyMappers;
 using Stronk.PropertyWriters;
+using Stronk.ValueConverters;
 
 namespace Stronk
 {
@@ -30,8 +33,6 @@ namespace Stronk
 				properties.Length,
 				properties.Select(p => p.Name));
 
-			var applicator = new Applicator(_options);
-
 			var values = properties
 				.Select(NewPropertyConversionUnit)
 				.Where(SelectedValueIsValid)
@@ -39,8 +40,59 @@ namespace Stronk
 
 			foreach (var descriptor in values)
 			{
-				applicator.Apply(descriptor, target);
+				var converted = Convert(descriptor);
+
+				try
+				{
+					descriptor.Property.Assign(target, converted);
+				}
+				catch (TargetInvocationException e)
+				{
+					throw e.InnerException ?? e;
+				}
 			}
+		}
+
+		private object Convert(PropertyConversionUnit unit)
+		{
+			var conversionPolicy = _options.ErrorPolicy.ConversionExceptionPolicy;
+			conversionPolicy.BeforeConversion(new ConversionExceptionBeforeArgs
+			{
+				Logger = _options.WriteLog
+			});
+
+			foreach (var converter in unit.Converters)
+			{
+				var vca = new ValueConverterArgs(
+					_options.WriteLog,
+					_options.ValueConverters.Where(x => x != converter),
+					unit.Property.Type,
+					unit.Value
+				);
+
+				try
+				{
+					//_options.WriteLog("Converted '{value}' and {typeName}", unit.Value, unit.Property.Type.Name);
+					return converter.Map(vca);
+				}
+				catch (Exception ex)
+				{
+					conversionPolicy.OnConversionException(new ConversionExceptionArgs
+					{
+						Property = unit.Property,
+						Value = unit.Value,
+						Logger = _options.WriteLog,
+						Exception = ex
+					});
+				}
+			}
+
+			conversionPolicy.AfterConversion(new ConversionExceptionAfterArgs
+			{
+				Logger = _options.WriteLog
+			});
+
+			return null;
 		}
 
 		private void LogPopulationStart(object target)

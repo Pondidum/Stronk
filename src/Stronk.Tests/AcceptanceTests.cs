@@ -50,7 +50,7 @@ namespace Stronk.Tests
 		public void When_loading_the_configuration_and_a_property_throws()
 		{
 			var config = new ThrowingSetter();
-			Should.Throw<ValueConversionException>(() => config.FromAppConfig());
+			Should.Throw<ExpectedException>(() => config.FromAppConfig());
 		}
 
 		public class ThrowingSetter
@@ -60,7 +60,7 @@ namespace Stronk.Tests
 			public string Name
 			{
 				get { return _name; }
-				set { throw new NotFiniteNumberException(); }
+				set { throw new ExpectedException(); }
 			}
 		}
 		
@@ -95,6 +95,10 @@ namespace Stronk.Tests
 			ExternalTest,
 			QA,
 			Production
+		}
+
+		private class ExpectedException : Exception
+		{
 		}
 	}
 }
