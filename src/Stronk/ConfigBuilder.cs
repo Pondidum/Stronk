@@ -3,6 +3,7 @@ using System.Reflection;
 using Stronk.Policies;
 using Stronk.PropertyMappers;
 using Stronk.PropertyWriters;
+using Stronk.ValueConverters;
 
 namespace Stronk
 {
@@ -31,24 +32,28 @@ namespace Stronk
 				properties.Length,
 				properties.Select(p => p.Name));
 
-			var values = properties
-				.Select(NewPropertyConversionUnit)
-				.Where(SelectedValueIsValid)
-				.Where(SelectedConvertersAreValid);
-
 			var converter = new ConversionProcess(_options);
-			
-			foreach (var descriptor in values)
-			{
-				var converted = converter.Convert(descriptor);
 
-				try
+			foreach (var property in properties)
+			{
+				var selectionArgs = new PropertyMapperArgs(_options.WriteLog, _options.ConfigSources, property);
+
+				var validConverters = _options.ValueConverters.Where(c => c.CanMap(property.Type)).ToArray();
+				var valueToUse = _options.Mappers.Select(x => x.Select(selectionArgs)).FirstOrDefault(v => v != null);
+
+				if (SelectedValueIsValid(property, validConverters, valueToUse) && SelectedConvertersAreValid(property, validConverters))
 				{
-					descriptor.Property.Assign(target, converted);
-				}
-				catch (TargetInvocationException e)
-				{
-					throw e.InnerException ?? e;
+					
+					var converted = converter.Convert(property, validConverters, valueToUse);
+					
+					try
+					{
+						property.Assign(target, converted);
+					}
+					catch (TargetInvocationException e)
+					{
+						throw e.InnerException ?? e;
+					}
 				}
 			}
 		}
@@ -71,51 +76,38 @@ namespace Stronk
 				_options.ValueConverters.SelectTypeNames());
 		}
 
-		private bool SelectedConvertersAreValid(PropertyConversionUnit descriptor)
+		private bool SelectedConvertersAreValid(PropertyDescriptor property, IValueConverter[] converters)
 		{
-			if (descriptor.Converters.Any())
+			if (converters.Any())
 				return true;
 
-			_options.WriteLog("Unable to any converters for {typeName} for property {propertyName}", descriptor.Property.Type.Name, descriptor.Property.Name);
+			_options.WriteLog("Unable to any converters for {typeName} for property {propertyName}", property.Type.Name, property.Name);
 
 			_options.ErrorPolicy.OnConverterNotFound.Handle(new ConverterNotFoundArgs
 			{
 				AvailableConverters = _options.ValueConverters,
-				Property = descriptor.Property
+				Property = property
 			});
 
 			return false;
 		}
 
-		private bool SelectedValueIsValid(PropertyConversionUnit descriptor)
+		private bool SelectedValueIsValid(PropertyDescriptor property, IValueConverter[] converters, string sourceValue)
 		{
-			if (descriptor.Value != null)
+			if (sourceValue != null)
 				return true;
 
-			_options.WriteLog("Unable to find a value for {propertyName}", descriptor.Property.Name);
+			_options.WriteLog("Unable to find a value for {propertyName}", property.Name);
 
 			_options.ErrorPolicy.OnSourceValueNotFound.Handle(new SourceValueNotFoundArgs
 			{
 				ValueSelectors = _options.Mappers,
-				Property = descriptor.Property,
-				Converters = descriptor.Converters,
-				Sources = descriptor.Sources
+				Property = property,
+				Converters = converters,
+				Sources = _options.ConfigSources
 			});
 
 			return false;
-		}
-
-		private PropertyConversionUnit NewPropertyConversionUnit(PropertyDescriptor property)
-		{
-			var selectionArgs = new PropertyMapperArgs(_options.WriteLog, _options.ConfigSources, property);
-
-			return new PropertyConversionUnit
-			{
-				Sources = _options.ConfigSources,
-				Property = property,
-				Converters = _options.ValueConverters.Where(c => c.CanMap(property.Type)).ToArray(),
-				Value = _options.Mappers.Select(x => x.Select(selectionArgs)).FirstOrDefault(v => v != null)
-			};
 		}
 	}
 }
