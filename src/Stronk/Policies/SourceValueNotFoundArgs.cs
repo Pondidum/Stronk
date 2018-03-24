@@ -10,7 +10,6 @@ namespace Stronk.Policies
 	{
 		public IEnumerable<IPropertyMapper> ValueSelectors { get; set; }
 		public PropertyDescriptor Property { get; set; }
-		public IValueConverter[] Converters { get; set; }
 		public IEnumerable<IConfigurationSource> Sources { get; set; }
 	}
 }
