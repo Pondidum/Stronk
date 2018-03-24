@@ -39,18 +39,15 @@ namespace Stronk
 				var validConverters = converterSelector.Select(property);
 				var valueToUse = valueSelector.Select(property);
 
-				if (validConverters.Any() && valueToUse != null)
-				{
-					var converted = converter.Convert(property, validConverters, valueToUse);
+				var converted = converter.Convert(property, validConverters, valueToUse);
 
-					try
-					{
-						property.Assign(target, converted);
-					}
-					catch (TargetInvocationException e)
-					{
-						throw e.InnerException ?? e;
-					}
+				try
+				{
+					property.Assign(target, converted);
+				}
+				catch (TargetInvocationException e)
+				{
+					throw e.InnerException ?? e;
 				}
 			}
 		}

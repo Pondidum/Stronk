@@ -17,6 +17,9 @@ namespace Stronk
 
 		public object Convert(PropertyDescriptor property, IValueConverter[] converters, string sourceValue)
 		{
+			if (sourceValue == null)
+				return null;
+
 			var conversionPolicy = _options.ErrorPolicy.ConversionExceptionPolicy;
 			conversionPolicy.BeforeConversion(new ConversionExceptionBeforeArgs
 			{
