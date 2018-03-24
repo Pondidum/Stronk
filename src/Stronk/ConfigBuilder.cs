@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using Stronk.PropertyWriters;
 
@@ -30,20 +29,20 @@ namespace Stronk
 				properties.Length,
 				properties.Select(p => p.Name));
 
-			var converter = new ConversionProcess(_options);
 			var converterSelector = new ConverterSelector(_options);
 			var valueSelector = new ValueSelector(_options);
+			var converter = new ConversionProcess(_options);
 
 			foreach (var property in properties)
 			{
-				var validConverters = converterSelector.Select(property);
-				var valueToUse = valueSelector.Select(property);
-
-				var converted = converter.Convert(property, validConverters, valueToUse);
+				var value = converter.Convert(
+					property,
+					converterSelector.Select(property),
+					valueSelector.Select(property));
 
 				try
 				{
-					property.Assign(target, converted);
+					property.Assign(target, value);
 				}
 				catch (TargetInvocationException e)
 				{
