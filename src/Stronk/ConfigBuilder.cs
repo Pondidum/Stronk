@@ -7,10 +7,16 @@ namespace Stronk
 	public class ConfigBuilder
 	{
 		private readonly IStronkConfig _options;
+		private readonly ConverterSelector _converterSelector;
+		private readonly ValueSelector _valueSelector;
+		private readonly ConversionProcess _conversionProcess;
 
 		public ConfigBuilder(IStronkConfig options)
 		{
 			_options = options;
+			_converterSelector = new ConverterSelector(_options);
+			_valueSelector = new ValueSelector(_options);
+			_conversionProcess = new ConversionProcess(_options);
 		}
 
 		public void Populate(object target)
@@ -29,16 +35,12 @@ namespace Stronk
 				properties.Length,
 				properties.Select(p => p.Name));
 
-			var converterSelector = new ConverterSelector(_options);
-			var valueSelector = new ValueSelector(_options);
-			var converter = new ConversionProcess(_options);
-
 			foreach (var property in properties)
 			{
-				var value = converter.Convert(
+				var value = _conversionProcess.Convert(
 					property,
-					converterSelector.Select(property),
-					valueSelector.Select(property));
+					_converterSelector.Select(property),
+					_valueSelector.Select(property));
 
 				try
 				{
