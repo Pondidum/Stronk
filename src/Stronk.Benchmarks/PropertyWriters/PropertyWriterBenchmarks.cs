@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using BenchmarkDotNet.Attributes;
+using Stronk.Benchmarks.Configs;
 using Stronk.PropertyWriters;
-using Stronk.Tests.PropertyWriters;
 
-namespace Stronk.Benchmarks
+namespace Stronk.Benchmarks.PropertyWriters
 {
-	public class PropertyWriterBenchmarks
+	public class WritingBenchmarks
 	{
 		private PropertyDescriptor[] _backingFields;
 		private PropertyDescriptor[] _setters;

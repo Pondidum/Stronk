@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Running;
+using Stronk.Benchmarks.PropertyWriters;
 
 namespace Stronk.Benchmarks
 {
@@ -6,7 +7,7 @@ namespace Stronk.Benchmarks
 	{
 		public static void Main(string[] args)
 		{
-			BenchmarkRunner.Run<PropertyWriterBenchmarks>();
+			BenchmarkRunner.Run<DiscoveryBenchmarks>();
 		}
 	}
 }

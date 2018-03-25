@@ -1,5 +1,5 @@
 ﻿#pragma warning disable 649
-namespace Stronk.Tests.PropertyWriters
+namespace Stronk.Benchmarks.Configs
 {
 	public  class MassiveConfig
 	{
