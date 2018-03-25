@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stronk", "src\Stronk\Stronk
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stronk.Tests", "src\Stronk.Tests\Stronk.Tests.csproj", "{1CE2442E-650D-4786-B646-5C19C3093154}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stronk.Benchmarks", "src\Stronk.Benchmarks\Stronk.Benchmarks.csproj", "{ABC14286-8B8F-4C8A-8096-B3C06AFAF11E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1CE2442E-650D-4786-B646-5C19C3093154}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CE2442E-650D-4786-B646-5C19C3093154}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CE2442E-650D-4786-B646-5C19C3093154}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABC14286-8B8F-4C8A-8096-B3C06AFAF11E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABC14286-8B8F-4C8A-8096-B3C06AFAF11E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABC14286-8B8F-4C8A-8096-B3C06AFAF11E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABC14286-8B8F-4C8A-8096-B3C06AFAF11E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
