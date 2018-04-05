@@ -55,11 +55,9 @@ namespace Stronk.Tests
 
 		public class ThrowingSetter
 		{
-			private string _name;
-
 			public string Name
 			{
-				get { return _name; }
+				get { return Guid.NewGuid().ToString(); }
 				set { throw new ExpectedException(); }
 			}
 		}

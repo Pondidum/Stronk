@@ -25,9 +25,8 @@ namespace Stronk
 
 			var writerArgs = new PropertyWriterArgs(_options.WriteLog, target.GetType());
 
-			var properties = _options
-				.PropertyWriters
-				.SelectMany(writer => writer.Select(writerArgs))
+			var properties = new FallbackPropertyWriter(_options.PropertyWriters)
+				.Select(writerArgs)
 				.ToArray();
 
 			_options.WriteLog(
