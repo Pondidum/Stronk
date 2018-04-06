@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Stronk.PropertyWriters
 {
-	internal class FallbackPropertyWriter : IPropertyWriter
+	public class FallbackPropertyWriter : IPropertyWriter
 	{
 		private readonly IEnumerable<IPropertyWriter> _others;
 
