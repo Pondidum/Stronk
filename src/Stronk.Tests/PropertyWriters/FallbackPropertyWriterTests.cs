@@ -37,7 +37,11 @@ namespace Stronk.Tests.PropertyWriters
 		[Fact]
 		public void When_there_is_one_writer_which_throws()
 		{
-			Should.Throw<ExpectedException>(() => Assign(new ThrowingWriter(new ExpectedException())));
+			var ex = Should.Throw<AggregateException>(() => Assign(new ThrowingWriter(new ExpectedException())));
+
+			ex.InnerExceptions
+				.ShouldHaveSingleItem()
+				.ShouldBeOfType<ExpectedException>();
 
 			_target.Value.ShouldBeNull();
 		}
@@ -78,11 +82,16 @@ namespace Stronk.Tests.PropertyWriters
 		[Fact]
 		public void When_there_are_two_writers_and_both_throw()
 		{
-			Should.Throw<ExpectedException>(() => Assign(
-				new ThrowingWriter(new UnExpectedException()),
+			var ex = Should.Throw<AggregateException>(() => Assign(
+				new ThrowingWriter(new ExpectedException()),
 				new ThrowingWriter(new ExpectedException())
 			));
 
+			ex.ShouldSatisfyAllConditions(
+				() => ex.InnerExceptions.Count.ShouldBe(2),
+				() => ex.InnerExceptions.First().ShouldBeOfType<ExpectedException>(),
+				() => ex.InnerExceptions.Last().ShouldBeOfType<ExpectedException>()
+			);
 			_target.Value.ShouldBeNull();
 		}
 

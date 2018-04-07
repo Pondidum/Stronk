@@ -27,6 +27,7 @@ namespace Stronk.PropertyWriters
 					Type = propertyGroup.First().Type,
 					Assign = (target, value) =>
 					{
+						var exceptions = new List<Exception>();
 						var last = propertyGroup.Last();
 						foreach (var descriptor in propertyGroup)
 						{
@@ -35,11 +36,13 @@ namespace Stronk.PropertyWriters
 								descriptor.Assign(target, value);
 								return;
 							}
-							catch (Exception)
+							catch (Exception ex)
 							{
+								exceptions.Add(ex);
+
 								//try the next
 								if (last == descriptor)
-									throw;
+									throw new AggregateException(exceptions);
 							}
 						}
 					}
