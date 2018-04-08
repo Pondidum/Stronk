@@ -50,7 +50,10 @@ namespace Stronk.Tests
 		public void When_loading_the_configuration_and_a_property_throws()
 		{
 			var config = new ThrowingSetter();
-			Should.Throw<ExpectedException>(() => config.FromAppConfig());
+			Should.Throw<AggregateException>(() => config.FromAppConfig())
+				.InnerExceptions
+				.ShouldHaveSingleItem()
+				.ShouldBeOfType<ExpectedException>();
 		}
 
 		public class ThrowingSetter
