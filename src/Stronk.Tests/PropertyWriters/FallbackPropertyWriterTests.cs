@@ -29,7 +29,7 @@ namespace Stronk.Tests.PropertyWriters
 		[Fact]
 		public void When_there_is_one_writer_which_works()
 		{
-			Assign(new WorkingWriter(_value));
+			Assign(new WorkingWriter(_target, _value));
 
 			_target.Value.ShouldBe(_value);
 		}
@@ -50,8 +50,8 @@ namespace Stronk.Tests.PropertyWriters
 		public void When_there_are_two_writers_and_both_work()
 		{
 			Assign(
-				new WorkingWriter(_value),
-				new WorkingWriter(_otherValue)
+				new WorkingWriter(_target, _value),
+				new WorkingWriter(_target, _otherValue)
 			);
 
 			_target.Value.ShouldBe(_value);
@@ -62,7 +62,7 @@ namespace Stronk.Tests.PropertyWriters
 		{
 			Assign(
 				new ThrowingWriter(new UnExpectedException()),
-				new WorkingWriter(_value)
+				new WorkingWriter(_target, _value)
 			);
 
 			_target.Value.ShouldBe(_value);
@@ -72,7 +72,7 @@ namespace Stronk.Tests.PropertyWriters
 		public void When_there_are_two_writers_and_the_second_throws()
 		{
 			Assign(
-				new WorkingWriter(_value),
+				new WorkingWriter(_target, _value),
 				new ThrowingWriter(new UnExpectedException())
 			);
 
@@ -101,20 +101,39 @@ namespace Stronk.Tests.PropertyWriters
 			public string Value { get; set; }
 		}
 
-		public class WorkingWriter : IPropertyWriter
+		private class TestDescriptor : PropertyDescriptor
 		{
+			private readonly Action _action;
+
+			public TestDescriptor(string name, Type type, Action action) : base(name, type)
+			{
+				_action = action;
+			}
+
+			public override void Assign(object target, object value)
+			{
+				_action();
+			}
+		}
+
+		private class WorkingWriter : IPropertyWriter
+		{
+			private readonly Target _target;
 			private readonly string _value;
 
-			public WorkingWriter(string value) => _value = value;
+			public WorkingWriter(Target target, string value)
+			{
+				_target = target;
+				_value = value;
+			}
 
 			public IEnumerable<PropertyDescriptor> Select(PropertyWriterArgs args)
 			{
-				yield return new PropertyDescriptor
-				{
-					Name = nameof(Target.Value),
-					Type = typeof(string),
-					Assign = (t, v) => ((Target)t).Value = _value
-				};
+				yield return new TestDescriptor(
+					nameof(Target.Value),
+					typeof(string),
+					() => _target.Value = _value
+				);
 			}
 		}
 
@@ -129,12 +148,11 @@ namespace Stronk.Tests.PropertyWriters
 
 			public IEnumerable<PropertyDescriptor> Select(PropertyWriterArgs args)
 			{
-				yield return new PropertyDescriptor
-				{
-					Name = nameof(Target.Value),
-					Type = typeof(string),
-					Assign = (t, v) => throw _exception
-				};
+				yield return new TestDescriptor(
+					nameof(Target.Value),
+					typeof(string),
+					() => throw _exception
+				);
 			}
 		}
 

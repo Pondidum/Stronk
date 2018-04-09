@@ -2,10 +2,17 @@
 
 namespace Stronk.PropertyWriters
 {
-	public class PropertyDescriptor
+	public abstract class PropertyDescriptor
 	{
-		public string Name { get; set; }
-		public Type Type { get; set; }
-		public Action<object, object> Assign { get; set; }
+		public string Name { get; }
+		public Type Type { get; }
+
+		public PropertyDescriptor(string name, Type type)
+		{
+			Name = name;
+			Type = type;
+		}
+
+		public abstract void Assign(object target, object value);
 	}
 }

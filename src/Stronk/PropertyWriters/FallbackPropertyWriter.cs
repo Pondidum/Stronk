@@ -17,55 +17,58 @@ namespace Stronk.PropertyWriters
 		public IEnumerable<PropertyDescriptor> Select(PropertyWriterArgs args) => _others
 			.SelectMany(writer => writer.Select(args))
 			.GroupBy(prop => prop.Name)
-			.Select(BuildDescriptor);
+			.Select(propertyGroup => new FallbackDescriptor(propertyGroup));
 
-		private PropertyDescriptor BuildDescriptor(IGrouping<string, PropertyDescriptor> propertyGroup)
+		private class FallbackDescriptor : PropertyDescriptor
 		{
-			return new PropertyDescriptor
+			private readonly IGrouping<string, PropertyDescriptor> _propertyGroup;
+
+			public FallbackDescriptor(IGrouping<string, PropertyDescriptor> propertyGroup)
+				: base(propertyGroup.Key, propertyGroup.First().Type)
 			{
-				Name = propertyGroup.Key,
-				Type = propertyGroup.First().Type,
-				Assign = (target, value) =>
+				_propertyGroup = propertyGroup;
+			}
+
+			public override void Assign(object target, object value)
+			{
+				var exceptions = new List<Exception>();
+				foreach (var property in _propertyGroup)
 				{
-					var exceptions = new List<Exception>();
-					foreach (var property in propertyGroup)
-					{
-						var result = Try(() => property.Assign(target, value));
+					var result = Try(() => property.Assign(target, value));
 
-						if (result.Successful)
-							return;
+					if (result.Successful)
+						return;
 
-						exceptions.Add(result.Exception);
-					}
-
-					throw new AggregateException(exceptions);
+					exceptions.Add(result.Exception);
 				}
-			};
-		}
 
-		private class Result
-		{
-			public bool Successful { get; private set; }
-			public Exception Exception { get; private set; }
-
-			public static Result Success() => new Result { Successful = true };
-			public static Result Failure(Exception ex) => new Result { Exception = ex };
-		}
-
-		private Result Try(Action action)
-		{
-			try
-			{
-				action();
-				return Result.Success();
+				throw new AggregateException(exceptions);
 			}
-			catch (TargetInvocationException e)
+
+			private class Result
 			{
-				return Result.Failure(e.InnerException);
+				public bool Successful { get; private set; }
+				public Exception Exception { get; private set; }
+
+				public static Result Success() => new Result { Successful = true };
+				public static Result Failure(Exception ex) => new Result { Exception = ex };
 			}
-			catch (Exception e)
+
+			private Result Try(Action action)
 			{
-				return Result.Failure(e);
+				try
+				{
+					action();
+					return Result.Success();
+				}
+				catch (TargetInvocationException e)
+				{
+					return Result.Failure(e.InnerException);
+				}
+				catch (Exception e)
+				{
+					return Result.Failure(e);
+				}
 			}
 		}
 	}
