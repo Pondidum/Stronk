@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
@@ -12,7 +12,6 @@ namespace Stronk.Tests
 	public class ConfigBuilderTests
 	{
 		private readonly ConfigBuilder _builder;
-		private readonly ErrorPolicy _policy;
 		private readonly TargetConfig _target;
 		private readonly StronkConfig _options;
 		private readonly IDictionary<string, string> _settings;
@@ -20,12 +19,10 @@ namespace Stronk.Tests
 		public ConfigBuilderTests()
 		{
 			_target = new TargetConfig();
-			_policy = new ErrorPolicy();
 			_settings = new Dictionary<string, string>();
 
 			_options = new StronkConfig()
-				.From.Source(new DictionarySource(_settings))
-				.HandleErrors.Using(_policy);
+				.From.Source(new DictionarySource(_settings));
 
 			_builder = new ConfigBuilder(_options);
 		}
@@ -33,7 +30,6 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_source_value_is_not_found_and_policy_is_throw()
 		{
-			_policy.OnSourceValueNotFound = new SourceValueNotFoundPolicy(PolicyActions.ThrowException);
 
 			Should
 				.Throw<SourceValueNotFoundException>(() => _builder.Populate(_target))
@@ -41,19 +37,8 @@ namespace Stronk.Tests
 		}
 
 		[Fact]
-		public void When_a_source_value_is_not_found_and_policy_is_skip()
-		{
-			_policy.OnSourceValueNotFound = new SourceValueNotFoundPolicy(PolicyActions.Skip);
-
-			_builder.Populate(_target);
-
-			_target.Value.ShouldBe(0);
-		}
-
-		[Fact]
 		public void When_a_converter_cannot_be_found_and_policy_is_throw()
 		{
-			_policy.OnConverterNotFound = new ConverterNotFoundPolicy(PolicyActions.ThrowException);
 			_settings["Value"] = "12";
 
 			_options.Convert.UsingOnly(new LambdaValueConverter<Uri>(val => new Uri(val)));
@@ -64,22 +49,8 @@ namespace Stronk.Tests
 		}
 
 		[Fact]
-		public void When_a_converter_cannot_be_found_and_policy_is_skip()
-		{
-			_policy.OnConverterNotFound = new ConverterNotFoundPolicy(PolicyActions.Skip);
-			_settings["Value"] = "12";
-
-			_options.Convert.UsingOnly(new LambdaValueConverter<Uri>(val => new Uri(val)));
-
-			_builder.Populate(_target);
-
-			_target.Value.ShouldBe(0);
-		}
-
-		[Fact]
 		public void When_a_converter_throws_an_exception_and_policy_is_throw()
 		{
-			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.ThrowException);
 			_settings["Value"] = "12";
 
 			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }));
@@ -90,22 +61,8 @@ namespace Stronk.Tests
 		}
 
 		[Fact]
-		public void When_a_converter_throws_an_exception_and_policy_is_skip()
-		{
-			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.Skip);
-			_settings["Value"] = "12";
-
-			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }));
-
-			_builder.Populate(_target);
-
-			_target.Value.ShouldBe(0);
-		}
-
-		[Fact]
 		public void When_a_converter_throws_and_policy_is_fallback_or_throw_and_there_is_no_fallback()
 		{
-			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 			_settings["Value"] = "12";
 
 			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }));
@@ -118,7 +75,6 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_converter_throws_and_policy_is_fallback_or_throw_and_fallback_works()
 		{
-			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 			_settings["Value"] = "12";
 
 			_options.Convert.UsingOnly(
@@ -133,7 +89,6 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_converter_throws_and_policy_is_fallback_or_throw_and_fallback_fails()
 		{
-			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 			_settings["Value"] = "12";
 
 			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
@@ -149,7 +104,6 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_converter_throws_and_policy_is_fallback_or_throw_and_multiple_fallbacks_fail()
 		{
-			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrThrow);
 			_settings["Value"] = "12";
 
 			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
@@ -164,22 +118,8 @@ namespace Stronk.Tests
 		}
 
 		[Fact]
-		public void When_a_converter_throws_and_policy_is_fallback_or_skip_and_there_is_no_fallback()
-		{
-			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrSkip);
-			_settings["Value"] = "12";
-
-			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }));
-
-			_builder.Populate(_target);
-
-			_target.Value.ShouldBe(0);
-		}
-
-		[Fact]
 		public void When_a_converter_throws_and_policy_is_fallback_or_skip_and_fallback_works()
 		{
-			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrSkip);
 			_settings["Value"] = "12";
 
 			_options.Convert.UsingOnly(
@@ -189,20 +129,6 @@ namespace Stronk.Tests
 			_builder.Populate(_target);
 
 			_target.Value.ShouldBe(12);
-		}
-
-		[Fact]
-		public void When_a_converter_throws_and_policy_is_fallback_or_skip_and_fallback_fails()
-		{
-			_policy.ConversionExceptionPolicy = new ConversionExceptionPolicy(ConverterExceptionPolicy.FallbackOrSkip);
-			_settings["Value"] = "12";
-
-			_options.Convert.UsingOnly(new LambdaValueConverter<int>(val => { throw new NotFiniteNumberException(); }),
-				new LambdaValueConverter<int>(val => { throw new IndexOutOfRangeException(); }));
-
-			_builder.Populate(_target);
-
-			_target.Value.ShouldBe(0);
 		}
 
 		private class TargetConfig

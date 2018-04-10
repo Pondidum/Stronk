@@ -24,7 +24,7 @@ namespace Stronk
 
 			_options.WriteLog("Unable to find a value for {propertyName}", property.Name);
 
-			_options.ErrorPolicy.OnSourceValueNotFound.Handle(new SourceValueNotFoundArgs
+			throw new SourceValueNotFoundException(new SourceValueNotFoundArgs
 			{
 				ValueSelectors = _options.Mappers,
 				Property = property,

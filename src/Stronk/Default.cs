@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Stronk.ConfigurationSources;
-using Stronk.Policies;
 using Stronk.PropertyMappers;
 using Stronk.PropertyWriters;
 using Stronk.ValueConverters;
@@ -37,7 +36,5 @@ namespace Stronk
 		{
 			new AppConfigSource()
 		};
-
-		public static ErrorPolicy ErrorPolicy { get; } = new ErrorPolicy();
 	}
 }

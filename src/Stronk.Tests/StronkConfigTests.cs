@@ -23,8 +23,7 @@ namespace Stronk.Tests
 				() => _config.ConfigSources.ShouldBe(Default.ConfigurationSources),
 				() => _config.Mappers.ShouldBe(Default.SourceValueSelectors),
 				() => _config.ValueConverters.ShouldBe(Default.ValueConverters),
-				() => _config.PropertyWriters.ShouldBe(Default.PropertyWriters),
-				() => _config.ErrorPolicy.ShouldBeOfType<ErrorPolicy>()
+				() => _config.PropertyWriters.ShouldBe(Default.PropertyWriters)
 			);
 		}
 
@@ -141,17 +140,6 @@ namespace Stronk.Tests
 				.Convert.UsingOnly(three);
 
 			_config.ValueConverters.ShouldBe(new IValueConverter[] { one, two, three });
-		}
-
-		[Fact]
-		public void When_specifying_the_error_policy()
-		{
-			var policy = new ErrorPolicy();
-
-			_config = new StronkConfig()
-				.HandleErrors.Using(policy);
-
-			_config.ErrorPolicy.ShouldBe(policy);
 		}
 
 		[Fact]

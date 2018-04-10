@@ -20,11 +20,7 @@ namespace Stronk
 			if (sourceValue == null)
 				return null;
 
-			var conversionPolicy = _options.ErrorPolicy.ConversionExceptionPolicy;
-			conversionPolicy.BeforeConversion(new ConversionExceptionBeforeArgs
-			{
-				Logger = _options.WriteLog
-			});
+			var conversionPolicy = new ConversionExceptionPolicy(property, sourceValue);
 
 			foreach (var converter in converters)
 			{
@@ -45,20 +41,11 @@ namespace Stronk
 				catch (Exception ex)
 				{
 					_options.WriteLog("Converting '{value}' to {typeName} failed", sourceValue, property.Type.Name);
-					conversionPolicy.OnConversionException(new ConversionExceptionArgs
-					{
-						Property = property,
-						Value = sourceValue,
-						Logger = _options.WriteLog,
-						Exception = ex
-					});
+					conversionPolicy.OnConversionException(ex);
 				}
 			}
 
-			conversionPolicy.AfterConversion(new ConversionExceptionAfterArgs
-			{
-				Logger = _options.WriteLog
-			});
+			conversionPolicy.AfterConversion();
 
 			return null;
 		}

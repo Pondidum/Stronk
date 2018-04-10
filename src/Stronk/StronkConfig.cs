@@ -17,7 +17,6 @@ namespace Stronk
 			Map = new MapExpression(this);
 			Convert = new ConversionExpression(this);
 			Log = new LogExpression(this);
-			HandleErrors = new ErrorPolicyExpression(this);
 		}
 
 		public SourceExpression From { get; }
@@ -25,13 +24,11 @@ namespace Stronk
 		public MapExpression Map { get; }
 		public ConversionExpression Convert { get; }
 		public LogExpression Log { get; }
-		public ErrorPolicyExpression HandleErrors { get; }
 
 		IEnumerable<IValueConverter> IStronkConfig.ValueConverters => Convert.Converters;
 		IEnumerable<IPropertyWriter> IStronkConfig.PropertyWriters => Write.Writers;
 		IEnumerable<IPropertyMapper> IStronkConfig.Mappers => Map.Mappers;
 		IEnumerable<IConfigurationSource> IStronkConfig.ConfigSources => From.Sources;
-		ErrorPolicy IStronkConfig.ErrorPolicy => HandleErrors.Policy;
 		void IStronkConfig.WriteLog(string template, params object[] args) => Log.Write(template, args);
 
 		public T Build<T>() where T : new()

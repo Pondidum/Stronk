@@ -23,13 +23,7 @@ namespace Stronk
 
 			_options.WriteLog("Unable to any converters for {typeName} for property {propertyName}", property.Type.Name, property.Name);
 
-			_options.ErrorPolicy.OnConverterNotFound.Handle(new ConverterNotFoundArgs
-			{
-				AvailableConverters = _options.ValueConverters,
-				Property = property
-			});
-
-			return new IValueConverter[0];
+			throw new ConverterNotFoundException(_options.ValueConverters, property);
 		}
 	}
 }

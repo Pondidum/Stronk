@@ -1,44 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Stronk.PropertyWriters;
 
 namespace Stronk.Policies
 {
-	public class ConversionExceptionPolicy : IConversionExceptionPolicy
+	public class ConversionExceptionPolicy
 	{
-		private readonly ConverterExceptionPolicy _policy;
-		private readonly List<ConversionExceptionArgs> _exceptions;
+		private readonly PropertyDescriptor _property;
+		private readonly string _value;
+		private readonly List<Exception> _exceptions;
 
-		public ConversionExceptionPolicy(ConverterExceptionPolicy policy)
+		public ConversionExceptionPolicy(PropertyDescriptor property, string value)
 		{
-			_policy = policy;
-			_exceptions = new List<ConversionExceptionArgs>();
+			_property = property;
+			_value = value;
+			_exceptions = new List<Exception>();
 		}
 
-		public void BeforeConversion(ConversionExceptionBeforeArgs args)
+		public void OnConversionException(Exception ex) => _exceptions.Add(ex);
+
+		public void AfterConversion()
 		{
-			_exceptions.Clear();
+			if (_exceptions.Any())
+				throw new ValueConversionException(BuildMessage(), _exceptions.ToArray());
 		}
 
-		public void OnConversionException(ConversionExceptionArgs args)
-		{
-			if (_policy == ConverterExceptionPolicy.ThrowException)
-				throw new ValueConversionException(BuildMessage(args), new[] { args.Exception });
-
-			_exceptions.Add(args);
-		}
-
-		public void AfterConversion(ConversionExceptionAfterArgs args)
-		{
-			if (!_exceptions.Any() || _policy != ConverterExceptionPolicy.FallbackOrThrow)
-				return;
-
-			throw new ValueConversionException(
-				BuildMessage(_exceptions.First()),
-				_exceptions.Select(e => e.Exception).ToArray());
-		}
-
-		private static string BuildMessage(ConversionExceptionArgs args)
-			=> $"Error converting the value '{args.Value}' to type '{args.Property.Type.Name}' for property '{args.Property.Name}'";
+		private string BuildMessage()
+			=> $"Error converting the value '{_value}' to type '{_property.Type.Name}' for property '{_property.Name}'";
 	}
 }

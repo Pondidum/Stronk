@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Stronk.ConfigurationSources;
 using Stronk.PropertyMappers;
 using Stronk.PropertyWriters;
-using Stronk.ValueConverters;
 
 namespace Stronk.Policies
 {
