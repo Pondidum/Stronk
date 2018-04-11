@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Stronk.Policies;
 using Stronk.PropertyWriters;
@@ -20,7 +21,7 @@ namespace Stronk
 			if (sourceValue == null)
 				return null;
 
-			var conversionPolicy = new ConversionExceptionPolicy(property, sourceValue);
+			var exceptions = new List<Exception>();
 
 			foreach (var converter in converters)
 			{
@@ -41,11 +42,14 @@ namespace Stronk
 				catch (Exception ex)
 				{
 					_options.WriteLog("Converting '{value}' to {typeName} failed", sourceValue, property.Type.Name);
-					conversionPolicy.OnConversionException(ex);
+					exceptions.Add(ex);
 				}
 			}
 
-			conversionPolicy.AfterConversion();
+			if (exceptions.Any())
+				throw new ValueConversionException(
+					$"Error converting the value '{sourceValue}' to type '{property.Type.Name}' for property '{property.Name}'",
+					exceptions.ToArray());
 
 			return null;
 		}
