@@ -30,8 +30,6 @@ namespace Stronk
 				Property = property,
 				Sources = _options.ConfigSources
 			});
-
-			return null;
 		}
 	}
 }
