@@ -17,7 +17,7 @@ namespace Stronk
 		public string Select(PropertyDescriptor property)
 		{
 			var selectionArgs = new PropertyMapperArgs(_options.WriteLog, _options.ConfigSources, property);
-			var valueToUse = _options.Mappers.Select(x => x.Select(selectionArgs)).FirstOrDefault(v => v != null);
+			var valueToUse = _options.Mappers.Select(x => x.ValueFor(selectionArgs)).FirstOrDefault(v => v != null);
 
 			if (valueToUse != null)
 				return valueToUse;

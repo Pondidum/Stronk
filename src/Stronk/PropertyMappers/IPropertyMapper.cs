@@ -2,6 +2,6 @@
 {
 	public interface IPropertyMapper
 	{
-		string Select(PropertyMapperArgs args);
+		string ValueFor(PropertyMapperArgs args);
 	}
 }

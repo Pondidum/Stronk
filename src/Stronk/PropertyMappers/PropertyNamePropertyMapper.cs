@@ -2,6 +2,6 @@
 {
 	public class PropertyNamePropertyMapper : IPropertyMapper
 	{
-		public string Select(PropertyMapperArgs args) => args.GetValue(args.Property.Name);
+		public string ValueFor(PropertyMapperArgs args) => args.GetValue(args.Property.Name);
 	}
 }
