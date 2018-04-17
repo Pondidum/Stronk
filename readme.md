@@ -1,9 +1,26 @@
 # Stronk
 *Mapping `app.config` an `web.config` to strong typed objects*
 
-## Usage:
+## Installation
+
+```powershell
+PM> install-package Stronk
+```
+
+
+## Usage
 
 ```csharp
+public class Startup
+{
+    public void Configure(IAppBuilder app)
+    {
+        var config = new StronkConfig()
+            .Build<MyApplicationConfiguration>();
+        // ...
+    }
+}
+
 public class MyApplicationConfiguration
 {
     public string ApplicationName { get; private set; }
@@ -11,17 +28,6 @@ public class MyApplicationConfiguration
     public ConfigurationMode Mode { get: private set; }
 
     public string MainDB { get; set; }
-
-    public MyApplicationConfiguration()
-    {
-        this.FromAppConfig();
-
-        // this is identical to FromAppConfig, it's here to make you happy if you are reading a web.config
-        //this.FromWebConfig():
-
-        // this is an idea for .net core. Subject to change. a lot.
-        //this.FromConfigurationProviderThingy(itGoesHere.Build());
-    }
 }
 
 public enum ConfigurationMode
@@ -51,88 +57,132 @@ public enum ConfigurationMode
 
 ## Customisation
 
-You can configure **how** Stronk handles configuration, and **where** Stronk reads it from.
-
-The rough pipeline is as follows:
-
-Select Properties to be populated
--> Get a Value from `ConfigurationSource` for each Property
--> Find an `IValueConverter` for the property
--> Convert the value with the selected converter
--> Assign to the property
-
-To specify your own conversion and mapping you can either implement `IStronkOptions`, or use the customisation methods on `StronkOptions`, e.g.
+Stronk provides a DSL to help guide configuration.  By default, it will read from `App.config` or `Web.config`, so you usually only need to write:
 
 ```csharp
-var sc = new StronkOptions();
-sc.AddBefore<EnumValueConverter>(new SpecialEnumValueConverter());
+var config = new StronkConfig()
+    .Build<MyApplicationConfiguration>();
+```
 
-this.FromAppConfig(sc);
+If you would rather populate an existing object, you can use the `ApplyTo` method instead of `Build`:
+
+```csharp
+var config = new MyApplicationConfiguration();
+
+new StronkConfig().ApplyTo(config);
+```
+
+You can find all default values used in the [`Default.cs` file](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/Default.cs).
+
+### Configuration Sources
+
+If you want to read from other sources, you can specify them using the `.From` DSL:
+
+```csharp
+var config = new StronkConfig()
+    .From.EnvironmentVariables()
+    .Build<Config>();
+```
+
+Optionally, you can specify a prefix to environment variables, which will get stripped off when matching property names in your config (e.g. a prefix of `AppOne:`, will find environment variable called `AppOne:Connection`, and map that to a property called `Connection`):
+
+```csharp
+var config = new StronkConfig()
+    .From.EnvironmentVariables("SuperAwesomeApp:")
+    .Build<Config>();
+```
+
+Note that if you specify sources, they will be the only ones used, so if you want to have fallbacks (e.g. read environment variables, but fallback to app.config if one is not available), you need to specify them:
+
+```csharp
+var config = new StronkConfig()
+    .From.EnvironmentVariables()
+    .From.AppConfig()
+    .Build<Config>();
+```
+
+### Value Conversion
+
+Stronk supports most simple types you will encounter out of the box: `Enums`, `Uri`, `Guid`, `TimeSpan`, `DateTime`, `Nullable<>`, CSV (of any type!), as well as all value types.
+
+Converters are created by implementing `IValueConverter`, or you can use the `LambdaValueConverter<T>` if you need something simple (for example, `Guid` conversion is defined as `new LambdaValueConverter<Guid>(Guid.Parse)`).
+
+You can either add additional value converters to what Stronk can use by default:
+
+```csharp
+var config = new StronkConfig()
+    .Convert.Using(new LambdaValueConverter<CustomThing>(val => CustomThing.Parse(val)))
+    .Build<Config>();
+```
+
+Or replace all default converters with your own (not recommended!):
+
+```csharp
+var config = new StronkConfig()
+    .Convert.UsingOnly(new LambdaValueConverter<CustomThing>(val => CustomThing.Parse(val)))
+    .Build<Config>();
+```
+
+### Property Mapping
+
+By default, Stronk will pick from values in your configuration sources where the key matches the property name (case insensitive).  If you want to replace this behaviour, you can implement a custom `IPropertyMapper`:
+
+```csharp
+public class PropertyNamePropertyMapper : IPropertyMapper
+{
+    public string ValueFor(PropertyMapperArgs args) => args.GetValue(args.Property.Name);
+}
+```
+
+```csharp
+var config = new StronkConfig()
+    .Map.With(new PropertyNamePropertyMapper())
+    .Build<Config>();
+```
+
+### Property Writing
+
+By default, Stronk can write to properties with a setter (no matter its visibility), and to backing fields for properties, when the backing field is the same, but with the `_` prefix (again, case insensitive).  It prefers the properties with setters.
+
+You can override this using the `.Write` DSL:
+
+```csharp
+var config = new StronkConfig()
+    .Write.To(new BackingFieldPropertyWriter())
+    .Build<Config>();
 ```
 
 ### Logging
 
-Logging is supported by means of a single callback, providing a template, and an array of objects.  The template is designed for serilog (or other structured logging), in that it uses named substitutions rather than index based, for example `Converting '{value}' and assigning to {typeName}.{propertyName}`.
+Want to know what Stronk did while populating your object? You can specify a logger to use with the `.Log` DSL:
 
 ```csharp
-var sc = new StronkOptions
-{
-    Logger = message => Serilog.Log.Information(message.Template, message.Args)
-};
-
-this.FromAppConfig(sc);
+var config = new StronkConfig()
+    .Log.Using(message => Log.Debug(message.Template, message.Args))
+    .Build<Config>();
 ```
 
-### Customising Conversion and Mapping
+The log messages are structured - so you can use them directly with [Serilog](https://serilog.net/) or similar libraries.  If your logging library is not structured, just call `.ToString()` on the message object, and you will get a flat string, with all that useful structure gone.
 
-#### Property Selection
-*This is used to scan the target `Type` and provide a set of `PropertyDescriptor`s for it.*
+## Questions
 
-Stronk comes with two implementations of `IPropertySelector`, which are both enabled by default:
+### Why not use Microsoft.Configuration?
 
-* [PrivateSetterPropertySelector](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/PropertySelection/PrivateSetterPropertySelector.cs) - this will select any public property which can be written to.
-* [BackingFieldPropertySelector](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/PropertySelection/BackingFieldPropertySelector.cs)) - this will select any public property with a backing field which matches the property name (optionally with a preceding underscore.)
+That didn't exist when I wrote this library.  Also, support for non dotnet core is somewhat lacking (e.g. reading a `web.config` in XML).
 
-In your own implementation, you just need to return an enumerable of `PropertyDescriptor`:
+### Will you support dotnet core
 
-```csharp
-new PropertyDescriptor
-{
-	Name = prop.Name,
-	Type = prop.PropertyType,
-	Assign = (target, value) => prop.GetSetMethod(true).Invoke(target, new[] { value })
-}
-```
+Undecided.<br />
+I could move the only dependency on `ConfigurationManager` to a separate package and then target core...but if you're on core, you might as well use `Microsoft.Configuration`.
 
-#### Value Selection
-*This is used to match a `PropertyDescriptor` to a value provided by `IConfigurationSource`.*
+### How about Json configuration files?
 
-Stronk comes with one implementation of `ISourceValueSelector`, which is enabled by default:
+I might add this as a separate package in the future (e.g. `Stronk.Sources.Json` or similar), but I don't want (any) dependencies on other libraries from the main Stronk library.
 
-* [PropertyNameSourceValueSelector](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/ValueSelection/PropertyNameSourceValueSelector.cs) - this will return a value from the `AppSettings` section of the app.config file, matching on `PropertyDescriptor.Name`, if there is no match in `AppSettings`, it will try the `connectionStrings` section also.
+### How about deserializing json inside a value?
 
-#### Value Conversion
-*This is used to take the value from an `ISourceValueSelector` and convert it to the type from `PropertyDescriptor`.*
+Implement a custom `IValueConverter`.
 
-Stronk comes with many converters, which are attempted to be used in order of specification.  By default this is the conversion order:
-* Uri - calls `val, type => new Uri(val)`
-* Guid - calls `val, type => Guid.Parse(val)`
-* [EnumValueConverter](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/ValueConversion/EnumValueConverter.cs) - Makes use of `Enum.Parse` and `Enum.IsDefined`
-* [CsvValueConverter](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/ValueConversion/CsvValueConverter.cs) - calls other value converters to convert individual values
-* [FallbackValueConverter](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/ValueConversion/FallbackValueConverter.cs) - calls `val, type => Convert.ChangeType(val, type)`
+### I have other questions
 
-The easiest way of creating a new converter is to just add an instance of `LambdaValueConverter<T>` to the `IStronkOptions`.  This is how `Uri` and `Guid` are implemented.
-
-### Customising Configuration Source
-*This is used to customise where Stronk will read configuration values from.*
-
-Stronk comes with one implementation of `IConfigurationSource`:
-
-* [AppConfigSource](https://github.com/Pondidum/Stronk/blob/master/src/Stronk/AppConfigSource.cs) - this uses the `ConfigurationManager` class, which means both `App.Config` and `Web.Config` are supported out of the box.
-
-## To Do
-
-* Customisable error policy
-  * no value found
-  * no converter found
-  * converter was not happy
+Cool!  Either open an issue on this repo or feel free to tweet me ([@pondidum](https://twitter.com/Pondidum)) :)
