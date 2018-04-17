@@ -23,36 +23,18 @@ namespace Stronk.Tests.ValueConverters
 				.ShouldBe(true);
 		}
 
-		[Fact]
-		public void When_type_is_ienumerable_t()
+		[Theory]
+		[InlineData(typeof(int[]), true)]
+		[InlineData(typeof(IEnumerable<int>), true)]
+		[InlineData(typeof(List<int>), true)]
+		[InlineData(typeof(IList<int>), true)]
+		[InlineData(typeof(string), false)]
+		public void It_can_map_correct_types(Type type, bool expected)
 		{
-			_converter
-				.CanMap(typeof(IEnumerable<int>))
-				.ShouldBe(true);
-		}
-
-		[Fact]
-		public void When_type_is_list_t()
-		{
-			_converter
-				.CanMap(typeof(List<int>))
-				.ShouldBe(true);
-		}
-
-		[Fact]
-		public void When_type_is_ilist_t()
-		{
-			_converter
-				.CanMap(typeof(IList<int>))
-				.ShouldBe(true);
-		}
-
-		[Fact]
-		public void When_type_is_a_string()
-		{
-			_converter
-				.CanMap(typeof(string))
-				.ShouldBe(false);
+			if (expected)
+				_converter.CanMap(type).ShouldBeTrue();
+			else
+				_converter.CanMap(type).ShouldBeFalse();
 		}
 
 		[Fact]
