@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Configuration;
 using Shouldly;
-using Stronk.Policies;
 using Xunit;
+
 #pragma warning disable 649
 
-namespace Stronk.Tests
+namespace Stronk.Tests.Scenarios
 {
 	public class AcceptanceTests
 	{
