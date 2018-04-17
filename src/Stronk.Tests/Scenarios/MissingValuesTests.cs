@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Shouldly;
 using Stronk.ConfigurationSources;
 using Stronk.Policies;
@@ -43,6 +44,34 @@ namespace Stronk.Tests.Scenarios
 				() => ex.Message.ShouldContain("PropertyName"),
 				() => ex.Message.ShouldContain("SomethingElse")
 			);
+		}
+
+		[Fact]
+		public void When_there_is_no_value_for_a_nullable_property()
+		{
+			var config = new StronkConfig()
+				.From.Source(_source)
+				.Build<NullablePropertyConfig>();
+
+			config.SomeValue.HasValue.ShouldBeFalse();
+		}
+
+		[Fact]
+		public void When_there_is_a_value_for_a_nullable_property()
+		{
+			_settings["SomeValue"] = "17";
+
+			var config = new StronkConfig()
+				.From.Source(_source)
+				.Build<NullablePropertyConfig>();
+
+			config.SomeValue.HasValue.ShouldBeTrue();
+			config.SomeValue.ShouldBe(17);
+		}
+
+		private class NullablePropertyConfig
+		{
+			public Nullable<int> SomeValue { get; private set; }
 		}
 
 		public class Config
