@@ -22,6 +22,9 @@ namespace Stronk
 			if (valueToUse != null)
 				return valueToUse;
 
+			if (property.IsOptional)
+				return string.Empty;
+
 			_options.WriteLog("Unable to find a value for {propertyName}", property.Name);
 
 			throw new SourceValueNotFoundException(new SourceValueNotFoundArgs

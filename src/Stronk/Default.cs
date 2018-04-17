@@ -16,6 +16,7 @@ namespace Stronk
 			new LambdaValueConverter<Guid>(Guid.Parse),
 			new LambdaValueConverter<TimeSpan>(TimeSpan.Parse),
 			new LambdaValueConverter<DateTime>(val => DateTime.Parse(val, null, DateTimeStyles.RoundtripKind)),
+			new NullableValueConverter(),
 			new EnumValueConverter(),
 			new CsvValueConverter(),
 			new FallbackValueConverter()
