@@ -14,4 +14,13 @@
   <PropertyGroup>
     <TargetFramework>net451</TargetFramework>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Consul" Version="0.7.2.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Stronk\Stronk.csproj">
+      <Project>{bcdbfffa-adc2-45fc-8e73-fd0cd7b0bd47}</Project>
+      <Name>Stronk</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
