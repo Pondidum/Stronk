@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>Stronk.Source.Consul</PackageId>
+    <PackageTags>stronk;consul;configuration;app.config;web.config;config</PackageTags>
+    <PackageVersion>0.0.1</PackageVersion>
+    <Title>Stronk.Source.Consul</Title>
+    <Description>Consul configuration source for Stronk.</Description>
+    <Authors>Andy Dote</Authors>
+    <PackageProjectUrl>https://github.com/pondidum/Stronk/</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/pondidum/Stronk/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>git://github.com/pondidum/Stronk</RepositoryUrl>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net451</TargetFramework>
+  </PropertyGroup>
+</Project>
