@@ -32,7 +32,7 @@ namespace Stronk.Source.Consul
 			{
 				var response = client.KV.List("").Result.Response;
 
-				return response.Select(r => r.Value).Select(AsString).ToArray();
+				return response.Select(r => r.Key).ToArray();
 			}
 		}
 
