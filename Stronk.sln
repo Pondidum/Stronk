@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stronk.Benchmarks", "src\St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stronk.Source.Consul", "src\Stronk.Source.Consul\Stronk.Source.Consul.csproj", "{6AF9B0C5-BD82-405D-A44F-2C5575746DEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stronk.Source.Consul.Tests", "src\Stronk.Source.Consul.Tests\Stronk.Source.Consul.Tests.csproj", "{E9528E77-F7D0-4595-B3DC-050BF30C6B67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{6AF9B0C5-BD82-405D-A44F-2C5575746DEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AF9B0C5-BD82-405D-A44F-2C5575746DEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AF9B0C5-BD82-405D-A44F-2C5575746DEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9528E77-F7D0-4595-B3DC-050BF30C6B67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9528E77-F7D0-4595-B3DC-050BF30C6B67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9528E77-F7D0-4595-B3DC-050BF30C6B67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9528E77-F7D0-4595-B3DC-050BF30C6B67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
