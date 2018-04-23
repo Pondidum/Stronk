@@ -22,7 +22,9 @@ namespace Stronk.Source.Consul
 			{
 				var response = client.KV.Get(key).Result.Response;
 
-				return AsString(response.Value);
+				return response != null
+					? AsString(response.Value)
+					: null;
 			}
 		}
 
