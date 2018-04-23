@@ -3,7 +3,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Consul;
 using Shouldly;
-using Xunit;
 
 namespace Stronk.Source.Consul.Tests
 {
@@ -32,7 +31,7 @@ namespace Stronk.Source.Consul.Tests
 			var key = Guid.NewGuid().ToString();
 			var value = Guid.NewGuid().ToString();
 
-			await _client.KV.Put(Pair(key, value));
+			await Write(key, value);
 
 			_source.GetValue(Prefixed(key)).ShouldBe(value);
 		}
@@ -40,16 +39,13 @@ namespace Stronk.Source.Consul.Tests
 		[RequiresConsulFact]
 		public async Task When_listing_keys()
 		{
-			await _client.KV.Put(Pair("a", "one"));
-			await _client.KV.Put(Pair("b", "two"));
-			await _client.KV.Put(Pair("c", "three"));
+			await Write("a", "one");
+			await Write("b", "two");
+			await Write("c", "three");
 
-			_source.GetAvailableKeys().ShouldBe(new[]
-			{
-				Prefixed("a"),
-				Prefixed("b"),
-				Prefixed("c")
-			}, ignoreOrder: true);
+			_source
+				.GetAvailableKeys()
+				.ShouldBe(new[] { Prefixed("a"), Prefixed("b"), Prefixed("c") }, ignoreOrder: true);
 		}
 
 		[RequiresConsulFact]
@@ -57,16 +53,13 @@ namespace Stronk.Source.Consul.Tests
 		{
 			_source = new ConsulConfigurationSource(() => new ConsulClient(), prefix: _prefix);
 
-			await _client.KV.Put(Pair("a", "one"));
-			await _client.KV.Put(Pair("b", "two"));
-			await _client.KV.Put(Pair("c", "three"));
+			await Write("a", "one");
+			await Write("b", "two");
+			await Write("c", "three");
 
-			_source.GetAvailableKeys().ShouldBe(new[]
-			{
-				"a",
-				"b",
-				"c"
-			}, ignoreOrder: true);
+			_source
+				.GetAvailableKeys()
+				.ShouldBe(new[] { "a", "b", "c" }, ignoreOrder: true);
 		}
 
 		[RequiresConsulFact]
@@ -74,13 +67,15 @@ namespace Stronk.Source.Consul.Tests
 		{
 			_source = new ConsulConfigurationSource(() => new ConsulClient(), prefix: _prefix + "/correct");
 
-			await _client.KV.Put(Pair("correct/a", "correct"));
-			await _client.KV.Put(Pair("incorrect/a", "incorrect"));
+			await Write("correct/a", "correct");
+			await Write("incorrect/a", "incorrect");
 
 			_source.GetValue("a").ShouldBe("correct");
 		}
 
 		private string Prefixed(string key) => _prefix + "/" + key;
+
+		private Task Write(string key, string value) => _client.KV.Put(Pair(key, value));
 
 		private KVPair Pair(string key, string value) => new KVPair(Prefixed(key))
 		{
