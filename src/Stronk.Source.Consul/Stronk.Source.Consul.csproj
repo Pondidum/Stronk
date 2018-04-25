@@ -2,7 +2,7 @@
   <PropertyGroup>
     <PackageId>Stronk.Source.Consul</PackageId>
     <PackageTags>stronk;consul;configuration;app.config;web.config;config</PackageTags>
-    <PackageVersion>0.0.1</PackageVersion>
+    <PackageVersion>1.0.0</PackageVersion>
     <Title>Stronk.Source.Consul</Title>
     <Description>Consul configuration source for Stronk.</Description>
     <Authors>Andy Dote</Authors>
