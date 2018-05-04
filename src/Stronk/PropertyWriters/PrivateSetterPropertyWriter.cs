@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -25,6 +24,8 @@ namespace Stronk.PropertyWriters
 			{
 				_property = property;
 			}
+
+			public override bool IsOptional => base.IsOptional || HasOptionalAttribute(_property.CustomAttributes);
 
 			public override void Assign(object target, object value)
 			{

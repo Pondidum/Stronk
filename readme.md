@@ -152,6 +152,29 @@ var config = new StronkConfig()
     .Build<Config>();
 ```
 
+If Stronk cannot find a value for a property, it will throw a `SourceValueNotFoundException`.  If you do need an optional property, you do one of the following:
+
+Make the type of the property Nullable:
+
+```csharp
+public class Configuration
+{
+    public bool? IsLive { get; private set; }
+}
+```
+
+Mark the property as optional with an attribute whose name starts with `Optional`:
+
+```csharp
+public class Configuration
+{
+    [Optional]
+    public string IsLive { get; private set; }
+}
+
+public class OptionalAttribute : Attribute {}
+```
+
 ### Logging
 
 Want to know what Stronk did while populating your object? You can specify a logger to use with the `.Log` DSL:

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 
 namespace Stronk.PropertyWriters
@@ -23,7 +22,7 @@ namespace Stronk.PropertyWriters
 					field = targetType.GetField(property.Name, FieldBindingFlags);
 
 				if (field != null)
-					descriptors.Add(new BackingFieldDescriptor(property.Name, property.PropertyType, field));
+					descriptors.Add(new BackingFieldDescriptor(property.Name, field));
 
 			}
 
@@ -34,10 +33,12 @@ namespace Stronk.PropertyWriters
 		{
 			private readonly FieldInfo _field;
 
-			public BackingFieldDescriptor(string name, Type type, FieldInfo field) : base(name, type)
+			public BackingFieldDescriptor(string name, FieldInfo field) : base(name, field.FieldType)
 			{
 				_field = field;
 			}
+
+			public override bool IsOptional => base.IsOptional || HasOptionalAttribute(_field.CustomAttributes);
 
 			public override void Assign(object target, object value)
 			{

@@ -29,6 +29,8 @@ namespace Stronk.PropertyWriters
 				_propertyGroup = propertyGroup;
 			}
 
+			public override bool IsOptional => _propertyGroup.Any(prop => prop.IsOptional);
+
 			public override void Assign(object target, object value)
 			{
 				var exceptions = new List<Exception>();
