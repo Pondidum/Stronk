@@ -15,7 +15,7 @@ namespace Stronk.Source.Consul.Tests
 					client.KV.List("").Wait();
 					return true;
 				}
-				catch (Exception exception)
+				catch (Exception)
 				{
 					return false;
 				}
