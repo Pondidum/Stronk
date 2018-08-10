@@ -10,7 +10,7 @@ namespace Stronk.PropertyMappers
 	{
 		private readonly IEnumerable<IConfigurationSource> _sources;
 
-		internal PropertyMapperArgs(Action<string, object[]> logger, IEnumerable<IConfigurationSource> sources, PropertyDescriptor property)
+		public PropertyMapperArgs(Action<string, object[]> logger, IEnumerable<IConfigurationSource> sources, PropertyDescriptor property)
 		{
 			_sources = sources;
 			Logger = logger;
@@ -20,8 +20,20 @@ namespace Stronk.PropertyMappers
 		public Action<string, object[]> Logger { get; }
 		public PropertyDescriptor Property { get; }
 
-		public string GetValue(string key) => _sources
-			.Select(source => source.GetValue(key))
-			.FirstOrDefault(value => value != null);
+		public string GetValue(string key)
+		{
+			if (key == null)
+				return null;
+
+			return _sources
+				.Select(source => source.GetValue(key))
+				.FirstOrDefault(value => value != null);
+		}
+
+		public string GetValue(Func<string, bool> matchKey) => GetValue(FindKey(matchKey));
+
+		private string FindKey(Func<string, bool> matchKey) => _sources
+			.SelectMany(source => source.GetAvailableKeys())
+			.FirstOrDefault(matchKey);
 	}
 }
