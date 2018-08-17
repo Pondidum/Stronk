@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using Stronk.PropertyWriters;
+using Stronk.Validation;
 
 namespace Stronk
 {
@@ -10,6 +11,7 @@ namespace Stronk
 		private readonly ConverterSelector _converterSelector;
 		private readonly ValueSelector _valueSelector;
 		private readonly ConversionProcess _conversionProcess;
+		private readonly Validator _validator;
 
 		public ConfigBuilder(IStronkConfig options)
 		{
@@ -17,6 +19,7 @@ namespace Stronk
 			_converterSelector = new ConverterSelector(_options);
 			_valueSelector = new ValueSelector(_options);
 			_conversionProcess = new ConversionProcess(_options);
+			_validator = new Validator(_options);
 		}
 
 		public void Populate<T>(T target)
@@ -50,6 +53,8 @@ namespace Stronk
 					throw e.InnerException ?? e;
 				}
 			}
+
+			_validator.Validate(target);
 		}
 
 		private void LogPopulationStart(object target)

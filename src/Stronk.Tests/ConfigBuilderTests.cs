@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
@@ -30,7 +30,6 @@ namespace Stronk.Tests
 		[Fact]
 		public void When_a_source_value_is_not_found_and_policy_is_throw()
 		{
-
 			Should
 				.Throw<SourceValueNotFoundException>(() => _builder.Populate(_target))
 				.Message.ShouldStartWith("Unable to find a value for 'Int32' property 'Value'");
@@ -129,6 +128,22 @@ namespace Stronk.Tests
 			_builder.Populate(_target);
 
 			_target.Value.ShouldBe(12);
+		}
+
+		[Fact]
+		public void When_validating_a_config_which_doesnt_pass()
+		{
+			_settings["Value"] = "15";
+
+			_options.Validate.Using<TargetConfig>(c =>
+			{
+				if (c.Value > 10)
+					throw new ArgumentOutOfRangeException(nameof(c.Value), $"Can't be greater than 10, but was {c.Value}");
+			});
+
+			Should
+				.Throw<ArgumentOutOfRangeException>(() => _builder.Populate(_target))
+				.Message.ShouldStartWith("Can't be greater than 10, but was 15");
 		}
 
 		private class TargetConfig
