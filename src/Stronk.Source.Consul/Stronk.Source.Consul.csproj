@@ -2,7 +2,6 @@
   <PropertyGroup>
     <PackageId>Stronk.Source.Consul</PackageId>
     <PackageTags>stronk;consul;configuration;app.config;web.config;config</PackageTags>
-    <PackageVersion>1.0.0</PackageVersion>
     <Title>Stronk.Source.Consul</Title>
     <Description>Consul configuration source for Stronk.</Description>
     <Authors>Andy Dote</Authors>
@@ -10,6 +9,9 @@
     <PackageLicenseUrl>https://github.com/pondidum/Stronk/blob/master/LICENSE.txt</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>git://github.com/pondidum/Stronk</RepositoryUrl>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Version>1.0.0</Version>
   </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>net451</TargetFramework>
