@@ -19,7 +19,7 @@ namespace Stronk
 			_conversionProcess = new ConversionProcess(_options);
 		}
 
-		public void Populate(object target)
+		public void Populate<T>(T target)
 		{
 			LogPopulationStart(target);
 
