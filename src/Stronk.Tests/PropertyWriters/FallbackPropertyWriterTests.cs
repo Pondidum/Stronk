@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
 using Stronk.PropertyWriters;
+using Stronk.Tests.TestUtils;
 using Stronk.Tests.Validation;
 using Xunit;
 
@@ -62,7 +63,7 @@ namespace Stronk.Tests.PropertyWriters
 		public void When_there_are_two_writers_and_first_throws()
 		{
 			Assign(
-				new ThrowingWriter(new UnExpectedException()),
+				new ThrowingWriter(new ShouldNotBeThrownException()),
 				new WorkingWriter(_target, _value)
 			);
 
@@ -74,7 +75,7 @@ namespace Stronk.Tests.PropertyWriters
 		{
 			Assign(
 				new WorkingWriter(_target, _value),
-				new ThrowingWriter(new UnExpectedException())
+				new ThrowingWriter(new ShouldNotBeThrownException())
 			);
 
 			_target.Value.ShouldBe(_value);
@@ -154,13 +155,6 @@ namespace Stronk.Tests.PropertyWriters
 					typeof(string),
 					() => throw _exception
 				);
-			}
-		}
-
-		private class UnExpectedException : Exception
-		{
-			public UnExpectedException() : base("This was not supposed to be thrown")
-			{
 			}
 		}
 	}
