@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
 using Stronk.PropertyWriters;
+using Stronk.Tests.Validation;
 using Xunit;
 
 namespace Stronk.Tests.PropertyWriters
@@ -153,13 +154,6 @@ namespace Stronk.Tests.PropertyWriters
 					typeof(string),
 					() => throw _exception
 				);
-			}
-		}
-
-		private class ExpectedException : Exception
-		{
-			public ExpectedException() : base("This was supposed to be thrown")
-			{
 			}
 		}
 
