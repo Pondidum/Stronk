@@ -1,6 +1,6 @@
 using System;
 
-namespace Stronk.Tests.Validation
+namespace Stronk.Tests.TestUtils
 {
 	public class ExpectedException : Exception
 	{
