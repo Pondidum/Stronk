@@ -6,10 +6,10 @@ namespace Stronk.Dsl
 {
 	public class ValidationExpression
 	{
-		private readonly IStronkConfig _configRoot;
+		private readonly StronkConfig _configRoot;
 		private readonly List<IValidator> _validators;
 
-		public ValidationExpression(IStronkConfig configRoot)
+		public ValidationExpression(StronkConfig configRoot)
 		{
 			_configRoot = configRoot;
 			_validators = new List<IValidator>();
@@ -17,7 +17,7 @@ namespace Stronk.Dsl
 
 		public IEnumerable<IValidator> Validators => _validators;
 
-		public IStronkConfig Using<TConfig>(Action<TConfig> validate)
+		public StronkConfig Using<TConfig>(Action<TConfig> validate)
 		{
 			_validators.Add(new LambdaValidator(
 				typeof(TConfig),

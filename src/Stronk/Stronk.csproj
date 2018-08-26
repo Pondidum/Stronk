@@ -11,7 +11,7 @@
     <RepositoryUrl>git://github.com/pondidum/Stronk</RepositoryUrl>
   </PropertyGroup>
   <PropertyGroup>
-    <Version>5.3.0</Version>
+    <Version>5.3.1</Version>
   </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>net451</TargetFramework>
