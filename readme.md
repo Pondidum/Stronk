@@ -175,6 +175,28 @@ public class Configuration
 public class OptionalAttribute : Attribute {}
 ```
 
+### Validation
+
+It's always a good idea to make sure your configuration is not only validly loaded, but also that the values make semantic sense.  For example, if you have a `Timeout` property being mapped to a `TimeSpan`, not only should the value be formatted correctly, but there is a probably a minimum and maximum value which would make sense too.
+
+```csharp
+var config = new StronkConfig()
+    .Validate.Using<Configuration>(c =>
+    {
+        if (c.Timeout < TimeSpan.FromSeconds(60) && c.Timeout > TimeSpan.Zero)
+            throw new ArgumentOutOfRangeException(nameof(c.Timeout), $"Must be greater than 0, and less than 1 minute");
+    });
+    .Build<Config>();
+```
+
+You can of course use other libraries (such as [FluentValidation](https://github.com/JeremySkinner/FluentValidation)) to perform the actual validation, in which case your configuration might look like this:
+
+```csharp
+var config = new StronkConfig()
+    .Validate.Using<Configuration>(c => new ConfigValidator().Validate(c))
+    .Build<Config>();
+```
+
 ### Logging
 
 Want to know what Stronk did while populating your object? You can specify a logger to use with the `.Log` DSL:
