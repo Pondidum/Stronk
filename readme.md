@@ -193,7 +193,7 @@ You can of course use other libraries (such as [FluentValidation](https://github
 
 ```csharp
 var config = new StronkConfig()
-    .Validate.Using<Configuration>(c => new ConfigValidator().Validate(c))
+    .Validate.Using<Configuration>(c => new ConfigValidator().ValidateAndThrow(c))
     .Build<Config>();
 ```
 
