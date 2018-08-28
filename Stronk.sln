@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{B7F6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateWithFluentValidation", "src\Samples\ValidateWithFluentValidation\ValidateWithFluentValidation.csproj", "{59D5729B-69BD-4AE6-9D6F-3A2BEA15D5DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadFromConsul", "src\Samples\ReadFromConsul\ReadFromConsul.csproj", "{776BA879-CBF6-495D-9517-6B701E2F28B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,11 +49,16 @@ Global
 		{59D5729B-69BD-4AE6-9D6F-3A2BEA15D5DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59D5729B-69BD-4AE6-9D6F-3A2BEA15D5DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59D5729B-69BD-4AE6-9D6F-3A2BEA15D5DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{776BA879-CBF6-495D-9517-6B701E2F28B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{776BA879-CBF6-495D-9517-6B701E2F28B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{776BA879-CBF6-495D-9517-6B701E2F28B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{776BA879-CBF6-495D-9517-6B701E2F28B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{59D5729B-69BD-4AE6-9D6F-3A2BEA15D5DD} = {B7F6743C-6474-4C41-8A09-CEBADC4FD8A3}
+		{776BA879-CBF6-495D-9517-6B701E2F28B7} = {B7F6743C-6474-4C41-8A09-CEBADC4FD8A3}
 	EndGlobalSection
 EndGlobal
