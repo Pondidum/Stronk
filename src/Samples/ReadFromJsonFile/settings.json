@@ -1,0 +1,4 @@
+{
+  "callback": "https://localhost/some/callback",
+  "timeout": "00:00:45"
+}

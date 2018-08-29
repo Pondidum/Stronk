@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateWithFluentValidatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadFromConsul", "src\Samples\ReadFromConsul\ReadFromConsul.csproj", "{776BA879-CBF6-495D-9517-6B701E2F28B7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadFromJsonFile", "src\Samples\ReadFromJsonFile\ReadFromJsonFile.csproj", "{F0906B40-A707-4B36-9A2A-4AE9137A3BF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{776BA879-CBF6-495D-9517-6B701E2F28B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{776BA879-CBF6-495D-9517-6B701E2F28B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{776BA879-CBF6-495D-9517-6B701E2F28B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0906B40-A707-4B36-9A2A-4AE9137A3BF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0906B40-A707-4B36-9A2A-4AE9137A3BF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0906B40-A707-4B36-9A2A-4AE9137A3BF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0906B40-A707-4B36-9A2A-4AE9137A3BF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,5 +66,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{59D5729B-69BD-4AE6-9D6F-3A2BEA15D5DD} = {B7F6743C-6474-4C41-8A09-CEBADC4FD8A3}
 		{776BA879-CBF6-495D-9517-6B701E2F28B7} = {B7F6743C-6474-4C41-8A09-CEBADC4FD8A3}
+		{F0906B40-A707-4B36-9A2A-4AE9137A3BF2} = {B7F6743C-6474-4C41-8A09-CEBADC4FD8A3}
 	EndGlobalSection
 EndGlobal
