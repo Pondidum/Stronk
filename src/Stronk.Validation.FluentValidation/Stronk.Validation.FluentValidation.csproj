@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <PackageId>Stronk.Validation.FluentValidation</PackageId>
+        <PackageTags>stronk;fluentvalidation;configuration;app.config;web.config;config;validation</PackageTags>
+        <Title>Stronk.Validation.FluentValidation</Title>
+        <Description>FluentValidation extensions for Stronk.</Description>
+        <Authors>Andy Dote</Authors>
+        <PackageProjectUrl>https://github.com/pondidum/Stronk/</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/pondidum/Stronk/blob/master/LICENSE.txt</PackageLicenseUrl>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>git://github.com/pondidum/Stronk</RepositoryUrl>
+    </PropertyGroup>
+    <PropertyGroup>
+        <Version>0.0.1</Version>
+    </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net451</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="8.0.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Stronk\Stronk.csproj">
+            <Project>{bcdbfffa-adc2-45fc-8e73-fd0cd7b0bd47}</Project>
+            <Name>Stronk</Name>
+        </ProjectReference>
+    </ItemGroup>
+</Project>
