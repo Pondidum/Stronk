@@ -4,7 +4,7 @@ namespace Stronk.Validation.FluentValidation.Tests
 	{
 		public ValidationByGenericType()
 		{
-			_builder.Validate.Using<TargetValidator>();
+			_builder.Validate.With<TargetValidator>();
 		}
 	}
 }

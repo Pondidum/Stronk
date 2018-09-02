@@ -5,7 +5,7 @@ namespace Stronk.Validation.FluentValidation
 {
 	public static class Extensions
 	{
-		public static StronkConfig Using<TValidator>(this ValidationExpression expression) where TValidator : global::FluentValidation.IValidator, new()
+		public static StronkConfig With<TValidator>(this ValidationExpression expression) where TValidator : global::FluentValidation.IValidator, new()
 		{
 			return expression.Using<object>(config =>
 			{
@@ -21,7 +21,7 @@ namespace Stronk.Validation.FluentValidation
 			});
 		}
 
-		public static StronkConfig Using<T>(this ValidationExpression expression, AbstractValidator<T> validator)
+		public static StronkConfig With<T>(this ValidationExpression expression, AbstractValidator<T> validator)
 		{
 			return expression.Using<T>(config => validator.ValidateAndThrow(config));
 		}

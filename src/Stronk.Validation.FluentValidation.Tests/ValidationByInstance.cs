@@ -4,7 +4,7 @@ namespace Stronk.Validation.FluentValidation.Tests
 	{
 		public ValidationByInstance()
 		{
-			_builder.Validate.Using(new TargetValidator());
+			_builder.Validate.With(new TargetValidator());
 		}
 	}
 }
