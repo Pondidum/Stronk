@@ -7,20 +7,19 @@ using Xunit;
 
 namespace Stronk.Validation.FluentValidation.Tests
 {
-	public class ValidationTests
+	public abstract class ValidationTests
 	{
-		private readonly StronkConfig _builder;
+		protected readonly StronkConfig _builder;
 
-		public ValidationTests()
+		protected ValidationTests()
 		{
 			var source = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 			source[nameof(TargetParent.ParentValue)] = "1";
 			source[nameof(Target.TargetValue)] = "2";
 			source[nameof(TargetChild.ChildValue)] = "3";
 
-			_builder = new StronkConfig()
-				.From.Source(new DictionarySource(source))
-				.Validate.Using<TargetValidator>();
+			_builder = new StronkConfig();
+			_builder.From.Source(new DictionarySource(source));
 		}
 
 		[Fact]
@@ -38,13 +37,13 @@ namespace Stronk.Validation.FluentValidation.Tests
 		[Fact]
 		public void When_validating_a_parent_type()
 		{
-			Should.Throw<InvalidOperationException>(() => _builder.Build<TargetParent>());
+			Should.NotThrow(() => _builder.Build<TargetParent>());
 		}
 
 		[Fact]
 		public void When_validating_a_different_type()
 		{
-			Should.Throw<InvalidOperationException>(() => _builder.Build<Other>());
+			Should.NotThrow(() => _builder.Build<Other>());
 		}
 
 		public class TargetParent
