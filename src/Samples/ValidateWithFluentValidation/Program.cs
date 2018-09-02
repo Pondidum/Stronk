@@ -1,6 +1,6 @@
 ﻿using System;
-using FluentValidation;
 using Stronk;
+using Stronk.Validation.FluentValidation;
 
 namespace ValidateWithFluentValidation
 {
@@ -16,7 +16,7 @@ namespace ValidateWithFluentValidation
 				Console.WriteLine("");
 
 				var config = new StronkConfig()
-					.Validate.Using<Configuration>(c => new ConfigurationValidator().ValidateAndThrow(c))
+					.Validate.With<ConfigurationValidator>()
 					.Build<Configuration>();
 
 				Console.WriteLine($"{nameof(config.Timeout)}: {config.Timeout.TotalSeconds} seconds");

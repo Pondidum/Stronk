@@ -65,6 +65,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Stronk.Validation.FluentValidation\Stronk.Validation.FluentValidation.csproj">
+      <Project>{4de31c8e-98bc-40c1-8229-2840f450ff39}</Project>
+      <Name>Stronk.Validation.FluentValidation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Stronk\Stronk.csproj">
       <Project>{bcdbfffa-adc2-45fc-8e73-fd0cd7b0bd47}</Project>
       <Name>Stronk</Name>
