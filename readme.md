@@ -55,6 +55,11 @@ public enum ConfigurationMode
 </configuration>
 ```
 
+## Samples
+
+There are a lot of sample projects in the [src/Samples](https://github.com/Pondidum/Stronk/tree/master/src/Samples) directory for different Stronk use cases (e.g. reading a Json file, reading from Consul, validating a config.)
+
+
 ## Customisation
 
 Stronk provides a DSL to help guide configuration.  By default, it will read from `App.config` or `Web.config`, so you usually only need to write:
@@ -226,7 +231,7 @@ I might add this as a separate package in the future (e.g. `Stronk.Sources.Json`
 
 ### How about deserializing json inside a value?
 
-Implement a custom `IValueConverter`.
+Implement a custom `IValueConverter`.  There is a [sample of this here](https://github.com/Pondidum/Stronk/blob/master/src/Samples/ReadFromJsonFile/JsonConfigFile.cs).
 
 ### I have other questions
 
