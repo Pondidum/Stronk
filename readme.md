@@ -194,13 +194,15 @@ var config = new StronkConfig()
     .Build<Config>();
 ```
 
-You can of course use other libraries (such as [FluentValidation](https://github.com/JeremySkinner/FluentValidation)) to perform the actual validation, in which case your configuration might look like this:
+You can of course use other libraries (such as [FluentValidation](https://github.com/JeremySkinner/FluentValidation)) to perform the actual validation.  Stronk provides an extension package to make this even easier:
 
 ```csharp
 var config = new StronkConfig()
-    .Validate.Using<Configuration>(c => new ConfigValidator().ValidateAndThrow(c))
+    .Validate.With<ConfigurationValidator>()
     .Build<Config>();
 ```
+
+Check out the [Samples](https://github.com/Pondidum/Stronk/tree/master/src/Samples/ValidateWithFluentValidation) for a complete implementation.
 
 ### Logging
 
