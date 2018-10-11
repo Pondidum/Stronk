@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using Shouldly;
+using Stronk.ConfigurationSources;
+using Stronk.Validation;
 using Xunit;
 
 #pragma warning disable 649
@@ -47,6 +50,23 @@ namespace Stronk.Tests.Scenarios
 		}
 
 		[Fact]
+		public void When_loading_and_checking_all_sources_are_used()
+		{
+			var settings = new Dictionary<string, string>
+			{
+				{ "One", "1" },
+				{ "Two", "2" }
+			};
+
+			var ex = Should.Throw<UnusedConfigurationEntriesException>(() => new StronkConfig()
+				.Validate.AllSourceValuesAreUsed()
+				.From.Source(new DictionarySource(settings))
+				.Build<OneProperty>());
+
+			ex.UnusedKeys.ShouldBe(new[] { "Two" });
+		}
+
+		[Fact]
 		public void When_loading_the_configuration_and_a_property_throws()
 		{
 			var config = new ThrowingSetter();
@@ -64,7 +84,7 @@ namespace Stronk.Tests.Scenarios
 				set { throw new ExpectedException(); }
 			}
 		}
-		
+
 		public class ConfigWithPrivateSetters
 		{
 			public string Name { get; private set; }
@@ -100,6 +120,11 @@ namespace Stronk.Tests.Scenarios
 
 		private class ExpectedException : Exception
 		{
+		}
+
+		private class OneProperty
+		{
+			public int One { get; set; }
 		}
 	}
 }

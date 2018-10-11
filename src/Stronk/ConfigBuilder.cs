@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using Stronk.PropertyWriters;
 using Stronk.Validation;
@@ -54,6 +55,7 @@ namespace Stronk
 				}
 			}
 
+			_validator.Validate(_valueSelector);
 			_validator.Validate(target);
 		}
 

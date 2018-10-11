@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Stronk.Validation;
 
 namespace Stronk.Dsl
@@ -24,6 +25,12 @@ namespace Stronk.Dsl
 				x => validate((TConfig)x))
 			);
 
+			return _configRoot;
+		}
+
+		public StronkConfig AllSourceValuesAreUsed()
+		{
+			_validators.Add(new ValueSelectorValidator());
 			return _configRoot;
 		}
 	}
