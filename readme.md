@@ -204,6 +204,16 @@ var config = new StronkConfig()
 
 Check out the [Samples](https://github.com/Pondidum/Stronk/tree/master/src/Samples/ValidateWithFluentValidation) for a complete implementation.
 
+Validation can also be used to check that all configuration source values have been used - which can be useful if you want to ensure that old values get removed from configuration files:
+
+```csharp
+var config = new StronkConfig()
+    .Validate.AllSourceValuesAreUsed()
+    .Build<Config>();
+```
+
+If a key is not queried then this will throw a `UnusedConfigurationEntriesException`, which will contain a list of all unused keys.  If you have several sources providing the same key name, as long as the name is queried once, there will not be an exception.  [This test](https://github.com/Pondidum/Stronk/blob/master/src/Stronk.Tests/ConfigurationSources/ConfigurationSourcesMonitorTests.cs#L116) probably explains it better.
+
 ### Logging
 
 Want to know what Stronk did while populating your object? You can specify a logger to use with the `.Log` DSL:
