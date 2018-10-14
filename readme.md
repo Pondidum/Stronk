@@ -1,12 +1,21 @@
 # Stronk
-*Mapping `app.config` an `web.config` to strong typed objects*
+
+Stronk is all about [Strong Typing  and Composing your Configuration](https://andydote.co.uk/2017/11/09/configuration-composition/).  It supports reading from many sources (`app.config`, `web.config`, `Dictionary<>`, `Consul`, to name a few), and can be extended to provide [Semantic Validation](https://andydote.co.uk/2018/08/26/validate-configuration/).
+
+I've written a lot about this on my blog, where you can learn more about:
+
+* [Configuration Composition](https://andydote.co.uk/2017/11/09/configuration-composition/)
+* [Semantics Configuration Validation](https://andydote.co.uk/2018/08/26/validate-configuration/)
+* [When to Test Your Configuration](https://andydote.co.uk/2018/09/08/semantic-configuration-validation-earlier/)
+
 
 ## Installation
+
+Currently this project **is for non-core projects only**, as there is a reasonable strong configuration package from Microsoft for core already.
 
 ```powershell
 PM> install-package Stronk
 ```
-
 
 ## Usage
 
