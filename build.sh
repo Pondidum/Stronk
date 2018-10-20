@@ -13,6 +13,8 @@ if [ -x "$(command -v docker)" ]; then
   sleep 2
 fi
 
+.tools/nuget.exe restore  # needed because of the sample projects
+
 dotnet build \
   --configuration $MODE
 
