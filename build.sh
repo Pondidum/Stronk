@@ -2,8 +2,6 @@
 
 set -e  # stop on errors
 
-find=/usr/bin/find  # appveyor has find pointing to /c/windows/system32/find for some reason
-
 MODE=${1:-Debug}  # First parameter is build mode, defaults to Debug
 NAME=$(basename $(ls *.sln | head -n 1) .sln) # Find the solution file
 
@@ -18,12 +16,14 @@ fi
 dotnet build \
   --configuration $MODE
 
-find ./src -iname "*.Tests.csproj" | xargs -L1 dotnet test \
+# appveyor has find pointing to /c/windows/system32/find for some reason
+/usr/bin/find ./src -iname "*.Tests.csproj" | xargs -L1 dotnet test \
   --no-restore \
   --no-build \
   --configuration $MODE \
 
-find ./src -iname "Stronk*.csproj" -not -iname "*.Tests.csproj" | xargs -L1 dotnet pack \
+# appveyor has find pointing to /c/windows/system32/find for some reason
+/usr/bin/find ./src -iname "Stronk*.csproj" -not -iname "*.Tests.csproj" | xargs -L1 dotnet pack \
   --no-restore \
   --no-build \
   --configuration $MODE \
